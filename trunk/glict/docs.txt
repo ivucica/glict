@@ -1,0 +1,38 @@
+GLIT DOCUMENTATION
+(c) 2006 OBJECT Networks
+
+programmed by Ivan Vucica
+
+GLIT stands for Graphics Library Interface Toolkit. It is designed as a drop-in library for simple building into existing applications, as well as easy programming of additional controls into it. Every control can contain subcontrols.
+
+This library provides a very simple C++ interface which uses few very simple functions to set up the interface and to manage it.
+
+All the user interface controls are C++ classes derived from glitContainer class. This class contains only basic functionalities and does not render anything. It handles object management, clipping, and drawing subobjects. It is intended to serve only as a desktop class. Here are the public interfaces in this class:
+
+	// customizable functions
+        virtual void Paint();
+       
+        // the following elements are always inherited from container
+        void CPaint();
+        void AddObject(glitContainer* object);
+        void RemoveObject(glitContainer* object);
+        void SetHeight(int h);
+        void SetWidth(int w);
+        void SetPos(int x, int y);
+        void SetPos(glitPos pos);
+        void GetPos(int* x, int* y);
+        void GetPos(glitPos* pos);
+        void GetSize(glitSize* size);
+        void SetScissor(); 
+
+Paint() is used to draw the element. This is an inheritable function and is intended to be replaced by custom controls.
+CPaint() is used to draw child elements. It sets up the clipping and draws each object.
+AddObject() adds an object as a subobject into the control.
+RemoveObject() removes an object from the control.
+SetHeight() sets the height of the control.
+SetWidth() sets the width of the control.
+SetPos() sets the position of the control inside the parent control.
+GetPos() and GetSize() respectively get the size.
+SetScissor() prepares for drawing by activating appropriate clipping model. We do not recommend that this function is used and do not promise ongoing support for it.
+
+This library is still deep in development.
