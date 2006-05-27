@@ -16,22 +16,29 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
- 
-// Glut-helper.cpp
-// contains glut helper
 
-// objnet glut helper
-// (c) 2005 object networks
-//
-// contains some helper code for glut
-// e.g. entire string printing
+#ifndef __GLICT_BUTTON_H
+#define __GLICT_BUTTON_H
 
-#ifndef _glutx_
-#define _glutx_
-void glutxStrokeString(const char* txt, void* font, float x, float y) ;
-char* glutxStrokeStringExpert(const char* txt, void* font);
-void glutxBitmapString(char* txt, void* font,int x, int y) ;
-float glutxBitmapSize(char* txt, void* font);
-float glutxStrokeSize(const char* txt, void* font);
-int glutxNumberOfLines(char* txt);
+#include <string>
+
+#include "window.h"
+#include "types.h"
+class glictButton : public glictContainer {
+    public:
+        glictButton();
+        ~glictButton();
+
+        void SetBGColor(float r, float g, float b, float a);
+        void SetCaption(std::string caption);
+        
+        // redefined functions
+        void Paint();
+        bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
+    private:
+        glictColor bgcolor;
+        bool highlighted; // is mouse pressed
+        std::string caption;
+};
 #endif
+
