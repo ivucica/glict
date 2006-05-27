@@ -1,9 +1,28 @@
+/*
+    GLICT - Graphics Library Interface Creation Toolkit
+    Copyright (C) 2006 OBJECT Networks
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
 #include <GL/glut.h>
 #include <stdio.h>
 #include "window.h"
 #include "globals.h"
 #include "glut-helper.h"
-glitWindow::glitWindow() {
+glictWindow::glictWindow() {
     
     this->bgcolor.r = 0.75;
     this->bgcolor.g = 0.75;
@@ -14,10 +33,10 @@ glitWindow::glitWindow() {
     this->parent = NULL;
     this->SetCaption("Untitled Window");
 }    
-glitWindow::~glitWindow() {
+glictWindow::~glictWindow() {
     
 }
-void glitWindow::Paint() {
+void glictWindow::Paint() {
 
 //    printf("panel\n");
     
@@ -43,7 +62,7 @@ void glitWindow::Paint() {
     
     this->SetScissor();
 	
-	glColor4fv(glitGlobals.windowTitleBgColor);
+	glColor4fv(glictGlobals.windowTitleBgColor);
     
     glBegin(GL_QUADS);
     glVertex2f(this->x,this->y);
@@ -52,23 +71,37 @@ void glitWindow::Paint() {
     glVertex2f(this->x, this->y+12);
     glEnd();
 //    glDisable(GL_SCISSOR_TEST);
-    glColor4fv(glitGlobals.windowTitleColor);
+    glColor4fv(glictGlobals.windowTitleColor);
     
     glPushMatrix();
     //glRotatef(180.0, 0.0, 0.0, 1.0);
     //glutxStrokeString(this->caption.c_str(),GLUT_STROKE_ROMAN, (this->x + this->width / 2 + glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2) * -1, this->y - 9);
     glRotatef(180.0, 1.0, 0.0, 0.0);
     //glDisable(GL_SCISSOR_TEST);
-    glutxStrokeString(this->caption.c_str(),GLUT_STROKE_ROMAN, (this->width / 2 - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2) , this->y*-1 - 9);
+    glutxStrokeString(this->caption.c_str(),GLUT_STROKE_ROMAN, this->x + (this->width / 2 - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2) , this->y*-1. - 9.);
     //glEnable(GL_SCISSOR_TEST);
     glPopMatrix();
 }
-void glitWindow::SetBGColor(float r, float g, float b, float a) {
+void glictWindow::SetBGColor(float r, float g, float b, float a) {
     this->bgcolor.r = r;
     this->bgcolor.g = g;
     this->bgcolor.b = b;
     this->bgcolor.a = a;
 }
-void glitWindow::SetCaption(std::string caption) {
+void glictWindow::SetCaption(std::string caption) {
     this->caption = caption;
+}    
+
+bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
+    if (evt == GLICT_MOUSECLICK) {
+        if (((glictPos*)wparam)->x > this->clipleft &&
+            ((glictPos*)wparam)->x < this->clipright &&
+            ((glictPos*)wparam)->y > this->cliptop &&
+            ((glictPos*)wparam)->y < this->clipbottom) {
+            printf("Caught window click!\n");
+            return true;
+        }
+    }    
+        
+    return false;
 }    
