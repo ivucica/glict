@@ -17,6 +17,12 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+/**
+ * \file button.h
+ * \brief Button class header
+ * \sa glictButton
+ */
+
 #ifndef __GLICT_BUTTON_H
 #define __GLICT_BUTTON_H
 
@@ -24,21 +30,29 @@
 
 #include "window.h"
 #include "types.h"
+
+/**
+ * \brief Button class widget
+ *
+ * Buttons are clickable widgets that have a text written on the center of it,
+ * with settable background color. Upon click on a button, the function
+ * specified as OnClick function is called.
+ */
 class glictButton : public glictContainer {
     public:
-        glictButton();
-        ~glictButton();
+        glictButton(); ///< Constructor for the button widget.
+        ~glictButton(); ///< Destructor for the button widget.
 
-        void SetBGColor(float r, float g, float b, float a);
-        void SetCaption(std::string caption);
-        
+        void SetBGColor(float r, float g, float b, float a); ///< Sets the background color of the button.
+        void SetCaption(std::string caption); ///< Sets the caption of the button.
+
         // redefined functions
-        void Paint();
-        bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
+        void Paint(); ///< Paints the button.
+        bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Event processing for button widget.
     private:
-        glictColor bgcolor;
-        bool highlighted; // is mouse pressed
-        std::string caption;
+        glictColor bgcolor; ///< Stores the background color.
+        bool highlighted; ///< Is mouse pressed or not
+        std::string caption; ///< Caption written on the button.
 };
 #endif
 

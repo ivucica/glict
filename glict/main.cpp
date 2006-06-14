@@ -52,7 +52,7 @@ void passivemouse(int mousex, int mousey) {
     mousepos.y = mousey;
     desktop.TransformScreenCoords(&mousepos);
     display();
-}    
+}
 void reshape(int x, int y) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -69,11 +69,11 @@ void reshape(int x, int y) {
     //desktop.SetHeight(y/2);
     desktop.SetHeight(y);
     //printf("Postavljam poziciju desktopa\n");
-    desktop.SetPos(0, 10);
-    
+    desktop.SetPos(0, 0);
+
     panela2.SetHeight(y/2);
-    
-    
+
+
     glictGlobals.h = y;
     glictGlobals.w = x;
     ww = x; wh = y;
@@ -81,30 +81,34 @@ void reshape(int x, int y) {
 
     desktop.ReportDebug();
     display();
-}    
+}
+#include <math.h>
+float kut = 0.;
 void display() {
     glDisable(GL_STENCIL_TEST);
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_STENCIL_TEST);
-    
-    
-    
-    desktop.RememberTransformations(); 
-    desktop.SetScissor();
-    desktop.Paint();
-    
+
+
     glPushMatrix();
-    //glTranslatef(95., 0., 0.);
-    //glScalef(2.00,2.00,2.00);
-    glRotatef(60.0,0.0,0.0,1.0);
-    
-    desktop.RememberTransformations(); 
+    desktop.RememberTransformations();
     desktop.SetScissor();
     desktop.Paint();
-    
     glPopMatrix();
-    
+
+    glPushMatrix();
+    //glTranslatef( sin(kut++ * 3.14 / 180.)*90., 150., 0.);
+    //glScalef(2.00,2.00,2.00);
+    glTranslatef(100, 0, 0);
+    glRotatef(25.0,0.0,0.0,1.0);
+
+    desktop.RememberTransformations();
+    desktop.SetScissor();
+    desktop.Paint();
+
+    glPopMatrix();
+
     glDisable(GL_STENCIL_TEST);
     glBegin(GL_QUADS);
     glColor4f(0.5,0.5,0.5,1.0);
@@ -117,68 +121,72 @@ void display() {
 
     glutSwapBuffers();
     //desktop.ReportDebug();
-}   
+}
 bool buttonstate = true;
 void onpanel5click(glictPos *a, glictContainer* callclass) {
     buttonstate = !buttonstate;
-    
+
     (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked");
     panela2.SetCaption(buttonstate ? "Sample Window" : "Name Changed"); // window
     if (buttonstate)
         panela2.SetPos(10,15);
     else
         panela2.SetPos(120,90);
-}    
+}
 void glinit() {
     glictPanel* panela = new glictPanel;
     //panela2 = new glictWindow;
     glictPanel* panela3 = new glictPanel;
     glictButton* panela5 = new glictButton;
-    
+
     desktop.AddObject((panela));
     panela->SetBGColor(0.5,0.5,1.0,1.0);
     panela->AddObject((&panela2));
 	panela->SetWidth(600);
 	panela->SetHeight(256);
-	
+
 	panela5->SetBGColor(1,0,0,1);
+	panela5->SetPos(0,90);
 	panela->AddObject(panela5);
-    
+
     panela2.SetBGColor(0.2,1.0,0.2,1.0);
     panela2.SetPos(10,15);
     panela2.SetHeight(50);
     panela2.SetWidth(400);
-    
+
     panela2.SetCaption("Sample Window");
     /*panela3->SetPos(12,12);
     panela2->AddObject(panela3);*/
 
     panela2.AddObject(&panela4);
     panela4.SetHeight(128);
-    
+
     panela5->SetOnClick(onpanel5click);
     panela5->SetWidth(64);
 }
 int main(int argc, char** argv) {
-    
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);
     glutInitWindowSize (640, 480);
     glutInitWindowPosition (0, 0);
-    
+
     windowhandle = glutCreateWindow ("GLICT Demo");
 
     glinit();
-       
+
     glutSetWindow(windowhandle);
     glutShowWindow();
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutMouseFunc(mouse);
-    
+
+
+    glutIdleFunc (display);
+
     glutPassiveMotionFunc(passivemouse);
-    
-    glutMainLoop();  
+
+    glutMainLoop();
 	return 0;
 }

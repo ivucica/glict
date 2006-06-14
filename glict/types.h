@@ -17,23 +17,54 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+
+
+/**
+ * \file types.h
+ * \brief Global library's types
+ */
+
 #ifndef _GLICT_TYPES_H
 #define _GLICT_TYPES_H
+/**
+ * \brief Used to store either position or size. (later typedefed to equal glictSize - contains unions so both names can be used for elements)
+ *
+ * It appears that doxygen doesnt handle unions well. For that purpose I'll list them here:
+ * <int x, y;>
+ * or
+ * <int w, h;>
+ */
 typedef struct {
     union {
-        int x,w;
+        int x,w; ///< X coordinate of position or width
     };
     union {
-        int y,h;
+        int y,h; ///< Y coordinate of position or height
     };
-} glictPos; 
+} glictPos;
+
+
+/**
+ * \brief Same as glitctPos. Just a typedef to aforementioned struct.
+ */
 typedef glictPos glictSize;
+
+
+/**
+ * \brief Used to store all color elements supported by OpenGL - red, green, blue and alpha channel. Stored as float.
+ */
 typedef struct {
+    /// Red, green, blue and alpha element.
     float r, g, b, a;
 } glictColor;
+
+
+/**
+ * \brief Enumerates events that can occur.
+ */
 enum glictEvents {
-    GLICT_MOUSECLICK = 0,
-    GLICT_MOUSEDOWN = 1,
-    GLICT_MOUSEUP = 2
+    GLICT_MOUSECLICK = 0, ///< Mouse click event
+    GLICT_MOUSEDOWN = 1, ///< Mouse down event
+    GLICT_MOUSEUP = 2 ///< Mouse up event
 };
 #endif

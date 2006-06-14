@@ -17,12 +17,22 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+/**
+ * \file container.cpp
+ * \brief Button class code
+ * \sa glictButton
+ */
+
+
 #include <GL/glut.h>
 #include <stdio.h>
 #include "button.h"
 #include "globals.h"
 #include "glut-helper.h"
 
+/**
+  * It fills up the class with default infos.
+  */
 glictButton::glictButton() {
     //printf("init panele\n");
     this->bgcolor.r = 1.0;
@@ -30,15 +40,36 @@ glictButton::glictButton() {
     this->bgcolor.b = 1.0;
     this->bgcolor.a = 1.0;
     strcpy(this->objtype, "Button");
-    
+
     this->highlighted = false;
     this->parent = NULL;
-    
+
     this->caption = "Button";
-}    
-glictButton::~glictButton() {
-    
 }
+
+/**
+  * Currently does nothing.
+  */
+glictButton::~glictButton() {
+
+}
+
+/**
+  * \param evt Event to process. Processed are GLICT_MOUSEUP, GLICT_MOUSEDOWN
+  *            and GLICT_MOUSECLICK.
+  * \param *wparam Pointer parameter depending on event processed
+  * \param lparam Numeric parameter depending on event processed.
+  * \param returnvalue Not filled up with any currently processed event.
+  * \return Boolean value, true if event processed
+  *
+  * If evt is mouse-related, then this function understands *wparam as a
+  * pointer to glictPos. If these coordinates are within clipping boundaries,
+  * then different actions are taken depending on the precise event. Even if
+  * they are not, in case the event is a mouse release we dehighlight the
+  * button, yet we still trick the parents that the event was not processed.
+  *
+  * \sa glictContainer::CastEvent()
+  */
 bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 
     switch (evt) {
@@ -49,41 +80,46 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
                 ((glictPos*)wparam)->x < this->clipright &&
                 ((glictPos*)wparam)->y > this->cliptop &&
                 ((glictPos*)wparam)->y < this->clipbottom) {
-        
+
                 if (evt == GLICT_MOUSECLICK) {
                     printf("Caught button click!\n");
-                } 
-                
+                }
+
                 if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
                     printf("Dehighlighting button\n");
                     highlighted = false;
-                }  
+                }
                 if (evt == GLICT_MOUSEDOWN) {
                     printf("Highlighting button\n");
                     highlighted = true;
-                } 
-                
+                }
+
                 if (DefaultCastEvent(evt, wparam, lparam, returnvalue)) { // if a child caught click, we dont handle it otherwise
                     return true; // we simply return
-                }    
+                }
                 // otherwise we could handle it mroe ...
                 return true;
-            }    
-            
-        
+            }
+
+
             if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
                 printf("Dehighlighting button\n");
                 highlighted = false;
-            }    
+            }
             break;
-    }    
+    }
 
 
 
     return false;
-}    
+}
 
-
+/**
+  * Paints a button. Button is a square thing rendered within boundaries
+  * specified by SetRect(). The square's color is specified with SetBGColor().
+  * Upon rendering the square, white text specified with SetCaption() is placed
+  * on center of the widget.
+  */
 void glictButton::Paint() {
 
     if (!highlighted) {
@@ -92,42 +128,55 @@ void glictButton::Paint() {
             (float)this->bgcolor.g,
             (float)this->bgcolor.b,
             (float)this->bgcolor.a
-        ); 
-    }    
+        );
+    }
     else {
         glColor4f(
             1.0, 1.0, 1.0, 1.0
         );
         printf("RENDERING HIGHLIGHTED BUTTON\n");
-    } 
+    }
     glBegin(GL_QUADS);
     glVertex2f(this->x,this->y);
     glVertex2f(this->x+this->width,this->y);
     glVertex2f(this->x+this->width,this->y+this->height);
     glVertex2f(this->x,this->y+this->height);
     glEnd();
-    
+
     glColor4f(0., 0., 0., 1.);
-    
+
     glPushMatrix();
     glRotatef(180.0, 1.0, 0.0, 0.0);
     glutxStrokeString(
-        this->caption.c_str(), 
-        GLUT_STROKE_ROMAN, 
+        this->caption.c_str(),
+        GLUT_STROKE_ROMAN,
         this->x + this->width / 2. - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2.,
         (this->y + this->height / 2. + 4.)*-1.
         );
     glPopMatrix();
     this->CPaint();
 }
+/**
+  * \param r Red element of the color.
+  * \param g Green element of the color.
+  * \param b Blue element of the color.
+  * \param a Alpha element of the color.
+  *
+  * Sets the background color of the button that'll be used in
+  * Paint().
+  */
 void glictButton::SetBGColor(float r, float g, float b, float a) {
     this->bgcolor.r = r;
     this->bgcolor.g = g;
     this->bgcolor.b = b;
     this->bgcolor.a = a;
 }
+/**
+  * \param caption Text that'll be placed on the button
+  *
+  * Sets the caption that'll be used when rendering text placed on center of the
+  * button.
+  */
 void glictButton::SetCaption(std::string caption) {
     this->caption = caption;
-}    
-
-
+}
