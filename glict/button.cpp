@@ -121,7 +121,6 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
   * on center of the widget.
   */
 void glictButton::Paint() {
-
     if (!highlighted) {
         glColor4f(
             (float)this->bgcolor.r,

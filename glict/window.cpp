@@ -23,25 +23,25 @@
 #include "globals.h"
 #include "glut-helper.h"
 glictWindow::glictWindow() {
-    
+
     this->bgcolor.r = 0.75;
     this->bgcolor.g = 0.75;
     this->bgcolor.b = 0.75;
     this->bgcolor.a = 1.0;
     strcpy(this->objtype, "Window");
-    
+
     this->parent = NULL;
     this->SetCaption("Untitled Window");
-}    
+}
 glictWindow::~glictWindow() {
-    
+
 }
 void glictWindow::Paint() {
 
 //    printf("panel\n");
-    
-    
-    
+
+
+
     glColor4f(
         (float)this->bgcolor.r,
         (float)this->bgcolor.g,
@@ -54,16 +54,16 @@ void glictWindow::Paint() {
     glVertex2f(this->x+this->width,this->y+this->height);
     glVertex2f(this->x,this->y+this->height);
     glEnd();
-    
-    
-    
+
+
+
     this->CPaint();
-    
-    
+
+
     this->SetScissor();
-	
+
 	glColor4fv(glictGlobals.windowTitleBgColor);
-    
+
     glBegin(GL_QUADS);
     glVertex2f(this->x,this->y);
     glVertex2f(this->x + this->width, this->y);
@@ -72,7 +72,7 @@ void glictWindow::Paint() {
     glEnd();
 //    glDisable(GL_SCISSOR_TEST);
     glColor4fv(glictGlobals.windowTitleColor);
-    
+
     glPushMatrix();
     //glRotatef(180.0, 0.0, 0.0, 1.0);
     //glutxStrokeString(this->caption.c_str(),GLUT_STROKE_ROMAN, (this->x + this->width / 2 + glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2) * -1, this->y - 9);
@@ -90,18 +90,18 @@ void glictWindow::SetBGColor(float r, float g, float b, float a) {
 }
 void glictWindow::SetCaption(std::string caption) {
     this->caption = caption;
-}    
+}
 
 bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
-    if (evt == GLICT_MOUSECLICK) {
+    if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP) {
         if (((glictPos*)wparam)->x > this->clipleft &&
             ((glictPos*)wparam)->x < this->clipright &&
             ((glictPos*)wparam)->y > this->cliptop &&
             ((glictPos*)wparam)->y < this->clipbottom) {
-            printf("Caught window click!\n");
-            return true;
+
+            return DefaultCastEvent(evt, wparam, lparam, returnvalue);
         }
-    }    
-        
+    }
+
     return false;
-}    
+}
