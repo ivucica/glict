@@ -39,6 +39,14 @@ glictButton::glictButton() {
     this->bgcolor.g = 1.0;
     this->bgcolor.b = 1.0;
     this->bgcolor.a = 1.0;
+
+    this->fgcolor.r = 1.0;
+    this->fgcolor.g = 1.0;
+    this->fgcolor.b = 1.0;
+    this->fgcolor.a = 1.0;
+
+
+
     strcpy(this->objtype, "Button");
 
     this->highlighted = false;
@@ -150,7 +158,7 @@ void glictButton::Paint() {
         this->caption.c_str(),
         GLUT_STROKE_ROMAN,
         this->x + this->width / 2. - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2.,
-        (this->y + this->height / 2. + 4.)*-1.
+        (this->y + this->height / 2. + 5. - 5.*((float)glutxNumberOfLines(this->caption.c_str())-1.))*-1.
         );
     glPopMatrix();
     this->CPaint();
@@ -170,12 +178,19 @@ void glictButton::SetBGColor(float r, float g, float b, float a) {
     this->bgcolor.b = b;
     this->bgcolor.a = a;
 }
+
 /**
-  * \param caption Text that'll be placed on the button
+  * \param r Red element of the color.
+  * \param g Green element of the color.
+  * \param b Blue element of the color.
+  * \param a Alpha element of the color.
   *
-  * Sets the caption that'll be used when rendering text placed on center of the
-  * button.
+  * Sets the foreground color of the button that'll be used in
+  * Paint(). Namely, the text color.
   */
-void glictButton::SetCaption(std::string caption) {
-    this->caption = caption;
+void glictButton::SetFGColor(float r, float g, float b, float a) {
+    this->fgcolor.r = r;
+    this->fgcolor.g = g;
+    this->fgcolor.b = b;
+    this->fgcolor.a = a;
 }

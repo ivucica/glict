@@ -88,9 +88,6 @@ void glictWindow::SetBGColor(float r, float g, float b, float a) {
     this->bgcolor.b = b;
     this->bgcolor.a = a;
 }
-void glictWindow::SetCaption(std::string caption) {
-    this->caption = caption;
-}
 
 bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
     if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP) {

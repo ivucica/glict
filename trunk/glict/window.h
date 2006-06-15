@@ -28,14 +28,13 @@ class glictWindow : public glictContainer {
         ~glictWindow();
 
         void SetBGColor(float r, float g, float b, float a);
-        void SetCaption(std::string caption);
 
         // redefined functions
-        void Paint();        
+        void Paint();
         bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
     private:
         glictColor bgcolor;
-        std::string caption;
+    friend class glictContainer;
 };
 #endif
 

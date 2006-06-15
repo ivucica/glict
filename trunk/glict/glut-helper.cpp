@@ -16,7 +16,7 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
- 
+
 // Glut-helper.h
 // contains glut helper
 
@@ -36,7 +36,7 @@ char* glutxStrokeStringExpert(const char* txt, void* font) {
     char *p;
     for (p = (char*)txt; *p && *p!='\n'; p++) {
         glutStrokeCharacter(font,*p);
-    }    
+    }
     glPopMatrix();
     return p;
 }
@@ -54,7 +54,7 @@ void glutxStrokeString(const char* txt, void* font, float x, float y) {
         glPopMatrix();
         y -= 10;
     } while (*fromwhere);
-}    
+}
 
 void glutxBitmapString(char* txt, void* font,int x,int y) {
     int len, i;
@@ -66,13 +66,13 @@ void glutxBitmapString(char* txt, void* font,int x,int y) {
     for (i = 0; i < len; i++) {
       glutBitmapCharacter(font, txt[i]);
     }
-    
+
 }
 float glutxBitmapSize(char* txt, void* font) {
     int size=0, len=strlen(txt);
     for (int i=0;i<len;i++) {
         size+=glutBitmapWidth(font,txt[i]);
-    }    
+    }
     return (float)size;
 }
 
@@ -89,14 +89,14 @@ float glutxStrokeSize(const char* txt, void* font) {
     }
     if (size>maxsize) maxsize=size;
     size = maxsize;
-    
+
     // scale it down appropriately (like we've done before)
     if (font != GLUT_STROKE_ROMAN)
         return (float)size*0.075;
-    else 
+    else
         return (float)size*0.1;//0.12
 }
-int glutxNumberOfLines(char* txt) {
+int glutxNumberOfLines(const char* txt) {
     int count=1; // at least 1 line
     //DEBUGPRINT("NUMBEROFLINES: ");
     for (unsigned int i=0;i<strlen(txt);i++) {
@@ -104,6 +104,6 @@ int glutxNumberOfLines(char* txt) {
             count++;
         } //else DEBUGPRINT("%d ",txt[i]);
     }
-    
+
     return count;
 }

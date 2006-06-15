@@ -16,7 +16,7 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
- 
+
 // Glut-helper.cpp
 // contains glut helper
 
@@ -33,5 +33,5 @@ char* glutxStrokeStringExpert(const char* txt, void* font);
 void glutxBitmapString(char* txt, void* font,int x, int y) ;
 float glutxBitmapSize(char* txt, void* font);
 float glutxStrokeSize(const char* txt, void* font);
-int glutxNumberOfLines(char* txt);
+int glutxNumberOfLines(const char* txt);
 #endif
