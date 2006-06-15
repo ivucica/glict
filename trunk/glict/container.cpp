@@ -86,13 +86,16 @@ void glictContainer::ResetTransformations() {
   * \param obj Pointer to object to add as a child.
   * Simply inserts the passed object pointer into a vector of objects, also
   * giving the child object a "this" as a parent, so the child knows who gave
-  * birth to it.
+  * birth to it. Also tells it to ResetTransformations, which'd be incorrect
+  * at display, but lets us get rid of it at init time.
   * (Oh, dear, no more biology...)
   * \sa RemoveObject
   */
 void glictContainer::AddObject(glictContainer* obj) {
     obj->parent = this;
+    obj->ResetTransformations();
     this->objects.insert(this->objects.end(), obj);
+
 }
 /**
   * \param obj Pointer to object to remove.
@@ -521,8 +524,9 @@ bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam) {
   * \sa DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue)
   */
 bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
-    if (evt == GLICT_MOUSEDOWN) printf("Mousedown event\n");
-    if (evt == GLICT_MOUSEUP)   printf("Mouseup   event\n");
+
+    if (evt == GLICT_MOUSEDOWN) printf("Mousedown event\n",0,0);
+    if (evt == GLICT_MOUSEUP)   printf("Mouseup   event\n",0,0);
     switch (evt) {
         default:
             return DefaultCastEvent(evt, wparam, lparam, returnvalue); // use default processing for all events
@@ -630,6 +634,7 @@ bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam, void*
 void glictContainer::SetOnClick(void(*f)(glictPos* relmousepos, glictContainer* callerclass)) {
     this->OnClick = f;
 }
+
 /**
   * Function collects the OpenGL's modelview matrix, and remembers whatever
   * state it currently is in. It is later used in TransformScreenCoords().
@@ -646,7 +651,7 @@ void glictContainer::RememberTransformations() {
     vector<glictContainer*>::iterator it;
 
     glGetFloatv(GL_MODELVIEW_MATRIX, ModelviewMatrix);
-    printf("Remembering %s's modelview matrix\n", objtype);
+    printf("Remembering %s's modelview matrix (child of %s)\n", objtype, parent ? parent->objtype : "NULL");
 
     for (it=objects.begin(); it!=objects.end(); it++) {
         (*it)->RememberTransformations();
