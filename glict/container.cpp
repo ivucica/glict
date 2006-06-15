@@ -63,6 +63,8 @@ glictContainer::glictContainer() {
 
     this->ResetTransformations();
 
+    this->SetCaption("");
+
 }
 
 /**
@@ -833,4 +835,14 @@ void glictContainer::TransformScreenCoords(glictPos *pos) {
             + (double)(0     ) * result[2 * 4 + 1]
             + (double)(0     ) * result[3 * 4 + 1]);
 
+}
+
+/**
+  * \param caption Caption that's to be set
+  *
+  * If the object that derived from this class supports captions, then this
+  * function will change the caption being displayed on it.
+  */
+void glictContainer::SetCaption(std::string caption) {
+    this->caption = caption;
 }

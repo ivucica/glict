@@ -32,6 +32,7 @@
 #ifndef _GLICT_CONTAINER_H
 #define _GLICT_CONTAINER_H
 #include <vector>
+#include <string>
 #include "types.h"
 using namespace std;
 
@@ -77,6 +78,7 @@ class glictContainer  {
         bool DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event into default event processor, omitting the widget's code.
 
         void SetOnClick(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon click.
+        void SetCaption(std::string caption); ///< Sets the caption of the control, if supported.
 
         void ReportDebug(); ///< Reports debug information to stdout.
 
@@ -94,7 +96,7 @@ class glictContainer  {
 
 
 
-    protected:
+    protected: // remark: protected allows access to friends, private doesnt
         vector <glictContainer*> objects; ///< Contains all the children objects.
         /*int height, width;
         int x, y;
@@ -106,5 +108,9 @@ class glictContainer  {
         float ModelviewMatrix[16]; ///< Modelview matrix, as remembered last time RememberTransformations() was called.
 
         void(*OnClick)(glictPos* relmousepos, glictContainer* callerclass); ///< Pointer to function specified as OnClick function.
+
+
+        std::string caption; ///< Caption written on the control, if control supports it.
+
 };
 #endif

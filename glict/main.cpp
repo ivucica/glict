@@ -126,7 +126,7 @@ bool buttonstate = true;
 void onpanel5click(glictPos *a, glictContainer* callclass) {
     buttonstate = !buttonstate;
 
-    (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked");
+    (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked\nButton");
     panela2.SetCaption(buttonstate ? "Sample Window" : "Name Changed"); // window
     if (buttonstate)
         panela2.SetPos(10,15);
