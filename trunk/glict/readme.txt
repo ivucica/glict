@@ -47,6 +47,9 @@ class. This class contains only basic functionalities and does not render
 anything. It handles object management, clipping, and drawing subobjects. It
 is intended to serve only as a desktop class.
 
+Examples for development can be found on http://sf.net/projects/glict/ when
+you click on big, green "Download" button.
+
 We'd like to point out that this documentation file won't be maintained
 much, and that we use in-code documentation. Doxygen is used to generate
 documentation files, and please refer to them. (This file, readme.txt, is also
