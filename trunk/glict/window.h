@@ -30,10 +30,12 @@ class glictWindow : public glictContainer {
         void SetBGColor(float r, float g, float b, float a);
 
         // redefined functions
-        void Paint();
+        virtual void Paint();
         bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
     private:
         glictColor bgcolor;
+        glictPos relmouse; // relative position of mouse acquired upon mousepress
+        bool mousedown; // is mouse currently down on the window?
     friend class glictContainer;
 };
 #endif

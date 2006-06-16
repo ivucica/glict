@@ -40,6 +40,9 @@ to four basic liberties as defined by Free Software Foundation.
 This library provides a very simple C++ interface which uses few very simple
 functions to set up the interface and to manage it.
 
+\note Currently font output functions are depending upon GLUT. This is a
+      to-be-fixed.
+
 \section Usage
 
 All the user interface controls are C++ classes derived from glictContainer

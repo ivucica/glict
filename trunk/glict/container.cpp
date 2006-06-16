@@ -65,6 +65,8 @@ glictContainer::glictContainer() {
 
     this->SetCaption("");
 
+    printf("Container created.\n");
+
 }
 
 /**
@@ -450,9 +452,14 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
        case GLICT_MOUSECLICK:
            {
            vector<glictContainer*>::iterator it;
-           for (it=objects.begin(); it!=objects.end(); it++) {
-               if ((*it)->CastEvent(evt, wparam, lparam, returnvalue))
-                   return true;
+
+           // code below should be done with a FOR loop ... this is wrong, but will do for now
+
+           if (objects.size()) {
+               for (it=objects.end()-1; it >= objects.begin(); it--) {
+                   if ((*it)->CastEvent(evt, wparam, lparam, returnvalue))
+                       return true;
+               }
            }
            if (evt == GLICT_MOUSEDOWN) {
                glictGlobals.lastMousePos.x = ((glictPos*)wparam)->x; // remembers x and y when pressing the mouse down
@@ -461,12 +468,17 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
                if (abs (((glictPos*)wparam)->x - glictGlobals.lastMousePos.x) < 3 && // upon release verifies the location of mouse, and if nearby then it's a click - cast a click event
                    abs (((glictPos*)wparam)->y - glictGlobals.lastMousePos.y) < 3 ) { // if up to 2 pixels diff
                    return this->CastEvent(GLICT_MOUSECLICK, wparam, lparam, returnvalue);
+               } else {
+                   //MessageBox(0, "It was dragging.",0,0);
                }
            } else {
+                //char temporaree[256];
+                //sprintf(temporaree, "%s (%s)", objtype, parent ? parent->objtype : "NULL");
+                //MessageBox(0,"OnClick was cast",temporaree,0);
                 glictPos relmousepos;
                 relmousepos.x = ((glictPos*)wparam)->x - this->left;
                 relmousepos.y = ((glictPos*)wparam)->y - this->top;
-                if (this->OnClick) this->OnClick(&relmousepos, this);
+                if (this->OnClick) this->OnClick((glictPos*)wparam, this);
            }
            return false; // came here? defaultcastevent caught nothing
            break;
@@ -833,7 +845,7 @@ void glictContainer::TransformScreenCoords(glictPos *pos) {
     pos->y = (int)((double)(pos->x) * result[0 * 4 + 1]
             + (double)(pos->y) * result[1 * 4 + 1]
             + (double)(0     ) * result[2 * 4 + 1]
-            + (double)(0     ) * result[3 * 4 + 1]);
+            + (double)(1     ) * result[3 * 4 + 1]);
 
 }
 

@@ -17,22 +17,18 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <stdlib.h>
-#include <time.h>
-#include "globals.h"
 
+#ifndef __GLICT_MESSAGEBOX_H
+#define __GLICT_MESSAGEBOX_H
+#include "window.h"
+#include "button.h"
+class glictMessageBox : public glictWindow {
+    public:
+        glictMessageBox();
+        ~glictMessageBox();
 
-glictGlobalsClass glictGlobals;
-
-glictGlobalsClass::glictGlobalsClass() {
-	windowTitleBgColor[0] = 0.0; windowTitleBgColor[1] = 0.0; windowTitleBgColor[2] = 1.0; windowTitleBgColor[3] = 1.0;
-	windowTitleColor[0] = 1.0; windowTitleColor[1] = 1.0; windowTitleColor[2] = 1.0; windowTitleColor[3] = 1.0;
-
-	renderMode = GLICT_RENDERING;
-
-    lastMousePos.x = 0; lastMousePos.y = 0;
-    srand(time(NULL));
-}
-glictGlobalsClass::~glictGlobalsClass() {
-}
-
+        void Paint();
+    private:
+        glictButton btnOk;
+};
+#endif

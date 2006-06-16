@@ -27,11 +27,13 @@
 #include "button.h"
 #include "panel.h"
 #include "window.h"
+#include "messagebox.h"
 #include "globals.h"
 #include "types.h"
 
 glictWindow panela2;
 glictPanel panela4;
+glictMessageBox msgbox;
 
 unsigned int windowhandle;
 glictContainer desktop;
@@ -45,6 +47,10 @@ void mouse(int button, int shift, int mousex, int mousey) {
     desktop.TransformScreenCoords(&pos);
     if (shift==GLUT_DOWN) desktop.CastEvent(GLICT_MOUSEDOWN, &pos, 0);
     if (shift==GLUT_UP) desktop.CastEvent(GLICT_MOUSEUP, &pos, 0);
+
+    //char zz[256];
+    //sprintf(zz, "%d %d", pos.x, pos.y);
+    //glutSetWindowTitle(zz);
     glutPostRedisplay();
 }
 void passivemouse(int mousex, int mousey) {
@@ -100,8 +106,8 @@ void display() {
     glPushMatrix();
     //glTranslatef( sin(kut++ * 3.14 / 180.)*90., 150., 0.);
     //glScalef(2.00,2.00,2.00);
-    glTranslatef(100, 0, 0);
     glRotatef(25.0,0.0,0.0,1.0);
+    glTranslatef(100, 0, 0);
 
     desktop.RememberTransformations();
     desktop.SetScissor();
@@ -126,7 +132,7 @@ bool buttonstate = true;
 void onpanel5click(glictPos *a, glictContainer* callclass) {
     buttonstate = !buttonstate;
 
-    (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked\nButton");
+    (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked\nButton\n(indeed)");
     panela2.SetCaption(buttonstate ? "Sample Window" : "Name Changed"); // window
     if (buttonstate)
         panela2.SetPos(10,15);
@@ -163,6 +169,12 @@ void glinit() {
 
     panela5->SetOnClick(onpanel5click);
     panela5->SetWidth(64);
+
+
+    desktop.AddObject(&msgbox);
+    msgbox.SetPos(50,50);
+    msgbox.SetWidth(50);
+    msgbox.SetHeight(50);
 }
 int main(int argc, char** argv) {
 
@@ -183,7 +195,7 @@ int main(int argc, char** argv) {
     glutMouseFunc(mouse);
 
 
-    glutIdleFunc (display);
+//    glutIdleFunc (display);
 
     glutPassiveMotionFunc(passivemouse);
 

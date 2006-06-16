@@ -32,14 +32,15 @@ glictWindow::glictWindow() {
 
     this->parent = NULL;
     this->SetCaption("Untitled Window");
+
+    printf("Window generated.\n");
 }
 glictWindow::~glictWindow() {
 
 }
 void glictWindow::Paint() {
 
-//    printf("panel\n");
-
+    printf("window\n");
 
 
     glColor4f(
@@ -96,8 +97,35 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
             ((glictPos*)wparam)->y > this->cliptop &&
             ((glictPos*)wparam)->y < this->clipbottom) {
 
+            if (((glictPos*)wparam)->y <= this->cliptop+10) {
+                if (evt == GLICT_MOUSEDOWN) {
+                    this->mousedown = true;
+                    this->relmouse.x = ((glictPos*)wparam)->x-this->left;
+                    this->relmouse.y = ((glictPos*)wparam)->y-this->top;
+                    return true;
+                }
+            }
+            if (evt == GLICT_MOUSEUP && this->mousedown) {
+                this->SetPos(
+                    ((glictPos*)wparam)->x - this->relmouse.x,
+                    ((glictPos*)wparam)->y - this->relmouse.y
+                );
+                this->mousedown = false;
+                return true;
+            }
+
             return DefaultCastEvent(evt, wparam, lparam, returnvalue);
+        } else
+        // if mouse drag is done outside object...
+        if (evt == GLICT_MOUSEUP && this->mousedown) {
+            this->SetPos(
+                ((glictPos*)wparam)->x - this->relmouse.x,
+                ((glictPos*)wparam)->y - this->relmouse.y
+            );
+            this->mousedown = false;
+            return true;
         }
+        return DefaultCastEvent(evt, wparam, lparam, returnvalue);
     }
 
     return false;

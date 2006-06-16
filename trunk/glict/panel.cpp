@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include "panel.h"
 #include "globals.h"
+#include "glut-helper.h"
 glictPanel::glictPanel() {
     //printf("init panele\n");
     this->bgcolor.r = 1.0;
@@ -28,29 +29,36 @@ glictPanel::glictPanel() {
     this->bgcolor.b = 1.0;
     this->bgcolor.a = 1.0;
     strcpy(this->objtype, "Panel");
-    
+
     this->parent = NULL;
-}    
+    printf("Panel generated.\n");
+}
 glictPanel::~glictPanel() {
-    
+
 }
 void glictPanel::Paint() {
 
 //    printf("panel\n");
-    
+
     glColor4f(
         (float)this->bgcolor.r,
         (float)this->bgcolor.g,
         (float)this->bgcolor.b,
         (float)this->bgcolor.a
-    ); 
+    );
     glBegin(GL_QUADS);
     glVertex2f(this->x,this->y);
     glVertex2f(this->x+this->width,this->y);
     glVertex2f(this->x+this->width,this->y+this->height);
     glVertex2f(this->x,this->y+this->height);
     glEnd();
-    
+
+    glPushMatrix();
+    glRotatef(180.0, 1.0, 0.0, 0.0);
+    glTranslatef(0, glutxNumberOfLines(this->caption.c_str())*-10., 0.);
+    glColor4f(1.,1.,1.,1.);
+    glutxStrokeString(this->caption.c_str(), GLUT_STROKE_ROMAN, 0, 0);
+    glPopMatrix();
     this->CPaint();
 }
 void glictPanel::SetBGColor(float r, float g, float b, float a) {
@@ -59,6 +67,7 @@ void glictPanel::SetBGColor(float r, float g, float b, float a) {
     this->bgcolor.b = b;
     this->bgcolor.a = a;
 }
+// This is the copypasteable castevent usable in other widgets
 bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 
     switch (evt) {
@@ -69,17 +78,17 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
                 ((glictPos*)wparam)->x < this->clipright &&
                 ((glictPos*)wparam)->y > this->cliptop &&
                 ((glictPos*)wparam)->y < this->clipbottom) {
-        
+
                 if (evt==GLICT_MOUSECLICK) printf("Caught panel click!\n");
-                
+
                 if (DefaultCastEvent(evt, wparam, lparam, returnvalue)) { // if a child caught click, we dont handle it otherwise
                     return true; // we simply return
-                }    
+                }
                 // otherwise we could handle it mroe ...
                 return true;
-            }    
-            break;    
-    }    
-        
+            }
+            break;
+    }
+
     return false;
-}    
+}
