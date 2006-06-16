@@ -16,23 +16,25 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include "messagebox.h"
+#include <GL/glut.h>
 
-#include <stdlib.h>
-#include <time.h>
-#include "globals.h"
-
-
-glictGlobalsClass glictGlobals;
-
-glictGlobalsClass::glictGlobalsClass() {
-	windowTitleBgColor[0] = 0.0; windowTitleBgColor[1] = 0.0; windowTitleBgColor[2] = 1.0; windowTitleBgColor[3] = 1.0;
-	windowTitleColor[0] = 1.0; windowTitleColor[1] = 1.0; windowTitleColor[2] = 1.0; windowTitleColor[3] = 1.0;
-
-	renderMode = GLICT_RENDERING;
-
-    lastMousePos.x = 0; lastMousePos.y = 0;
-    srand(time(NULL));
+#include <stdlib.h> // to make system() work
+glictMessageBox::glictMessageBox() {
+    printf("MessageBox generated.\n");
+    this->AddObject(&btnOk);
+    btnOk.SetBGColor(1.0,0.0,0.0,1.0);
+    strcpy(objtype, "MessageBox");
 }
-glictGlobalsClass::~glictGlobalsClass() {
+glictMessageBox::~glictMessageBox() {
 }
+void glictMessageBox::Paint() {
+    printf("msgbox\n");
+    //system("pause");
+    printf("now painting window:\n");
 
+    //static_cast<glictWindow*>(this))->Paint();
+    glictWindow::Paint();
+    printf("window painted\n");
+    //system("pause");
+}
