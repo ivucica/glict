@@ -80,6 +80,8 @@ class glictContainer  {
         void SetOnClick(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon click.
         void SetCaption(std::string caption); ///< Sets the caption of the control, if supported.
 
+        glictContainer* GetParent();
+
         void ReportDebug(); ///< Reports debug information to stdout.
 
 
@@ -111,6 +113,13 @@ class glictContainer  {
 
 
         std::string caption; ///< Caption written on the control, if control supports it.
+
+
+
+
+    /// \todo REmove this friend!
+
+    friend void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller);
 
 };
 #endif

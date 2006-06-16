@@ -24,9 +24,9 @@
 #include "glut-helper.h"
 glictPanel::glictPanel() {
     //printf("init panele\n");
-    this->bgcolor.r = 1.0;
-    this->bgcolor.g = 1.0;
-    this->bgcolor.b = 1.0;
+    this->bgcolor.r = .7;
+    this->bgcolor.g = .7;
+    this->bgcolor.b = .7;
     this->bgcolor.a = 1.0;
     strcpy(this->objtype, "Panel");
 
@@ -53,9 +53,15 @@ void glictPanel::Paint() {
     glVertex2f(this->x,this->y+this->height);
     glEnd();
 
+
+    //if (strlen(this->caption.c_str()) &&
+    //    strcmp(this->caption.c_str(), "Hello there.")) MessageBox(0,this->caption.c_str(), "Painting",0);
+
+    glColor4f(1., 1., 1., 1.);
     glPushMatrix();
     glRotatef(180.0, 1.0, 0.0, 0.0);
-    glTranslatef(0, glutxNumberOfLines(this->caption.c_str())*-10., 0.);
+    //glTranslatef(0, glutxNumberOfLines(this->caption.c_str())*-10., 0.);
+    glTranslatef(0,-20.,0.);
     glColor4f(1.,1.,1.,1.);
     glutxStrokeString(this->caption.c_str(), GLUT_STROKE_ROMAN, 0, 0);
     glPopMatrix();
