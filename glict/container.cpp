@@ -100,6 +100,7 @@ void glictContainer::AddObject(glictContainer* obj) {
     obj->ResetTransformations();
     this->objects.insert(this->objects.end(), obj);
 
+    this->SetHeight(height); // just force the clipping code to execute
 }
 /**
   * \param obj Pointer to object to remove.
@@ -111,11 +112,13 @@ void glictContainer::AddObject(glictContainer* obj) {
   */
 void glictContainer::RemoveObject(glictContainer* object) {
     vector<glictContainer*>::iterator it;
+
     for (it=objects.begin(); it!=objects.end(); it++) {
         if ((*it)==object) {
 
-            delete *it;
+            //delete *it;
             objects.erase(it);
+            return;
         }
     }
 }
@@ -479,6 +482,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
                 relmousepos.x = ((glictPos*)wparam)->x - this->left;
                 relmousepos.y = ((glictPos*)wparam)->y - this->top;
                 if (this->OnClick) this->OnClick((glictPos*)wparam, this);
+                return true;
            }
            return false; // came here? defaultcastevent caught nothing
            break;
@@ -857,4 +861,9 @@ void glictContainer::TransformScreenCoords(glictPos *pos) {
   */
 void glictContainer::SetCaption(std::string caption) {
     this->caption = caption;
+}
+
+
+glictContainer* glictContainer::GetParent() {
+    return parent;
 }

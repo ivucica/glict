@@ -20,15 +20,25 @@
 
 #ifndef __GLICT_MESSAGEBOX_H
 #define __GLICT_MESSAGEBOX_H
+#include <string>
 #include "window.h"
 #include "button.h"
+#include "panel.h"
 class glictMessageBox : public glictWindow {
     public:
         glictMessageBox();
         ~glictMessageBox();
 
         void Paint();
+        void SetMessage(std::string msg);
+        void SetOnDismiss(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass));
     private:
         glictButton btnOk;
+        glictPanel pnlMessage;
+        std::string mesg;
+        void(*OnDismissFunction)(glictPos* relmousepos, glictContainer* callerclass);
+    //    void KillYourself();
+
+    friend void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller);
 };
 #endif

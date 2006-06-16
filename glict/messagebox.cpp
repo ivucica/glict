@@ -19,15 +19,46 @@
 #include "messagebox.h"
 #include <GL/glut.h>
 
-#include <stdlib.h> // to make system() work
+void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller) {
+    void(*UponClick)(glictPos* relmousepos, glictContainer* callerclass);
+    glictContainer* parent=caller->GetParent(); // this gets the messagebox
+    glictContainer* parent2=parent->GetParent(); // this gets the parent of messagebox
+    UponClick = dynamic_cast<glictMessageBox*>(parent)->OnDismissFunction;
+    parent2->RemoveObject(parent);
+    if (UponClick) UponClick(relmousepos, parent);
+
+}
+
 glictMessageBox::glictMessageBox() {
     printf("MessageBox generated.\n");
+
+
+    this->AddObject(&pnlMessage);
+    pnlMessage.SetHeight(90);
+    pnlMessage.SetWidth(300);
+    pnlMessage.SetPos(0,10);
+
     this->AddObject(&btnOk);
     btnOk.SetBGColor(1.0,0.0,0.0,1.0);
+    btnOk.SetOnClick(_glictMessageBox_Closer);
+    btnOk.SetCaption("Ok");
+    btnOk.SetHeight(16);
+    btnOk.SetWidth(64);
+    btnOk.SetPos(150 - 32, 95 - 16);
+
+    SetHeight(100);
+    SetWidth(300);
+
+    this->SetCaption("Message Box");
+    this->SetMessage("Sample message box.");
     strcpy(objtype, "MessageBox");
 }
+
+
 glictMessageBox::~glictMessageBox() {
+    this->RemoveObject(&btnOk);
 }
+
 void glictMessageBox::Paint() {
     printf("msgbox\n");
     //system("pause");
@@ -37,4 +68,13 @@ void glictMessageBox::Paint() {
     glictWindow::Paint();
     printf("window painted\n");
     //system("pause");
+}
+
+void glictMessageBox::SetMessage(std::string msg) {
+    this->mesg = msg;
+    pnlMessage.SetCaption(msg);
+}
+
+void glictMessageBox::SetOnDismiss(void(*OnDism)(glictPos* relmousepos, glictContainer* callerclass)) {
+    OnDismissFunction = OnDism;
 }

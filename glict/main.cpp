@@ -106,7 +106,7 @@ void display() {
     glPushMatrix();
     //glTranslatef( sin(kut++ * 3.14 / 180.)*90., 150., 0.);
     //glScalef(2.00,2.00,2.00);
-    glRotatef(25.0,0.0,0.0,1.0);
+    glRotatef(5.0,0.0,0.0,1.0);
     glTranslatef(100, 0, 0);
 
     desktop.RememberTransformations();
@@ -172,9 +172,8 @@ void glinit() {
 
 
     desktop.AddObject(&msgbox);
+    msgbox.SetMessage("Hello there. Are you a dude?\nOr are you a babe? You should not\ntake care about such\nsilly stuff.");
     msgbox.SetPos(50,50);
-    msgbox.SetWidth(50);
-    msgbox.SetHeight(50);
 }
 int main(int argc, char** argv) {
 

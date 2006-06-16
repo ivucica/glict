@@ -100,8 +100,8 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
             if (((glictPos*)wparam)->y <= this->cliptop+10) {
                 if (evt == GLICT_MOUSEDOWN) {
                     this->mousedown = true;
-                    this->relmouse.x = ((glictPos*)wparam)->x-this->left;
-                    this->relmouse.y = ((glictPos*)wparam)->y-this->top;
+                    this->relmouse.x = ((glictPos*)wparam)->x-this->x;
+                    this->relmouse.y = ((glictPos*)wparam)->y-this->y;
                     return true;
                 }
             }
