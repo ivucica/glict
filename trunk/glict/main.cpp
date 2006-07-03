@@ -28,12 +28,14 @@
 #include "panel.h"
 #include "window.h"
 #include "messagebox.h"
+#include "textbox.h"
 #include "globals.h"
 #include "types.h"
 
 glictWindow panela2;
 glictPanel panela4;
 glictMessageBox msgbox;
+glictTextbox textbox;
 
 unsigned int windowhandle;
 glictContainer desktop;
@@ -43,7 +45,8 @@ void display();
 
 void mouse(int button, int shift, int mousex, int mousey) {
     glictPos pos;
-    pos.x = mousex; pos.y = mousey;
+    pos.x = mousex;
+    pos.y = mousey;
     desktop.TransformScreenCoords(&pos);
     if (shift==GLUT_DOWN) desktop.CastEvent(GLICT_MOUSEDOWN, &pos, 0);
     if (shift==GLUT_UP) desktop.CastEvent(GLICT_MOUSEUP, &pos, 0);
@@ -82,7 +85,8 @@ void reshape(int x, int y) {
 
     glictGlobals.h = y;
     glictGlobals.w = x;
-    ww = x; wh = y;
+    ww = x;
+    wh = y;
 //    desktop.SetPos(0,0);
 
     desktop.ReportDebug();
@@ -106,8 +110,8 @@ void display() {
     glPushMatrix();
     //glTranslatef( sin(kut++ * 3.14 / 180.)*90., 150., 0.);
     //glScalef(2.00,2.00,2.00);
-    glRotatef(5.0,0.0,0.0,1.0);
-    glTranslatef(100, 0, 0);
+    //glRotatef(5.0,0.0,0.0,1.0);
+    glTranslatef(100, 50, 0);
 
     desktop.RememberTransformations();
     desktop.SetScissor();
@@ -148,12 +152,12 @@ void glinit() {
     desktop.AddObject((panela));
     panela->SetBGColor(0.5,0.5,1.0,1.0);
     panela->AddObject((&panela2));
-	panela->SetWidth(600);
-	panela->SetHeight(256);
+    panela->SetWidth(600);
+    panela->SetHeight(256);
 
-	panela5->SetBGColor(1,0,0,1);
-	panela5->SetPos(0,90);
-	panela->AddObject(panela5);
+    panela5->SetBGColor(1,0,0,1);
+    panela5->SetPos(0,90);
+    panela->AddObject(panela5);
 
     panela2.SetBGColor(0.2,1.0,0.2,1.0);
     panela2.SetPos(10,15);
@@ -172,8 +176,13 @@ void glinit() {
 
 
     desktop.AddObject(&msgbox);
-    msgbox.SetMessage("Hello there. Are you a dude?\nOr are you a babe? You should not\ntake care about such\nsilly stuff.");
+    msgbox.SetMessage("Hello there. What's better,\nto live or to die? You should not\ntake care about such\nsilly stuff.");
+    msgbox.SetCaption("Nice Messagebox");
     msgbox.SetPos(50,50);
+
+    desktop.AddObject(&textbox);
+    textbox.SetPos(50,400);
+
 }
 int main(int argc, char** argv) {
 
@@ -199,5 +208,5 @@ int main(int argc, char** argv) {
     glutPassiveMotionFunc(passivemouse);
 
     glutMainLoop();
-	return 0;
+    return 0;
 }

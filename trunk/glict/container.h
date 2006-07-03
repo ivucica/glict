@@ -80,6 +80,9 @@ class glictContainer  {
         void SetOnClick(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon click.
         void SetCaption(std::string caption); ///< Sets the caption of the control, if supported.
 
+        const char *EvtTypeDescriptor(glictEvents evt); ///< Returns string with generated event.
+        void Focus(glictContainer* callerchild); ///< Sets the focus to the current object.
+
         glictContainer* GetParent();
 
         void ReportDebug(); ///< Reports debug information to stdout.
@@ -90,6 +93,7 @@ class glictContainer  {
         int left, right, top, bottom; ///< Current boundaries of the widget, calculated from height, width, x and y. FIX: Make private.
         int clipleft, clipright, cliptop, clipbottom; ///< Current clipping boundaries of the widget. Somewhat depends on the parent's clipping. FIX: Make private.
 
+        char objtype[50]; ///< Short descriptive string containing name of the object. (Each class actually rewrites this one upon intialization in constructor.)
 
     private:
         // these should be called only internally
@@ -104,7 +108,7 @@ class glictContainer  {
         int x, y;
         int left, right, top, bottom;
         int clipleft, clipright, cliptop, clipbottom;*/
-        char objtype[50]; ///< Short descriptive string containing name of the object. (Each class actually rewrites this one upon intialization in constructor.)
+
         glictContainer* parent; ///< Pointer to class' parents.
         unsigned int guid; ///< Unique identifier; unused so far
         float ModelviewMatrix[16]; ///< Modelview matrix, as remembered last time RememberTransformations() was called.
@@ -114,10 +118,10 @@ class glictContainer  {
 
         std::string caption; ///< Caption written on the control, if control supports it.
 
+        bool focusable;
 
 
-
-    /// \todo REmove this friend!
+    /// \todo Remove this friend!
 
     friend void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller);
 

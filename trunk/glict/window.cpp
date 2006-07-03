@@ -33,14 +33,16 @@ glictWindow::glictWindow() {
     this->parent = NULL;
     this->SetCaption("Untitled Window");
 
-    printf("Window generated.\n");
+    this->focusable = true;
+
+    //printf("Window generated.\n");
 }
 glictWindow::~glictWindow() {
 
 }
 void glictWindow::Paint() {
 
-    printf("window\n");
+    //printf("window\n");
 
 
     glColor4f(
@@ -91,11 +93,18 @@ void glictWindow::SetBGColor(float r, float g, float b, float a) {
 }
 
 bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
+    //printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
     if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP) {
         if (((glictPos*)wparam)->x > this->clipleft &&
             ((glictPos*)wparam)->x < this->clipright &&
             ((glictPos*)wparam)->y > this->cliptop &&
             ((glictPos*)wparam)->y < this->clipbottom) {
+
+
+            if (evt == GLICT_MOUSECLICK) {
+                //this->Focus(this);
+            }
+
 
             if (((glictPos*)wparam)->y <= this->cliptop+10) {
                 if (evt == GLICT_MOUSEDOWN) {
@@ -111,7 +120,7 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
                     ((glictPos*)wparam)->y - this->relmouse.y
                 );
                 this->mousedown = false;
-                return true;
+                return DefaultCastEvent(evt,wparam,lparam,returnvalue);
             }
 
             return DefaultCastEvent(evt, wparam, lparam, returnvalue);
