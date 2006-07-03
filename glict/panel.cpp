@@ -23,7 +23,6 @@
 #include "globals.h"
 #include "glut-helper.h"
 glictPanel::glictPanel() {
-    //printf("init panele\n");
     this->bgcolor.r = .7;
     this->bgcolor.g = .7;
     this->bgcolor.b = .7;
@@ -31,14 +30,14 @@ glictPanel::glictPanel() {
     strcpy(this->objtype, "Panel");
 
     this->parent = NULL;
-    printf("Panel generated.\n");
+    //printf("Panel generated.\n");
+
+    this->focusable = false;
 }
 glictPanel::~glictPanel() {
 
 }
 void glictPanel::Paint() {
-
-//    printf("panel\n");
 
     glColor4f(
         (float)this->bgcolor.r,
@@ -54,13 +53,11 @@ void glictPanel::Paint() {
     glEnd();
 
 
-    //if (strlen(this->caption.c_str()) &&
-    //    strcmp(this->caption.c_str(), "Hello there.")) MessageBox(0,this->caption.c_str(), "Painting",0);
 
     glColor4f(1., 1., 1., 1.);
     glPushMatrix();
     glRotatef(180.0, 1.0, 0.0, 0.0);
-    //glTranslatef(0, glutxNumberOfLines(this->caption.c_str())*-10., 0.);
+
     glTranslatef(0,-20.,0.);
     glColor4f(1.,1.,1.,1.);
     glutxStrokeString(this->caption.c_str(), GLUT_STROKE_ROMAN, 0, 0);
@@ -73,9 +70,8 @@ void glictPanel::SetBGColor(float r, float g, float b, float a) {
     this->bgcolor.b = b;
     this->bgcolor.a = a;
 }
-// This is the copypasteable castevent usable in other widgets
+/// This is the copypasteable castevent usable in other widgets
 bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
-
     switch (evt) {
         case GLICT_MOUSEUP:
         case GLICT_MOUSEDOWN:
@@ -85,14 +81,12 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
                 ((glictPos*)wparam)->y > this->cliptop &&
                 ((glictPos*)wparam)->y < this->clipbottom) {
 
-                if (evt==GLICT_MOUSECLICK) printf("Caught panel click!\n");
+                // if a child caught click, we dont handle it otherwise
+                return DefaultCastEvent(evt, wparam, lparam, returnvalue);
+                // otherwise we could handle it mroe but we'll simply tell we didnt proces it
 
-                if (DefaultCastEvent(evt, wparam, lparam, returnvalue)) { // if a child caught click, we dont handle it otherwise
-                    return true; // we simply return
-                }
-                // otherwise we could handle it mroe ...
-                return true;
             }
+            //printf("It occured outside the panel, ignored.\n");
             break;
     }
 

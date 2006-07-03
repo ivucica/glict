@@ -52,6 +52,8 @@ glictButton::glictButton() {
     this->highlighted = false;
     this->parent = NULL;
 
+    this->focusable = true;
+
     this->caption = "Button";
 }
 
@@ -79,7 +81,7 @@ glictButton::~glictButton() {
   * \sa glictContainer::CastEvent()
   */
 bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
-
+    //printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
     switch (evt) {
         case GLICT_MOUSEUP:
         case GLICT_MOUSEDOWN:
@@ -88,31 +90,34 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
                 ((glictPos*)wparam)->x <= this->clipright &&
                 ((glictPos*)wparam)->y >= this->cliptop &&
                 ((glictPos*)wparam)->y <= this->clipbottom) {
-
+                //printf("Within button\n");
                 if (evt == GLICT_MOUSECLICK) {
-                    printf("Caught button click!\n",0,0);
+                    //this->Focus(NULL);
+                    //printf("Caught button click!\n",0,0);
                 }
 
                 if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
-                    printf("Dehighlighting button\n",0,0);
+                    //printf("Dehighlighting button\n");
                     highlighted = false;
                 }
                 if (evt == GLICT_MOUSEDOWN) {
-                    printf("Highlighting button\n",0,0);
+                    //printf("Highlighting button\n",0,0);
                     highlighted = true;
                 }
 
                 if (DefaultCastEvent(evt, wparam, lparam, returnvalue)) { // if a child caught click, we dont handle it otherwise
+                    //printf("Default even was cast\n");
                     return true; // we simply return
                 }
                 // otherwise we could handle it mroe ...
-                return true;
+                return false;
             }
 
 
             if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
-                printf("Dehighlighting button\n");
+                //printf("Dehighlighting button while outside its borders\n");
                 highlighted = false;
+                return false;
             }
             break;
     }
@@ -141,7 +146,7 @@ void glictButton::Paint() {
         glColor4f(
             1.0, 1.0, 1.0, 1.0
         );
-        printf("RENDERING HIGHLIGHTED BUTTON\n");
+//        printf("RENDERING HIGHLIGHTED BUTTON\n");
     }
     glBegin(GL_QUADS);
     glVertex2f(this->x,this->y);

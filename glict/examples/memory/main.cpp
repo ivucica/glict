@@ -262,7 +262,7 @@ void MainWidgets() {
     desktop.AddObject(&pnlSolveds);
     pnlSolveds.SetCaption("Solved: 0\nOpens: 0");
     pnlSolveds.SetBGColor(0.,0.,0.,1.);
-    pnlSolveds.SetWidth(100.);
+    pnlSolveds.SetWidth(100);
 }
 
 

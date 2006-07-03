@@ -30,7 +30,7 @@ void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller) {
 }
 
 glictMessageBox::glictMessageBox() {
-    printf("MessageBox generated.\n");
+    //printf("MessageBox generated.\n");
 
 
     this->AddObject(&pnlMessage);
@@ -60,13 +60,13 @@ glictMessageBox::~glictMessageBox() {
 }
 
 void glictMessageBox::Paint() {
-    printf("msgbox\n");
+    //printf("msgbox\n");
     //system("pause");
-    printf("now painting window:\n");
+    //printf("now painting window:\n");
 
     //static_cast<glictWindow*>(this))->Paint();
     glictWindow::Paint();
-    printf("window painted\n");
+    //printf("window painted\n");
     //system("pause");
 }
 
