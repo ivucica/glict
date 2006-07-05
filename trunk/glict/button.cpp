@@ -93,7 +93,7 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
                 //printf("Within button\n");
                 if (evt == GLICT_MOUSECLICK) {
                     //this->Focus(NULL);
-                    //printf("Caught button click!\n",0,0);
+                    printf("Caught button click!\n",0,0);
                 }
 
                 if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
@@ -110,7 +110,8 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
                     return true; // we simply return
                 }
                 // otherwise we could handle it mroe ...
-                return false;
+                //return false;
+                return true;
             }
 
 
@@ -161,8 +162,8 @@ void glictButton::Paint() {
     glRotatef(180.0, 1.0, 0.0, 0.0);
     glutxStrokeString(
         this->caption.c_str(),
-        GLUT_STROKE_ROMAN,
-        this->x + this->width / 2. - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2.,
+        GLUT_STROKE_MONO_ROMAN,
+        this->x + this->width / 2. - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_MONO_ROMAN) / 2.,
         (this->y + this->height / 2. + 5. - 5.*((float)glutxNumberOfLines(this->caption.c_str())-1.))*-1.
         );
     glPopMatrix();

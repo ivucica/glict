@@ -32,6 +32,10 @@ glictGlobalsClass::glictGlobalsClass() {
 
     lastMousePos.x = 0; lastMousePos.y = 0;
     srand(time(NULL));
+
+    topFocused = NULL;
+
+    FinishPaint = NULL;
 }
 glictGlobalsClass::~glictGlobalsClass() {
 }

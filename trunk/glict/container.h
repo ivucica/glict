@@ -79,6 +79,7 @@ class glictContainer  {
 
         void SetOnClick(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon click.
         void SetCaption(std::string caption); ///< Sets the caption of the control, if supported.
+        std::string GetCaption(); ///< Retrieves the caption of the control, if supported.
 
         const char *EvtTypeDescriptor(glictEvents evt); ///< Returns string with generated event.
         void Focus(glictContainer* callerchild); ///< Sets the focus to the current object.

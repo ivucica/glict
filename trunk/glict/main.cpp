@@ -43,6 +43,12 @@ int ww, wh;
 glictPos mousepos;
 void display();
 
+
+void key(unsigned char key, int x, int y) {
+    desktop.CastEvent(GLICT_KEYPRESS, &key, 0);
+    glutPostRedisplay();
+}
+
 void mouse(int button, int shift, int mousex, int mousey) {
     glictPos pos;
     pos.x = mousex;
@@ -129,6 +135,7 @@ void display() {
     glEnd();
     glEnable(GL_STENCIL_TEST);
 
+    printf("FINISHED PAINT.\n");
     glutSwapBuffers();
     //desktop.ReportDebug();
 }
@@ -137,7 +144,7 @@ void onpanel5click(glictPos *a, glictContainer* callclass) {
     buttonstate = !buttonstate;
 
     (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked\nButton\n(indeed)");
-    panela2.SetCaption(buttonstate ? "Sample Window" : "Name Changed"); // window
+    panela2.SetCaption(buttonstate ? "Sample Window" : textbox.GetCaption()); // window
     if (buttonstate)
         panela2.SetPos(10,15);
     else
@@ -175,14 +182,16 @@ void glinit() {
     panela5->SetWidth(64);
 
 
-    desktop.AddObject(&msgbox);
+    panela->AddObject(&msgbox);
     msgbox.SetMessage("Hello there. What's better,\nto live or to die? You should not\ntake care about such\nsilly stuff.");
     msgbox.SetCaption("Nice Messagebox");
     msgbox.SetPos(50,50);
 
-    desktop.AddObject(&textbox);
-    textbox.SetPos(50,400);
+    panela2.AddObject(&textbox);
+    textbox.SetPos(50,100);
+    textbox.SetCaption("Text");
 
+    glictGlobals.FinishPaint = &glutSwapBuffers;
 }
 int main(int argc, char** argv) {
 
@@ -202,10 +211,10 @@ int main(int argc, char** argv) {
     glutReshapeFunc(reshape);
     glutMouseFunc(mouse);
 
-
+    glutKeyboardFunc(key);
 //    glutIdleFunc (display);
 
-    glutPassiveMotionFunc(passivemouse);
+    //glutPassiveMotionFunc(passivemouse);
 
     glutMainLoop();
     return 0;

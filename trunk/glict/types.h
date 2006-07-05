@@ -65,6 +65,9 @@ typedef struct {
 enum glictEvents {
     GLICT_MOUSECLICK = 0, ///< Mouse click event
     GLICT_MOUSEDOWN = 1, ///< Mouse down event
-    GLICT_MOUSEUP = 2 ///< Mouse up event
+    GLICT_MOUSEUP = 2, ///< Mouse up event
+    GLICT_KEYPRESS = 3, ///< Key press event
+    GLICT_KEYDOWN = 4, ///< Key down event
+    GLICT_KEYUP = 5 ///< Key release event
 };
 #endif

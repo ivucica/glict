@@ -52,6 +52,8 @@ glictMessageBox::glictMessageBox() {
     this->SetCaption("Message Box");
     this->SetMessage("Sample message box.");
     strcpy(objtype, "MessageBox");
+
+    this->focusable = true;
 }
 
 

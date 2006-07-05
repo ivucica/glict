@@ -450,80 +450,105 @@ void glictContainer::CPaint() {
   * \sa CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue)
   */
 bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
-   //printf("Default event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
-   switch (evt) {
-       case GLICT_MOUSEUP:
-       case GLICT_MOUSEDOWN:
-       case GLICT_MOUSECLICK:
-           {
-           vector<glictContainer*>::iterator it;
+    //printf("Default event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
+    switch (evt) {
+        case GLICT_KEYPRESS:
+            // as default behaviour is that widget doesnt know what to do with
+            // a key, it'll pass exec to the top focused item, whatever it
+            // might be
+            printf("IN DEVELOPMENT: Key press event\n");
+            if (glictGlobals.topFocused)
+                if (this!=glictGlobals.topFocused)
+                    return glictGlobals.topFocused->CastEvent(evt, wparam, lparam, returnvalue);
+            // if it cant find top focused item, or that it is actually the
+            // focused item, then it will report that it
+            // doesnt know how to proc the event
+            return false;
+        case GLICT_KEYDOWN:
+            printf("IN DEVELOPMENT: Key down event\n");
+            return false;
+        case GLICT_KEYUP:
+            printf("IN DEVELOPMENT: Key up event\n");
+            return false;
 
-           //printf(">>>>Giving children of %s chance to process it\n", objtype);
-           if (objects.size()) {
-               //printf(">>>>It has %d children\n", objects.size());
-               for (it=objects.end()-1; it >= objects.begin(); it--) {
-                   //printf(">> Moving on to %s (%s)\n", (*it)->objtype, objtype);
-                   if ((*it)->CastEvent(evt, wparam, lparam, returnvalue))
-                       return true;
-                   //else
-                       //printf(">> %s (%s) ignored it\n", (*it)->objtype, objtype);
-               }
-           }
+        case GLICT_MOUSEUP:
+        case GLICT_MOUSEDOWN:
+        case GLICT_MOUSECLICK:
+            {
+            vector<glictContainer*>::iterator it;
 
-           //printf("Passing on to specific mouseevent processing in %s (%s).\n", objtype, parent ? parent->objtype : "NULL");
-           if (evt == GLICT_MOUSEDOWN) {
-               //printf("Mouse down\n");
-               glictGlobals.lastMousePos.x = ((glictPos*)wparam)->x; // remembers x and y when pressing the mouse down
-               glictGlobals.lastMousePos.y = ((glictPos*)wparam)->y;
-               this->Focus(NULL);
-           } else if (evt == GLICT_MOUSEUP) {
-               //printf("Mouse up\n");
-               if (abs (((glictPos*)wparam)->x - glictGlobals.lastMousePos.x) < 3 && // upon release verifies the location of mouse, and if nearby then it's a click - cast a click event
-                   abs (((glictPos*)wparam)->y - glictGlobals.lastMousePos.y) < 3 ) { // if up to 2 pixels diff
-                   //printf("Considering it a click\n");
-                   if (!parent)
-                       return this->CastEvent(GLICT_MOUSECLICK, wparam, lparam, returnvalue);
-                   else {
-                       //printf("Not toplevel! Has a parent. Thus ignoring a click, letting toplevel parse properly.\n");
-                       return false;
-                   }
-
-               } else {
-                   //printf("Considering it dragging. Ignoring!\n");
-                   return false;
-               }
-           } else { // not mousedown , not mouseup? mouseclick!
-
-                glictPos relmousepos;
-                relmousepos.x = ((glictPos*)wparam)->x - this->left;
-                relmousepos.y = ((glictPos*)wparam)->y - this->top;
-
-
-                if (((glictPos*)wparam)->x > this->clipleft &&
-                    ((glictPos*)wparam)->x < this->clipright &&
-                    ((glictPos*)wparam)->y > this->cliptop &&
-                    ((glictPos*)wparam)->y < this->clipbottom) {
-                    if (this->OnClick) {
-                        this->OnClick((glictPos*)wparam, this);
+            if (objects.size()) {
+                for (it=objects.end()-1; it >= objects.begin(); it--) {
+                    if ((*it)->CastEvent(evt, wparam, lparam, returnvalue))
                         return true;
-                    }
-                    // if it happened within our boundaries, let it be as if we proc'ed it!
-                    return true;
                 }
-                // it didnt? then lets ignore it
-                return false;
+            }
 
-           }
-           //printf("No processing seems to have occured.\n");
-           return false; // came here? defaultcastevent caught nothing
-           break;
-           }
+            //printf("Passing on to specific mouseevent processing in %s (%s).\n", objtype, parent ? parent->objtype : "NULL");
+            if (evt == GLICT_MOUSEDOWN) {
+                //printf("Mouse down\n");
+                glictGlobals.lastMousePos.x = ((glictPos*)wparam)->x; // remembers x and y when pressing the mouse down
+                glictGlobals.lastMousePos.y = ((glictPos*)wparam)->y;
+                if (focusable) {
+                    if (((glictPos*)wparam)->x > this->clipleft &&
+                     ((glictPos*)wparam)->x < this->clipright &&
+                     ((glictPos*)wparam)->y > this->cliptop &&
+                     ((glictPos*)wparam)->y < this->clipbottom) {
+
+                        this->Focus(NULL);
+                        return true;
+                     }
+                }
+            } else if (evt == GLICT_MOUSEUP) {
+                //printf("Mouse up\n");
+                if (abs (((glictPos*)wparam)->x - glictGlobals.lastMousePos.x) < 3 && // upon release verifies the location of mouse, and if nearby then it's a click - cast a click event
+                    abs (((glictPos*)wparam)->y - glictGlobals.lastMousePos.y) < 3 ) { // if up to 2 pixels diff
+                    //printf("Considering it a click\n");
+                    //if (!parent) {
+                        printf("Casting click event.\n");
+                        return this->CastEvent(GLICT_MOUSECLICK, wparam, lparam, returnvalue);
+
+                    //} else {
+                        //Not toplevel! Has a parent. Thus ignoring a click, letting toplevel parse properly.
+                    //}
+
+                } else {
+                    //Considering it dragging. Ignoring!
+                }
+            } else { // not mousedown , not mouseup? mouseclick!
+
+                 glictPos relmousepos;
+                 relmousepos.x = ((glictPos*)wparam)->x - this->left;
+                 relmousepos.y = ((glictPos*)wparam)->y - this->top;
 
 
-       default:
-           printf("Unhandled event\n");
-           return false; // unprocessed, unknown event
-   }
+                 if (((glictPos*)wparam)->x > this->clipleft &&
+                     ((glictPos*)wparam)->x < this->clipright &&
+                     ((glictPos*)wparam)->y > this->cliptop &&
+                     ((glictPos*)wparam)->y < this->clipbottom) {
+                     if (this->OnClick) {
+                         printf("Click on %s.\n", objtype);
+                         this->OnClick((glictPos*)wparam, this);
+                         return true;
+                     }
+                     // if it happened within our boundaries, let it be as if we proc'ed it!
+                     return true;
+                 }
+                 // it didnt? then lets ignore it
+                 return false;
+
+            }
+            return false; // came here? defaultcastevent caught nothing
+            }
+
+
+        default:
+            printf("Unhandled event\n");
+            return false; // unprocessed, unknown event
+    }
+
+    // should never come here, but just in case:
+    return false;
 }
 
 /**
@@ -581,97 +606,6 @@ bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam, void*
             return DefaultCastEvent(evt, wparam, lparam, returnvalue); // use default processing for all events
         case GLICT_MOUSECLICK:
             return DefaultCastEvent(evt, wparam, lparam, returnvalue); // we never catch a mouse click in glictContainer... but some child might do so
-
-            { // non-workign code below ... its supposed to use blending but it wont function :(
-
-            GLint	oldviewport[4];
-            glGetIntegerv(GL_VIEWPORT, oldviewport);
-            glViewport(0,0,50,50);
-
-            int mousex = ((glictPos*)wparam)->x, mousey = ((glictPos*)wparam)->y;
-            GLuint	buffer[512];
-            GLint	pogotci;
-            GLint	viewport[4];
-
-            glGetIntegerv(GL_VIEWPORT, viewport);
-
-            glSelectBuffer(512, buffer);
-
-            //glRenderMode(GL_SELECT);
-            glictGlobals.renderMode = GLICT_SELECTING;
-            glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-            glInitNames();
-            glPushName(0);
-
-            glMatrixMode(GL_PROJECTION);
-
-
-
-            glPushMatrix();
-            glLoadIdentity();
-
-            // viewport set here
-
-            gluPickMatrix((GLdouble) (mousex ) , (GLdouble) (/*viewport[3] - */(mousey - viewport[1]*2)), 1.0f, 1.0f, viewport);
-
-            gluOrtho2D(0,glictGlobals.w ,0,glictGlobals.h);
-        	glMatrixMode (GL_MODELVIEW);
-
-        	glEnable(GL_STENCIL_TEST);
-        	glDisable(GL_SCISSOR_TEST);
-            this->SetScissor();
-            this->Paint();
-            glEnable(GL_SCISSOR_TEST);
-        	glDisable(GL_STENCIL_TEST);
-
-            glMatrixMode(GL_PROJECTION);
-            glPopMatrix();
-
-
-            /*glictGlobals.renderMode = GLICT_RENDERING;
-            glutSwapBuffers();
-            return;
-            */
-
-            glMatrixMode(GL_MODELVIEW);
-            pogotci=glRenderMode(GL_RENDER);
-
-            if (pogotci > 0)
-            {
-                int	najblizi = buffer[3];
-                int dubina = buffer[1];
-
-                printf("%d hits\n", pogotci);
-                for (int i = 1; i < pogotci; i++)
-                {
-                    printf("%d: %d %d %d %d\n", buffer[i*4], buffer[i*4+1], buffer[i*4+2], buffer[i*4+3]);
-                    if (buffer[i*4+1] < GLuint(dubina))
-                    {
-                        najblizi = buffer[i*4+3];
-                        dubina = buffer[i*4+1];
-                        printf("%d at %d\n", najblizi, dubina);
-                    }
-                }
-
-        /*        pointX = najblizi % 18;
-                pointY = najblizi / 18 % 14;
-                pointZ = najblizi / 18 / 14 % 14;
-          		hitID = najblizi;*/
-          		printf("Closest  %d\n", najblizi);
-            } else {
-        /*        pointX = -1;
-                pointY = -1;
-                pointZ = -1;
-                hitID=-1;*/
-                printf("Nothing selectable\n");
-            }
-
-            glViewport(oldviewport[0], oldviewport[1], oldviewport[2], oldviewport[3]);
-            glutSwapBuffers();
-            glictGlobals.renderMode = GLICT_RENDERING;
-            }
-
             break;
 	}
 }
@@ -894,6 +828,15 @@ void glictContainer::TransformScreenCoords(glictPos *pos) {
 void glictContainer::SetCaption(std::string caption) {
     this->caption = caption;
 }
+/**
+  * \return Caption of the object.
+  *
+  * If the object that derived from this class supports captions, then this
+  * function will get the caption being displayed on it.
+  */
+std::string glictContainer::GetCaption() {
+    return caption;
+}
 
 /**
   * Obtains the current object's parent, as stored in parent variable.
@@ -923,11 +866,19 @@ void glictContainer::Focus(glictContainer* callerchild) {
         if (heredone)
             objects.insert(objects.end(), callerchild);
     }
+
+
     if (parent) {
         parent->Focus(this);
+        printf("%s Focused parent.\n", objtype);
     } else { // we're on top level
-        Paint();
+        //Paint();
+        //printf("Painted.\n");
+        //if (glictGlobals.FinishPaint) glictGlobals.FinishPaint();
     }
+
+    if (!callerchild) printf("Focused on %s\n", this->objtype);
+    glictGlobals.topFocused = this;
 }
 
 const char* glictContainer::EvtTypeDescriptor(glictEvents evt) {
