@@ -53,15 +53,14 @@ void glictPanel::Paint() {
     glEnd();
 
 
-
     glColor4f(1., 1., 1., 1.);
     glPushMatrix();
+    glTranslatef(this->x, this->y+10.,0);
     glRotatef(180.0, 1.0, 0.0, 0.0);
-
-    glTranslatef(0,-20.,0.);
     glColor4f(1.,1.,1.,1.);
-    glutxStrokeString(this->caption.c_str(), GLUT_STROKE_ROMAN, 0, 0);
+    glutxStrokeString(this->caption.c_str(), GLUT_STROKE_MONO_ROMAN, 0, 0);
     glPopMatrix();
+
     this->CPaint();
 }
 void glictPanel::SetBGColor(float r, float g, float b, float a) {

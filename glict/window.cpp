@@ -81,7 +81,7 @@ void glictWindow::Paint() {
     //glutxStrokeString(this->caption.c_str(),GLUT_STROKE_ROMAN, (this->x + this->width / 2 + glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2) * -1, this->y - 9);
     glRotatef(180.0, 1.0, 0.0, 0.0);
     //glDisable(GL_SCISSOR_TEST);
-    glutxStrokeString(this->caption.c_str(),GLUT_STROKE_ROMAN, this->x + (this->width / 2 - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2) , this->y*-1. - 9.);
+    glutxStrokeString(this->caption.c_str(),GLUT_STROKE_MONO_ROMAN, this->x + (this->width / 2 - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_MONO_ROMAN) / 2) , this->y*-1. - 9.);
     //glEnable(GL_SCISSOR_TEST);
     glPopMatrix();
 }
@@ -105,15 +105,24 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
                 //this->Focus(this);
             }
 
-
             if (((glictPos*)wparam)->y <= this->cliptop+10) {
                 if (evt == GLICT_MOUSEDOWN) {
+                    this->Focus(NULL);
                     this->mousedown = true;
                     this->relmouse.x = ((glictPos*)wparam)->x-this->x;
                     this->relmouse.y = ((glictPos*)wparam)->y-this->y;
+                    // dont to defaultcastevent as it might call a child that's below our titlebar
                     return true;
                 }
             }
+
+
+            if (evt == GLICT_MOUSEDOWN) {
+                // we dont want anyone else to catch this one
+                DefaultCastEvent(evt,wparam,lparam,returnvalue);
+                return true;
+            }
+
             if (evt == GLICT_MOUSEUP && this->mousedown) {
                 this->SetPos(
                     ((glictPos*)wparam)->x - this->relmouse.x,
