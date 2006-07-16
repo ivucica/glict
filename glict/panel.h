@@ -20,15 +20,15 @@
 #ifndef __GLICT_PANEL_H
 #define __GLICT_PANEL_H
 
-#include "container.h"
-#include "types.h"
+#include <GLICT/container.h>
+#include <GLICT/types.h>
 class glictPanel : public glictContainer {
     public:
         glictPanel();
         ~glictPanel();
-        
+
         void SetBGColor(float r, float g, float b, float a);
-        
+
         // redefined functions
         void Paint();
         bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);

@@ -20,8 +20,8 @@
 #ifndef __GLICT_WINDOW_H
 #define __GLICT_WINDOW_H
 #include <string>
-#include "container.h"
-#include "types.h"
+#include <GLICT/container.h>
+#include <GLICT/types.h>
 class glictWindow : public glictContainer {
     public:
         glictWindow();

@@ -23,14 +23,15 @@
 
 #include <GL/glut.h>
 #include <stdio.h>
-#include "container.h"
-#include "button.h"
-#include "panel.h"
-#include "window.h"
-#include "messagebox.h"
-#include "textbox.h"
-#include "globals.h"
-#include "types.h"
+#include <GLICT/container.h>
+#include <GLICT/button.h>
+#include <GLICT/panel.h>
+#include <GLICT/window.h>
+#include <GLICT/messagebox.h>
+#include <GLICT/textbox.h>
+#include <GLICT/globals.h>
+//#include <GLICT/types.h>
+
 
 glictWindow panela2;
 glictPanel panela4;
@@ -101,19 +102,20 @@ void reshape(int x, int y) {
 #include <math.h>
 float kut = 0.;
 void display() {
-    glDisable(GL_STENCIL_TEST);
+    //glDisable(GL_STENCIL_TEST);
+    glDisable(GL_SCISSOR_TEST);
+    //printf("PAINT STARTUP\nPAINT STARTUP\nPAINT STARTUP\n-------------------\n");
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_STENCIL_TEST);
 
-
+    //glEnable(GL_STENCIL_TEST);
+    glEnable(GL_SCISSOR_TEST);
     glPushMatrix();
     desktop.RememberTransformations();
-    desktop.SetScissor();
     desktop.Paint();
     glPopMatrix();
 
-    glPushMatrix();
+    /*glPushMatrix();
     //glTranslatef( sin(kut++ * 3.14 / 180.)*90., 150., 0.);
     //glScalef(2.00,2.00,2.00);
     //glRotatef(5.0,0.0,0.0,1.0);
@@ -124,8 +126,8 @@ void display() {
     desktop.Paint();
 
     glPopMatrix();
-
-    glDisable(GL_STENCIL_TEST);
+*/
+    //glDisable(GL_STENCIL_TEST);
     glBegin(GL_QUADS);
     glColor4f(0.5,0.5,0.5,1.0);
     glVertex2f(mousepos.x, mousepos.y);
@@ -191,7 +193,6 @@ void glinit() {
     textbox.SetPos(50,100);
     textbox.SetCaption("Text");
 
-    glictGlobals.FinishPaint = &glutSwapBuffers;
 }
 int main(int argc, char** argv) {
 
