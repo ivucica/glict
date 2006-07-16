@@ -28,8 +28,8 @@
 
 #include <string>
 
-#include "window.h"
-#include "types.h"
+#include <GLICT/window.h>
+#include <GLICT/types.h>
 
 /**
  * \brief Button class widget

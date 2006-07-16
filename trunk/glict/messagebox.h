@@ -21,9 +21,9 @@
 #ifndef __GLICT_MESSAGEBOX_H
 #define __GLICT_MESSAGEBOX_H
 #include <string>
-#include "window.h"
-#include "button.h"
-#include "panel.h"
+#include <GLICT/window.h>
+#include <GLICT/button.h>
+#include <GLICT/panel.h>
 class glictMessageBox : public glictWindow {
     public:
         glictMessageBox();

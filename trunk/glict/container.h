@@ -33,9 +33,8 @@
 #define _GLICT_CONTAINER_H
 #include <vector>
 #include <string>
-#include "types.h"
+#include <GLICT/types.h>
 using namespace std;
-
 
 
 /**

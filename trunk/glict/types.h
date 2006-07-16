@@ -26,6 +26,8 @@
 
 #ifndef _GLICT_TYPES_H
 #define _GLICT_TYPES_H
+
+
 /**
  * \brief Used to store either position or size. (later typedefed to equal glictSize - contains unions so both names can be used for elements)
  *
@@ -70,4 +72,14 @@ enum glictEvents {
     GLICT_KEYDOWN = 4, ///< Key down event
     GLICT_KEYUP = 5 ///< Key release event
 };
+
+/**
+ * \brief Enumerates scissor modes that can be used.
+ */
+enum glictClippingMode {
+    GLICT_NOCLIP = 0, ///< Do not use clipping; max performance, UI designer needs to be careful
+    GLICT_SCISSORTEST = 1, ///< Use scissoring test; cannot be used with transformations
+    GLICT_STENCILTEST = 2 ///< Use stencil testing; compatible with transformations, slow
+};
+
 #endif

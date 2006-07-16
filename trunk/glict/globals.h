@@ -16,8 +16,8 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "container.h"
-#include "types.h"
+#include <GLICT/container.h>
+#include <GLICT/types.h>
 class glictGlobalsClass {
     public:
         glictGlobalsClass();
@@ -26,10 +26,9 @@ class glictGlobalsClass {
         float windowTitleColor[4];
         float w,h;
         glictPos lastMousePos; // last coordinates where user clicked
-        bool renderMode;
+        glictClippingMode clippingMode;
         glictContainer* topFocused;
 
-        void(*FinishPaint)(); ///< Pointer to function specified as OnClick function.
 };
 extern glictGlobalsClass glictGlobals;
 

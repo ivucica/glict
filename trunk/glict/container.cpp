@@ -311,26 +311,39 @@ void glictContainer::SetClip(int left, int top, int right, int bottom) {
   * function. If necessary, it can be manually called by program that uses the
   * library, however in most cases it should not be necessary.
   *
-  * Note: althought named SetScissor, note that GLICT now uses stencil
-  * testing. This is so that special transformations can be painlessly used
-  * on entire GUI, which was one of goals in making the library.
-  * In further development, who knows - maybe scissor test might come back
-  * to speed up stuff.
+  * Note: althought named SetScissor, GLICT can be set to use either scissor
+  * or stencil testing. This is so that special transformations can be
+  * painlessly used on entire GUI, which was one of goals in making the library.
+  * Default mode is scissor test for performance, scissoring/clipping can be
+  * turned off in glictGlobals's member clippingTest, or can be set to scissor
+  * testing.
   *
-  * \sa Paint(), CPaint()
+  * It is up to main program to enable or disable appropriate stencil/scissor
+  * test.
+  *
+  * If using scissor test, then you MUST update the glictGlobals.h, although
+  * that is always recommended. glictGlobals.h must contain current viewport
+  * height.
+  *
+  * \sa Paint(), CPaint(), glictGlobals::clippingMode
   */
 void glictContainer::SetScissor() {
-    // disabled scissor test because it doesnt like rescale, rotate etc.
-    /*if (glictGlobals.renderMode==GLICT_RENDERING) {
-        printf("Scissor testing %s (%s)\n", this->objtype, (this->parent ? this->parent->objtype : "NULL"));
+    //printf("SCISSOR SET\n");
+    if (glictGlobals.clippingMode==GLICT_SCISSORTEST) {
+        //printf("Scissor testing %s (%s), %d %d %d %d\n", this->objtype, (this->parent ? this->parent->objtype : "NULL"), clipleft, clipright, cliptop, clipbottom);
+        glPushMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
         glScissor(
             this->clipleft,
             (int)glictGlobals.h - this->clipbottom,
             this->clipright - this->clipleft,
             this->clipbottom - this->cliptop
         );
+        glPopMatrix();
 
-    } else {*/
+    } else
+    if (glictGlobals.clippingMode==GLICT_STENCILTEST) {
         //glLoadName(this->guid);
         //printf("Stencil testing %s (%s); %d %d %d %d\n", this->objtype, (this->parent ? this->parent->objtype : "NULL"), clipleft, clipright, cliptop, clipbottom);
         glClear(GL_STENCIL_BUFFER_BIT);
@@ -362,7 +375,7 @@ void glictContainer::SetScissor() {
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
 
-    //}
+    }// else printf("CLIP TEST IS OFF!!\n");
 }
 
 /**

@@ -28,14 +28,15 @@ glictGlobalsClass::glictGlobalsClass() {
 	windowTitleBgColor[0] = 0.0; windowTitleBgColor[1] = 0.0; windowTitleBgColor[2] = 1.0; windowTitleBgColor[3] = 1.0;
 	windowTitleColor[0] = 1.0; windowTitleColor[1] = 1.0; windowTitleColor[2] = 1.0; windowTitleColor[3] = 1.0;
 
-	renderMode = GLICT_RENDERING;
+	//renderMode = GLICT_RENDERING; defunct
 
     lastMousePos.x = 0; lastMousePos.y = 0;
     srand(time(NULL));
 
     topFocused = NULL;
 
-    FinishPaint = NULL;
+
+    clippingMode = GLICT_SCISSORTEST;
 }
 glictGlobalsClass::~glictGlobalsClass() {
 }

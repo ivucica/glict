@@ -75,5 +75,9 @@ glictContainer::TransformScreenCoords()
 
 Reordering of widgets - focusing
 
+\section Contact
 
+To contact me please send an e-mail to 
+\image html ivucica.gif "\@gm41l.kom"
+Of course, replace kom with com, and put correct name of Google's mailing service on appropriate place. I feel that privacy is important, yours just like mine.
 */
