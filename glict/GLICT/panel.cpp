@@ -16,17 +16,18 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
+#include <stdlib.h>
 #include <GL/glut.h>
 #include <stdio.h>
 #include "panel.h"
 #include "globals.h"
-#include "glut-helper.h"
+#include "fonts.h"
 glictPanel::glictPanel() {
-    this->bgcolor.r = .7;
-    this->bgcolor.g = .7;
-    this->bgcolor.b = .7;
+	this->bgcolor.r = 0.75;
+    this->bgcolor.g = 0.75;
+    this->bgcolor.b = 0.75;
     this->bgcolor.a = 1.0;
+
     strcpy(this->objtype, "Panel");
 
     this->parent = NULL;
@@ -38,7 +39,7 @@ glictPanel::~glictPanel() {
 
 }
 void glictPanel::Paint() {
-
+    if (!GetVisible()) return;
     glColor4f(
         (float)this->bgcolor.r,
         (float)this->bgcolor.g,
@@ -58,7 +59,7 @@ void glictPanel::Paint() {
     glTranslatef(this->x, this->y+10.,0);
     glRotatef(180.0, 1.0, 0.0, 0.0);
     glColor4f(1.,1.,1.,1.);
-    glutxStrokeString(this->caption.c_str(), GLUT_STROKE_MONO_ROMAN, 0, 0);
+    glictFontRender(this->caption.c_str(), "system", 0, 0);
     glPopMatrix();
 
     this->CPaint();
@@ -71,6 +72,7 @@ void glictPanel::SetBGColor(float r, float g, float b, float a) {
 }
 /// This is the copypasteable castevent usable in other widgets
 bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
+    if (!GetVisible() || !GetEnabled()) return false;
     switch (evt) {
         case GLICT_MOUSEUP:
         case GLICT_MOUSEDOWN:

@@ -22,10 +22,9 @@
 
 
 
-/* This file is now used only to support examples. Its functionality is now
-   superseded by fonts.cpp which offers a wider variety of font support and
-   extensibility. */
+/* This file is now defunct. Its functionality is now superseded by fonts.cpp */
 
+#error GLUT-HELPER.CPP is defunct, use FONTS.CPP for similar functionality. To compile, please just remove this file from the project.
 
 // Glut-helper.h
 // contains glut helper
@@ -50,23 +49,20 @@ char* glutxStrokeStringExpert(const char* txt, void* font) {
     glPopMatrix();
     return p;
 }
-#include <stdio.h>
 void glutxStrokeString(const char* txt, void* font, float x, float y) {
     char* fromwhere=(char*)txt;
     do {
         if (fromwhere!=txt) fromwhere++;
         glPushMatrix();
         glTranslatef(x,y,0);
-        //if (font==GLUT_STROKE_ROMAN)
-        //    glScalef(0.1,0.075,0.075);
-        //else
-        //    glScalef(0.075,0.075,0.075);
-        glScalef(.0075, .0075, .0075);
+        if (font==GLUT_STROKE_ROMAN)
+            glScalef(0.1,0.075,0.075);
+        else
+            glScalef(0.075,0.075,0.075);
         fromwhere = glutxStrokeStringExpert(fromwhere,font);
         glPopMatrix();
-        y -= 1;
+        y -= 10;
     } while (*fromwhere);
-    printf("Rendered %s\n", txt);
 }
 
 void glutxBitmapString(char* txt, void* font,int x,int y) {
@@ -91,10 +87,6 @@ float glutxBitmapSize(char* txt, void* font) {
 
 
 float glutxStrokeSize(const char* txt, void* font) {
-
-
-    printf(" SIZE OF %s\n", txt);
-
     int size=0, len=strlen(txt);
     int maxsize=0;
     for (int i=0;i<len;i++) {
@@ -107,14 +99,11 @@ float glutxStrokeSize(const char* txt, void* font) {
     if (size>maxsize) maxsize=size;
     size = maxsize;
 
-
     // scale it down appropriately (like we've done before)
-    //if (font != GLUT_STROKE_ROMAN)
-    //    return (float)size*0.075;
-    //else
-    //    return (float)size*0.1;//0.12
-    return (float)size * .0075;
-
+    if (font != GLUT_STROKE_ROMAN)
+        return (float)size*0.075;
+    else
+        return (float)size*0.1;//0.12
 }
 int glutxNumberOfLines(const char* txt) {
     int count=1; // at least 1 line

@@ -29,6 +29,8 @@ This library provides a very simple C++ interface which uses few very simple fun
 
 USAGE
 
+Please read the documentation generated with Doxygen.
+
 All the user interface controls are C++ classes derived from glictContainer class. This class contains only basic functionalities and does not render anything. It handles object management, clipping, and drawing subobjects. It is intended to serve only as a desktop class. Here are the public interfaces in this class:
 
 	// customizable functions
@@ -56,6 +58,11 @@ SetWidth() sets the width of the control.
 SetPos() sets the position of the control inside the parent control.
 GetPos() and GetSize() respectively get the size.
 SetScissor() prepares for drawing by activating appropriate clipping model. We do not recommend that this function is used and do not promise ongoing support for it.
+
+
+Before using the widgets, you should set up at least a GLICT font named 
+"system" (case sensitive). It is the font used through GLICT widget rendering.
+
 
 This library is still deep in development. We encourage capable people to join the project and assist in making this a library that's easy for implementation everywhere.
 

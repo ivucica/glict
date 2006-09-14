@@ -24,21 +24,22 @@
  */
 
 
+#include <stdlib.h>
 #include <GL/glut.h>
 #include <stdio.h>
 #include "button.h"
 #include "globals.h"
-#include "glut-helper.h"
+#include "fonts.h"
 
 /**
   * It fills up the class with default infos.
   */
 glictButton::glictButton() {
     //printf("init panele\n");
-    this->bgcolor.r = 1.0;
-    this->bgcolor.g = 1.0;
-    this->bgcolor.b = 1.0;
-    this->bgcolor.a = 1.0;
+    this->bgcolor.r = 0.0;
+    this->bgcolor.g = 0.0;
+    this->bgcolor.b = 0.0;
+    this->bgcolor.a = 0.0;
 
     this->fgcolor.r = 1.0;
     this->fgcolor.g = 1.0;
@@ -81,6 +82,8 @@ glictButton::~glictButton() {
   * \sa glictContainer::CastEvent()
   */
 bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
+    if (!GetVisible() || !GetEnabled()) return false;
+
     //printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
     switch (evt) {
         case GLICT_MOUSEUP:
@@ -93,7 +96,7 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
                 //printf("Within button\n");
                 if (evt == GLICT_MOUSECLICK) {
                     //this->Focus(NULL);
-                    printf("Caught button click!\n",0,0);
+                    //printf("Caught button click!\n",0,0);
                 }
 
                 if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
@@ -135,6 +138,7 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
   * on center of the widget.
   */
 void glictButton::Paint() {
+    if (!GetVisible()) return;
     if (!highlighted) {
         glColor4f(
             (float)this->bgcolor.r,
@@ -145,8 +149,18 @@ void glictButton::Paint() {
     }
     else {
         glColor4f(
-            1.0, 1.0, 1.0, 1.0
+            this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
+            this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
+            this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
+            this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
+
+            //0.95, 0.95, 0.95, 1.
         );
+        /*printf("Hilited RGBA: %f %f %f %f\n", this->bgcolor.r < 128 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
+            this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
+            this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
+            this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
+);*/
 //        printf("RENDERING HIGHLIGHTED BUTTON\n");
     }
     glBegin(GL_QUADS);
@@ -156,15 +170,16 @@ void glictButton::Paint() {
     glVertex2f(this->x,this->y+this->height);
     glEnd();
 
-    glColor4f(0., 0., 0., 1.);
+    glColor4f(1., 1., 1., 1.);
 
     glPushMatrix();
     glRotatef(180.0, 1.0, 0.0, 0.0);
-    glutxStrokeString(
+    if (highlighted) glTranslatef(1.5,-1.5,0.);
+    glictFontRender(
         this->caption.c_str(),
-        GLUT_STROKE_MONO_ROMAN,
-        this->x + this->width / 2. - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_MONO_ROMAN) / 2.,
-        (this->y + this->height / 2. + 5. - 5.*((float)glutxNumberOfLines(this->caption.c_str())-1.))*-1.
+        "system",
+        this->x + this->width / 2. - glictFontSize(this->caption.c_str(), "system") / 2.,
+        (this->y + this->height / 2. + 5. - 5.*((float)glictFontNumberOfLines(this->caption.c_str())-1.))*-1.
         );
     glPopMatrix();
     this->CPaint();

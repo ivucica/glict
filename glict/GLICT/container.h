@@ -68,7 +68,10 @@ class glictContainer  {
         void GetPos(glictPos* pos); ///< Gets object's position and writes it into predefined type. Useful when exchanging data between library's functions.
         void GetSize(glictSize* size); ///< Gets object's size (height and width) and writes it into predefined type. TODO: integer version
         void SetScissor(); ///< This one adjusts the clipping window through which something can be seen, and which is set by SetClip
-
+        void SetVisible(bool visibility); ///< Sets visibility.
+        bool GetVisible(); ///< Retrieves visibility.
+		void SetEnabled(bool enabled); ///< Sets enabledness.
+		bool GetEnabled(); ///< Retrieves enabledness.
         void RememberTransformations(); ///< When calling parent's paint, call it's 'remember transformations' too, so clicking detection is done properly. if clicking unused, or no transformations done, then not important
         void ResetTransformations(); ///< Resets transformations to default transf matrix (identity matrix)
         void TransformScreenCoords(glictPos *pos); ///< Transforms screen coordinates into plane coordinates
@@ -100,7 +103,8 @@ class glictContainer  {
         void SetRect(int left, int top, int right, int bottom); ///< Internal function. Sets the boundaries of the widget.
         void SetClip(int left, int top, int right, int bottom); ///< Internal function. Sets the clipping boundaries of the widget.
 
-
+        bool visible;
+		bool enabled;
 
     protected: // remark: protected allows access to friends, private doesnt
         vector <glictContainer*> objects; ///< Contains all the children objects.
@@ -119,6 +123,7 @@ class glictContainer  {
         std::string caption; ///< Caption written on the control, if control supports it.
 
         bool focusable;
+		
 
 
     /// \todo Remove this friend!

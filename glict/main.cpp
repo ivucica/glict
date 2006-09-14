@@ -30,8 +30,10 @@
 #include <GLICT/messagebox.h>
 #include <GLICT/textbox.h>
 #include <GLICT/globals.h>
+#include <GLICT/fonts.h>
 //#include <GLICT/types.h>
 
+#include "glut-helper.h"
 
 glictWindow panela2;
 glictPanel panela4;
@@ -89,7 +91,6 @@ void reshape(int x, int y) {
 
     panela2.SetHeight(y/2);
 
-
     glictGlobals.h = y;
     glictGlobals.w = x;
     ww = x;
@@ -146,6 +147,7 @@ void onpanel5click(glictPos *a, glictContainer* callclass) {
     buttonstate = !buttonstate;
 
     (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked\nButton\n(indeed)");
+    (dynamic_cast<glictButton*>(callclass))->SetWidth(100);
     panela2.SetCaption(buttonstate ? "Sample Window" : textbox.GetCaption()); // window
     if (buttonstate)
         panela2.SetPos(10,15);
@@ -192,6 +194,13 @@ void glinit() {
     panela2.AddObject(&textbox);
     textbox.SetPos(50,100);
     textbox.SetCaption("Text");
+
+
+    glictFont* sysfont = glictCreateFont("system");
+    sysfont->SetFontParam(GLUT_STROKE_MONO_ROMAN);
+    sysfont->SetRenderFunc(glutxStrokeString);
+    sysfont->SetSizeFunc(glutxStrokeSize);
+
 
 }
 int main(int argc, char** argv) {

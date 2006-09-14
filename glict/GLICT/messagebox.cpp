@@ -33,6 +33,7 @@ glictMessageBox::glictMessageBox() {
     //printf("MessageBox generated.\n");
 
 
+
     this->AddObject(&pnlMessage);
     pnlMessage.SetHeight(90);
     pnlMessage.SetWidth(300);
@@ -44,16 +45,18 @@ glictMessageBox::glictMessageBox() {
     btnOk.SetCaption("Ok");
     btnOk.SetHeight(16);
     btnOk.SetWidth(64);
-    btnOk.SetPos(150 - 32, 95 - 16);
+    btnOk.SetPos(300/2 - 32, 100 - 21);
 
-    SetHeight(100);
     SetWidth(300);
+    SetHeight(100);
 
     this->SetCaption("Message Box");
     this->SetMessage("Sample message box.");
     strcpy(objtype, "MessageBox");
 
     this->focusable = true;
+
+	this->OnDismissFunction = NULL;
 }
 
 
@@ -62,6 +65,8 @@ glictMessageBox::~glictMessageBox() {
 }
 
 void glictMessageBox::Paint() {
+    if (!GetVisible()) return;
+
     //printf("msgbox\n");
     //system("pause");
     //printf("now painting window:\n");
@@ -79,4 +84,25 @@ void glictMessageBox::SetMessage(std::string msg) {
 
 void glictMessageBox::SetOnDismiss(void(*OnDism)(glictPos* relmousepos, glictContainer* callerclass)) {
     OnDismissFunction = OnDism;
+}
+
+void glictMessageBox::SetHeight(int h) {
+	glictWindow::SetHeight(h);
+
+	btnOk.SetPos(width/2 - 32, height - 21);
+	pnlMessage.SetHeight(h-10);
+}
+void glictMessageBox::SetWidth(int w) {
+	glictWindow::SetWidth(w);
+
+	btnOk.SetPos(width/2 - 32, height - 21);
+    pnlMessage.SetWidth(w);
+}
+void glictMessageBox::SetEnabled(bool enabled) {
+	glictContainer::SetEnabled(enabled);
+	btnOk.SetVisible(enabled);
+}
+void glictMessageBox::SetBGColor(float r, float g, float b, float a) {
+	glictWindow::SetBGColor(r,g,b,a);
+	pnlMessage.SetBGColor(r,g,b,a);
 }
