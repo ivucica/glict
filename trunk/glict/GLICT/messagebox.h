@@ -32,6 +32,10 @@ class glictMessageBox : public glictWindow {
         void Paint();
         void SetMessage(std::string msg);
         void SetOnDismiss(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass));
+		void SetHeight(int height);
+		void SetWidth(int width);
+		void SetEnabled(bool enabled);
+		void SetBGColor(float r, float g, float b, float a);
     private:
         glictButton btnOk;
         glictPanel pnlMessage;

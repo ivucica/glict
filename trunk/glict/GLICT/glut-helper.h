@@ -19,9 +19,10 @@
 
 
 
-/* This file is now defunct. Its functionality is now superseded by fonts.h,
-   except in this example. */
+/* This file is now defunct. Its functionality is now superseded by fonts.h */
 
+
+#error GLUT-HELPER.H is defunct, use FONTS.H for similar functionality.
 
 
 // Glut-helper.cpp

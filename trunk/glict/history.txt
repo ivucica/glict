@@ -1,0 +1,21 @@
+31.8.2006
+
+* Initial writing of history; anything not noted here has been done before this date
+* Added visibility
+* Solved focusing bug when there's no parent
+* Letters on buttons now "drop in" when clicked.
+
+4.9.2006
+
+* Default background color of panel now same as background of window.
+* Bug in MessageBox, forgot to initialize OnDismissFunction to NULL
+* If messagebox is resized, button now get re-placed.
+
+9.9.2006
+
+* Fix for textbox when in VC++ 2005 (fixed a crash bug)
+
+10.9.2006
+
+* Added enabledness
+* MessageBox button location fixed

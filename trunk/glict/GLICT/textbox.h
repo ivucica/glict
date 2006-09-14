@@ -17,28 +17,26 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#ifndef __GLICT_TEXTBOX_H
+#define __GLICT_TEXTBOX_H
+
+#include <GLICT/container.h>
+#include <GLICT/types.h>
+class glictTextbox : public glictContainer {
+    public:
+        glictTextbox();
+        ~glictTextbox();
+
+        void SetBGColor(float r, float g, float b, float a);
+
+        // redefined functions
+        void Paint();
+        bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
 
 
-/* This file is now defunct. Its functionality is now superseded by fonts.h,
-   except in this example. */
-
-
-
-// Glut-helper.cpp
-// contains glut helper
-
-// objnet glut helper
-// (c) 2005 object networks
-//
-// contains some helper code for glut
-// e.g. entire string printing
-
-#ifndef _glutx_
-#define _glutx_
-void glutxStrokeString(const char* txt, void* font, float x, float y) ;
-char* glutxStrokeStringExpert(const char* txt, void* font);
-void glutxBitmapString(char* txt, void* font,int x, int y) ;
-float glutxBitmapSize(char* txt, void* font);
-float glutxStrokeSize(const char* txt, void* font);
-int glutxNumberOfLines(const char* txt);
+		void SetPassProtectCharacter(char asterisk); ///< Used to define which character will be used to display instead of regular characters.
+    private:
+        glictColor bgcolor;
+		char passprotectchar;
+};
 #endif

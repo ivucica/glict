@@ -28,7 +28,7 @@
 
 #include <string>
 
-#include <GLICT/window.h>
+#include <GLICT/container.h>
 #include <GLICT/types.h>
 
 /**

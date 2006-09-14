@@ -17,11 +17,12 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <stdlib.h>
 #include <GL/glut.h>
 #include <stdio.h>
 #include "window.h"
 #include "globals.h"
-#include "glut-helper.h"
+#include "fonts.h"
 glictWindow::glictWindow() {
 
     this->bgcolor.r = 0.75;
@@ -35,13 +36,23 @@ glictWindow::glictWindow() {
 
     this->focusable = true;
 
+	this->mousedown = false;
+
+	this->SetHeight(100);
+	this->SetWidth(100);
+
+	this->SetPos(0,0);
+
+	this->relmouse.x = 0;
+	this->relmouse.y = 0;
+
     //printf("Window generated.\n");
 }
 glictWindow::~glictWindow() {
 
 }
 void glictWindow::Paint() {
-
+    if (!GetVisible()) return;
     //printf("window\n");
 
 
@@ -59,7 +70,7 @@ void glictWindow::Paint() {
     glEnd();
 
 
-
+	
     this->CPaint();
 
 
@@ -73,16 +84,12 @@ void glictWindow::Paint() {
     glVertex2f(this->x + this->width, this->y+12);
     glVertex2f(this->x, this->y+12);
     glEnd();
-//    glDisable(GL_SCISSOR_TEST);
+
     glColor4fv(glictGlobals.windowTitleColor);
 
     glPushMatrix();
-    //glRotatef(180.0, 0.0, 0.0, 1.0);
-    //glutxStrokeString(this->caption.c_str(),GLUT_STROKE_ROMAN, (this->x + this->width / 2 + glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_ROMAN) / 2) * -1, this->y - 9);
     glRotatef(180.0, 1.0, 0.0, 0.0);
-    //glDisable(GL_SCISSOR_TEST);
-    glutxStrokeString(this->caption.c_str(),GLUT_STROKE_MONO_ROMAN, this->x + (this->width / 2 - glutxStrokeSize(this->caption.c_str(), GLUT_STROKE_MONO_ROMAN) / 2) , this->y*-1. - 9.);
-    //glEnable(GL_SCISSOR_TEST);
+    glictFontRender(this->caption.c_str(),"system", this->x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) , this->y*-1. - 9.);
     glPopMatrix();
 }
 void glictWindow::SetBGColor(float r, float g, float b, float a) {
@@ -94,6 +101,8 @@ void glictWindow::SetBGColor(float r, float g, float b, float a) {
 
 bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
     //printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
+    if (!GetVisible()) return false;
+	int oldx = this->x, oldy = this->y;
     if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP) {
         if (((glictPos*)wparam)->x > this->clipleft &&
             ((glictPos*)wparam)->x < this->clipright &&
@@ -101,25 +110,32 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
             ((glictPos*)wparam)->y < this->clipbottom) {
 
 
+			
+
             if (evt == GLICT_MOUSECLICK) {
-                //this->Focus(this);
+                this->Focus(this);
             }
 
             if (((glictPos*)wparam)->y <= this->cliptop+10) {
                 if (evt == GLICT_MOUSEDOWN) {
+					
                     this->Focus(NULL);
                     this->mousedown = true;
                     this->relmouse.x = ((glictPos*)wparam)->x-this->x;
                     this->relmouse.y = ((glictPos*)wparam)->y-this->y;
                     // dont to defaultcastevent as it might call a child that's below our titlebar
+					
                     return true;
                 }
             }
 
 
             if (evt == GLICT_MOUSEDOWN) {
-                // we dont want anyone else to catch this one
-                DefaultCastEvent(evt,wparam,lparam,returnvalue);
+                // we dont want anyone else to catch this one so return true
+				
+				if (GetEnabled()) 
+					DefaultCastEvent(evt,wparam,lparam,returnvalue);
+				
                 return true;
             }
 
@@ -129,10 +145,14 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
                     ((glictPos*)wparam)->y - this->relmouse.y
                 );
                 this->mousedown = false;
+				
                 return DefaultCastEvent(evt,wparam,lparam,returnvalue);
             }
-
-            return DefaultCastEvent(evt, wparam, lparam, returnvalue);
+		
+			if (GetEnabled()) 
+				return DefaultCastEvent(evt, wparam, lparam, returnvalue);
+			else
+				return false;
         } else
         // if mouse drag is done outside object...
         if (evt == GLICT_MOUSEUP && this->mousedown) {
@@ -141,9 +161,12 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
                 ((glictPos*)wparam)->y - this->relmouse.y
             );
             this->mousedown = false;
+			
             return true;
         }
-        return DefaultCastEvent(evt, wparam, lparam, returnvalue);
+		
+		
+		return DefaultCastEvent(evt, wparam, lparam, returnvalue);
     }
 
     return false;

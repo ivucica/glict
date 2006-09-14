@@ -40,9 +40,6 @@ to four basic liberties as defined by Free Software Foundation.
 This library provides a very simple C++ interface which uses few very simple
 functions to set up the interface and to manage it.
 
-\note Currently font output functions are depending upon GLUT. This is a
-      to-be-fixed.
-
 \section Usage
 
 All the user interface controls are C++ classes derived from glictContainer
@@ -58,6 +55,9 @@ much, and that we use in-code documentation. Doxygen is used to generate
 documentation files, and please refer to them. (This file, readme.txt, is also
 formatted for Doxygen and is set to be main page of Doxygen's documentation.)
 
+Before using the widgets, you should set up at least a GLICT font named 
+"system" (case sensitive). It is the font used through GLICT widget rendering.
+
 \section Development
 
 This library is still deep in development. We encourage capable people to join
@@ -72,8 +72,6 @@ custom-shaped widgets, only rectangle widgets!
 
 Effects of glScalef() are not detransformed in
 glictContainer::TransformScreenCoords()
-
-Reordering of widgets - focusing
 
 \section Contact
 

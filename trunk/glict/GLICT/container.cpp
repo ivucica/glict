@@ -26,7 +26,7 @@
  */
 
 
-
+#include <stdlib.h>
 #include <GL/glut.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,6 +67,8 @@ glictContainer::glictContainer() {
 
     this->focusable = false;
 
+    this->SetVisible(true);
+	this->SetEnabled(true);
     //printf("Container created.\n");
 
 }
@@ -391,7 +393,7 @@ void glictContainer::SetScissor() {
   * \sa SetScissor(), CPaint()
   */
 void glictContainer::Paint() {
-
+    if (!GetVisible()) return;
     this->SetScissor();
 
     this->CPaint();
@@ -488,10 +490,10 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
         case GLICT_MOUSEDOWN:
         case GLICT_MOUSECLICK:
             {
-            vector<glictContainer*>::iterator it;
+            vector<glictContainer*>::reverse_iterator it;
 
             if (objects.size()) {
-                for (it=objects.end()-1; it >= objects.begin(); it--) {
+				for (it=objects.rbegin(); it != objects.rend(); it++) {
                     if ((*it)->CastEvent(evt, wparam, lparam, returnvalue))
                         return true;
                 }
@@ -507,7 +509,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
                      ((glictPos*)wparam)->x < this->clipright &&
                      ((glictPos*)wparam)->y > this->cliptop &&
                      ((glictPos*)wparam)->y < this->clipbottom) {
-
+                        //MessageBox(0,"MouseDown",this->GetCaption().c_str(),0);
                         this->Focus(NULL);
                         return true;
                      }
@@ -518,7 +520,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
                     abs (((glictPos*)wparam)->y - glictGlobals.lastMousePos.y) < 3 ) { // if up to 2 pixels diff
                     //printf("Considering it a click\n");
                     //if (!parent) {
-                        printf("Casting click event.\n");
+                        //printf("Casting click event.\n");
                         return this->CastEvent(GLICT_MOUSECLICK, wparam, lparam, returnvalue);
 
                     //} else {
@@ -540,7 +542,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
                      ((glictPos*)wparam)->y > this->cliptop &&
                      ((glictPos*)wparam)->y < this->clipbottom) {
                      if (this->OnClick) {
-                         printf("Click on %s.\n", objtype);
+                         //printf("Click on %s.\n", objtype);
                          this->OnClick((glictPos*)wparam, this);
                          return true;
                      }
@@ -573,7 +575,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
   * \sa CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
   */
 bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam) {
-   this->CastEvent(evt, wparam, lparam, NULL);
+   return this->CastEvent(evt, wparam, lparam, NULL);
 }
 
 /**
@@ -612,7 +614,7 @@ bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam) {
   */
 bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 
-
+    if (!GetVisible() || !GetEnabled()) return false;
     //printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
     switch (evt) {
         default:
@@ -866,7 +868,7 @@ glictContainer* glictContainer::GetParent() {
   */
 void glictContainer::Focus(glictContainer* callerchild) {
 
-    if (parent && callerchild && callerchild->focusable && objects.size()) {
+    if (callerchild && callerchild->focusable && objects.size()) {
         vector<glictContainer*>::iterator it;
         bool heredone=false;
         for (it=objects.begin(); it!=objects.end(); it++) {
@@ -883,16 +885,53 @@ void glictContainer::Focus(glictContainer* callerchild) {
 
     if (parent) {
         parent->Focus(this);
-        printf("%s Focused parent.\n", objtype);
+        //printf("%s Focused parent.\n", objtype);
     } else { // we're on top level
         //Paint();
         //printf("Painted.\n");
         //if (glictGlobals.FinishPaint) glictGlobals.FinishPaint();
     }
 
-    if (!callerchild) printf("Focused on %s\n", this->objtype);
+    //if (!callerchild) printf("Focused on %s\n", this->objtype);
     glictGlobals.topFocused = this;
 }
+
+/**
+  * Sets whether the object is visible or not.
+  */
+
+void glictContainer::SetVisible(bool vsbl) {
+    this->visible = vsbl;
+}
+
+/**
+  * Retrieves whether the object is visible or not.
+  */
+
+bool glictContainer::GetVisible() {
+    return this->visible;
+}
+
+/**
+  * Sets whether the object is enabled or not.
+  */
+
+void glictContainer::SetEnabled(bool enabled) {
+    this->enabled = enabled;
+}
+
+/**
+  * Retrieves whether the object is enabled or not.
+  */
+
+bool glictContainer::GetEnabled() {
+    return this->enabled;
+}
+
+/**
+  * Describes event being passed as the parameter and returns its name as a
+  * string. For debugging purposes.
+  */
 
 const char* glictContainer::EvtTypeDescriptor(glictEvents evt) {
 
