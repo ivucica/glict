@@ -37,6 +37,7 @@ glictGlobalsClass::glictGlobalsClass() {
 
 
     clippingMode = GLICT_SCISSORTEST;
+
 }
 glictGlobalsClass::~glictGlobalsClass() {
 }

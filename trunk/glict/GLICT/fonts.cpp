@@ -46,10 +46,6 @@ _GLICTFONTVECTOR glictFonts;
 
 glictFont* glictCreateFont(const char* name) {
 
-
-
-
-
     if (glictFindFont(name)) return NULL;
 
 
