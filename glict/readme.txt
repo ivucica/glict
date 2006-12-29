@@ -26,6 +26,18 @@ Visit www.objectnetworks.net for more information on our projects.
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 \endcode
 
+\section Compilation
+
+GLICT is actively developed under Win32, but occasionally test builds are
+done under GNU/Linux. 
+GNU Makefile is directly in the GLICT subfolder, and is not strictly 
+maintained. It produces a library "libglict.a". There's no automatic
+installation.
+For building under Windows, you can use Code::Blocks project file that's
+included; for building library only choose the "library" target. 
+
+To build the documentation, use the Doxyfile that's included.
+
 \section Introduction
 
 GLICT stands for Graphics Library Interface Creation Toolkit. It is designed
