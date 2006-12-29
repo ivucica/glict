@@ -41,17 +41,17 @@
 
 void DEBUGPRINT(char* txt, ...);
 
-char* glutxStrokeStringExpert(const char* txt, void* font) {
+char* glutxStrokeStringExpert(const char* txt, const void* font) {
     glPushMatrix();
     char *p;
     for (p = (char*)txt; *p && *p!='\n'; p++) {
-        glutStrokeCharacter(font,*p);
+        glutStrokeCharacter((void*)font,*p);
     }
     glPopMatrix();
     return p;
 }
 #include <stdio.h>
-void glutxStrokeString(const char* txt, void* font, float x, float y) {
+void glutxStrokeString(const char* txt, const void* font, float x, float y) {
     char* fromwhere=(char*)txt;
     do {
         if (fromwhere!=txt) fromwhere++;
@@ -66,7 +66,7 @@ void glutxStrokeString(const char* txt, void* font, float x, float y) {
         glPopMatrix();
         y -= 1;
     } while (*fromwhere);
-    printf("Rendered %s\n", txt);
+    //printf("Rendered %s\n", txt);
 }
 
 void glutxBitmapString(char* txt, void* font,int x,int y) {
@@ -90,15 +90,15 @@ float glutxBitmapSize(char* txt, void* font) {
 }
 
 
-float glutxStrokeSize(const char* txt, void* font) {
+float glutxStrokeSize(const char* txt, const void* font) {
 
 
-    printf(" SIZE OF %s\n", txt);
+//    printf(" SIZE OF %s\n", txt);
 
     int size=0, len=strlen(txt);
     int maxsize=0;
     for (int i=0;i<len;i++) {
-        size+=glutStrokeWidth(font,txt[i]);
+        size+=glutStrokeWidth((void*)font,txt[i]);
         if (txt[i]=='\n') {
             if (size>maxsize) maxsize=size;
             size=0;

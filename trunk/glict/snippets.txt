@@ -11,7 +11,7 @@ Unlike some other basic GUI implementations for games or some that you could qui
 
 This document will tell you how to quickly start with GLICT, and provide you copypasteable chunks of code that are common to applicating GLICT (they're designed for GLUT, but adaptable to other IO systems). 
 
-THIS DOCUMENTS IS NOT A TUTORIAL; IT'S A CODECHUNK COLLECTION ALONG WITH SOME EXPLANATIONS. I'M NOT GOOD AT TUTORIAL WRITING (or just too lazy) SO IF ANYONE IS INTERESTED... WELL, I'M WAITING ;)
+THIS DOCUMENT IS NOT A TUTORIAL; IT'S A CODECHUNK COLLECTION ALONG WITH SOME EXPLANATIONS. I'M NOT GOOD AT TUTORIAL WRITING (or just too lazy) SO IF ANYONE IS INTERESTED... WELL, I'M WAITING ;)
 
 GLICT WANTS YOU! for a developer. CONTACT ME!
 
@@ -27,7 +27,7 @@ Event system has been designed that way. Your IO management system (either GLUT,
 
 INITIALIZATION
 ==============
-If you want stencil testing to work the glutInitDisplayMode() needs to have the GLUT_STENCIL as one of things you'll be "OR"-ing ("|"-ing). If you'll use scissor test, you don't need to have GLUT_STENCIL. Here's entire line that works for me:
+If you want stencil testing to work the glutInitDisplayMode() needs to have the GLUT_STENCIL as one of things you'll be "OR"-ing ("|"-ing). If you'll use scissor test, you don't need to have GLUT_STENCIL. If you'll use scissor test, then just remove the GLUT_STENCIL thing. Depth testing is also not a requirement (actually, it should be off when you do the painting). Nevertheless, here's entire line that works for me:
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);
 
@@ -69,6 +69,7 @@ void reshape(int w, int h) {
 	desktop.SetWidth(w);
 	glictGlobals.w = w; glictGlobals.h = h;
 
+	// gl stuff again
 	glutPostRedisplay();
 }
 
@@ -174,10 +175,30 @@ belong somewhere on top.
 
 Don't forget to tell your linker to link with GLICT's library. Or add all the .cpp files to your project (GLICT is opensource ;)). For Visual C++ it should be:
 
-#pragma comment(lib, "glict.lib")
+#pragma comment (lib, "glict.lib")
 
-For others compilers ... well ya figure out ;)
+For others compilers ... well ya'll figure out ;)
 
 I THINK WE'RE DONE
 ==================
 By now we should have all the basic code we need for GLICT application. This is not from-zero tutorial; you'll need to know where to put each snippet. So take your existing GLUT application and try to put these chunks on appropriate locations.
+
+AUTHOR & LEGAL
+==============
+Ivan Vucica - OBJECT Networks
+(c) 2006 OBJECT Networks 
+This document is provided for free, without any warranty. You are free to modify and distribute, however you are obligated to keep the History section and add specific date when you started modifications to this file, along with your name on the same location. You also must keep original copyright notice and this notice in place.
+Otherwise you are free to do whatever you want with this file. (Note, this rule doesn't apply to rest of GLICT which is given out under GNU LGPL.)
+
+HISTORY
+==================
+Here's a quick change history of this file.
+
+5.10.2006
+Small alterations in init section. (made clear what's not needed in glutInitDisplayMode())
+Added author section
+One new comment in resizing section
+Minifix to include files section
+
+13.9.2006
+Written first version

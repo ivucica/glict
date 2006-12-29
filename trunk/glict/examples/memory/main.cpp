@@ -32,13 +32,14 @@
 // bit different
 // this project, as it is, should be placed inside the GLICT's folder so
 // its includes is relative
-#include "../../container.h"
-#include "../../button.h"
-#include "../../globals.h"
-#include "../../window.h"
-#include "../../panel.h"
-#include "../../messagebox.h"
-
+#include <GLICT/container.h>
+#include <GLICT/button.h>
+#include <GLICT/globals.h>
+#include <GLICT/window.h>
+#include <GLICT/panel.h>
+#include <GLICT/messagebox.h>
+#include <GLICT/fonts.h>
+#include "glut-helper.h"
 // some nice strings for the cards... ;)
 char cardtitles[16][16] = { "Joe", "Annie", "Andrew", "the fike", "Pekay", "Yorick", "tliff", "SimOne"};
 // and some colors for the cards
@@ -199,7 +200,7 @@ void CardOnClick(glictPos* relmousepos, glictContainer* callerclass) {
                 msgSuccess->SetCaption("Congrats!");
                 msgSuccess->SetMessage("You've solved the game!");
                 msgSuccess->SetPos(32,32);
-                window.AddObject(msgSuccess);
+                desktop.AddObject(msgSuccess);
 
             }
         } else {
@@ -246,7 +247,7 @@ void MainWidgets() {
 
     for (int i=0; i<16;i++) {
 
-        cards[i].SetPos((i % 4) * 96, (i / 4) * 96);
+        cards[i].SetPos((i % 4) * 96, (i / 4) * 96 + 12);
         cards[i].SetWidth(96);
         cards[i].SetHeight(96);
         cards[i].SetBGColor(0.5, 0.5, 0.5, 1.);
@@ -279,6 +280,10 @@ int main(int argc, char** argv) {
 
     MainWidgets();
 
+	glictFont* sysfont = glictCreateFont("system");
+	sysfont->SetFontParam(GLUT_STROKE_MONO_ROMAN);
+	sysfont->SetRenderFunc(glutxStrokeString);
+	sysfont->SetSizeFunc(glutxStrokeSize);
 
 
 

@@ -97,7 +97,7 @@ void reshape(int x, int y) {
     wh = y;
 //    desktop.SetPos(0,0);
 
-    desktop.ReportDebug();
+    //desktop.ReportDebug();
     display();
 }
 #include <math.h>
@@ -138,7 +138,7 @@ void display() {
     glEnd();
     glEnable(GL_STENCIL_TEST);
 
-    printf("FINISHED PAINT.\n");
+    //printf("FINISHED PAINT.\n");
     glutSwapBuffers();
     //desktop.ReportDebug();
 }
@@ -190,6 +190,7 @@ void glinit() {
     msgbox.SetMessage("Hello there. What's better,\nto live or to die? You should not\ntake care about such\nsilly stuff.");
     msgbox.SetCaption("Nice Messagebox");
     msgbox.SetPos(50,50);
+    msgbox.SetHeight(120);
 
     panela2.AddObject(&textbox);
     textbox.SetPos(50,100);
