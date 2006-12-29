@@ -1,20 +1,20 @@
 /*
-    GLICT - Graphics Library Interface Creation Toolkit
-    Copyright (C) 2006 OBJECT Networks
+	GLICT - Graphics Library Interface Creation Toolkit
+	Copyright (C) 2006 OBJECT Networks
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Library General Public
+	License as published by the Free Software Foundation; either
+	version 2 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Library General Public License for more details.
 
-    You should have received a copy of the GNU Library General Public
-    License along with this library; if not, write to the Free
-    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+	You should have received a copy of the GNU Library General Public
+	License along with this library; if not, write to the Free
+	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
 /**
@@ -35,27 +35,26 @@
   * It fills up the class with default infos.
   */
 glictButton::glictButton() {
-    //printf("init panele\n");
-    this->bgcolor.r = 0.0;
-    this->bgcolor.g = 0.0;
-    this->bgcolor.b = 0.0;
-    this->bgcolor.a = 0.0;
+	//printf("init panele\n");
+	this->bgcolor.r = 0.0;
+	this->bgcolor.g = 0.0;
+	this->bgcolor.b = 0.0;
+	this->bgcolor.a = 0.0;
 
-    this->fgcolor.r = 1.0;
-    this->fgcolor.g = 1.0;
-    this->fgcolor.b = 1.0;
-    this->fgcolor.a = 1.0;
+	this->fgcolor.r = 1.0;
+	this->fgcolor.g = 1.0;
+	this->fgcolor.b = 1.0;
+	this->fgcolor.a = 1.0;
 
 
+	strcpy(this->objtype, "Button");
 
-    strcpy(this->objtype, "Button");
+	this->highlighted = false;
+	this->parent = NULL;
 
-    this->highlighted = false;
-    this->parent = NULL;
+	this->focusable = true;
 
-    this->focusable = true;
-
-    this->caption = "Button";
+	this->caption = "Button";
 }
 
 /**
@@ -82,53 +81,55 @@ glictButton::~glictButton() {
   * \sa glictContainer::CastEvent()
   */
 bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
-    if (!GetVisible() || !GetEnabled()) return false;
+	if (!GetVisible() || !GetEnabled()) return false;
 
-    //printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
-    switch (evt) {
-        case GLICT_MOUSEUP:
-        case GLICT_MOUSEDOWN:
-        case GLICT_MOUSECLICK:
-            if (((glictPos*)wparam)->x >= this->clipleft &&
-                ((glictPos*)wparam)->x <= this->clipright &&
-                ((glictPos*)wparam)->y >= this->cliptop &&
-                ((glictPos*)wparam)->y <= this->clipbottom) {
-                //printf("Within button\n");
-                if (evt == GLICT_MOUSECLICK) {
-                    //this->Focus(NULL);
-                    //printf("Caught button click!\n",0,0);
-                }
+	//printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
+	switch (evt) {
+		case GLICT_MOUSEUP:
+		case GLICT_MOUSEDOWN:
+		case GLICT_MOUSECLICK:
+			if (((glictPos*)wparam)->x >= this->clipleft &&
+				((glictPos*)wparam)->x <= this->clipright &&
+				((glictPos*)wparam)->y >= this->cliptop &&
+				((glictPos*)wparam)->y <= this->clipbottom) {
+				printf("Within button\n");
+				if (evt == GLICT_MOUSECLICK) {
+					//this->Focus(NULL);
+					//printf("Caught button click!\n",0,0);
+				}
 
-                if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
-                    //printf("Dehighlighting button\n");
-                    highlighted = false;
-                }
-                if (evt == GLICT_MOUSEDOWN) {
-                    //printf("Highlighting button\n",0,0);
-                    highlighted = true;
-                }
+				if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
+					//printf("Dehighlighting button\n");
+					highlighted = false;
+				}
+				if (evt == GLICT_MOUSEDOWN) {
+					//printf("Highlighting button\n",0,0);
+					highlighted = true;
+				}
 
-                if (DefaultCastEvent(evt, wparam, lparam, returnvalue)) { // if a child caught click, we dont handle it otherwise
-                    //printf("Default even was cast\n");
-                    return true; // we simply return
-                }
-                // otherwise we could handle it mroe ...
-                //return false;
-                return true;
-            }
-
-
-            if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
-                //printf("Dehighlighting button while outside its borders\n");
-                highlighted = false;
-                return false;
-            }
-            break;
-    }
+				if (DefaultCastEvent(evt, wparam, lparam, returnvalue)) { // if a child caught click, we dont handle it otherwise
+					//printf("Default even was cast\n");
+					return true; // we simply return
+				}
+				// otherwise we could handle it mroe ...
+				//return false;
+				return true;
+			} else {
+			    printf("BUTTON DID NOT FIND THIS THING. X, Y: %d %d Clip: %d %d %d %d\n", ((glictPos*)wparam)->x, ((glictPos*)wparam)->y, clipleft, clipright, cliptop, clipbottom);
+			}
 
 
+			if (evt == GLICT_MOUSEUP) { // the trick is that button doesnt need to be dereleased inside window to be dereleased! however it also doesnt do default click behaviour
+				//printf("Dehighlighting button while outside its borders\n");
+				highlighted = false;
+				return false;
+			}
+			break;
+	}
 
-    return false;
+
+
+	return false;
 }
 
 /**
@@ -138,51 +139,53 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
   * on center of the widget.
   */
 void glictButton::Paint() {
-    if (!GetVisible()) return;
-    if (!highlighted) {
-        glColor4f(
-            (float)this->bgcolor.r,
-            (float)this->bgcolor.g,
-            (float)this->bgcolor.b,
-            (float)this->bgcolor.a
-        );
-    }
-    else {
-        glColor4f(
-            this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
-            this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
-            this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
-            this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
+	if (!GetVisible()) return;
+	this->SetScissor();
+	if (!highlighted) {
+		glColor4f(
+			(float)this->bgcolor.r,
+			(float)this->bgcolor.g,
+			(float)this->bgcolor.b,
+			(float)this->bgcolor.a
+		);
+	}
 
-            //0.95, 0.95, 0.95, 1.
-        );
-        /*printf("Hilited RGBA: %f %f %f %f\n", this->bgcolor.r < 128 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
-            this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
-            this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
-            this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
+	else {
+		glColor4f(
+			this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
+			this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
+			this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
+			this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
+
+			//0.95, 0.95, 0.95, 1.
+	);
+	/*printf("Hilited RGBA: %f %f %f %f\n", this->bgcolor.r < 128 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
+			this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
+			this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
+			this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
 );*/
 //        printf("RENDERING HIGHLIGHTED BUTTON\n");
-    }
-    glBegin(GL_QUADS);
-    glVertex2f(this->x,this->y);
-    glVertex2f(this->x+this->width,this->y);
-    glVertex2f(this->x+this->width,this->y+this->height);
-    glVertex2f(this->x,this->y+this->height);
-    glEnd();
+	}
+	glBegin(GL_QUADS);
+	glVertex2f(this->x,this->y);
+	glVertex2f(this->x+this->width,this->y);
+	glVertex2f(this->x+this->width,this->y+this->height);
+	glVertex2f(this->x,this->y+this->height);
+	glEnd();
 
-    glColor4f(1., 1., 1., 1.);
+	glColor4f(1., 1., 1., 1.);
 
-    glPushMatrix();
-    glRotatef(180.0, 1.0, 0.0, 0.0);
-    if (highlighted) glTranslatef(1.5,-1.5,0.);
-    glictFontRender(
-        this->caption.c_str(),
-        "system",
-        this->x + this->width / 2. - glictFontSize(this->caption.c_str(), "system") / 2.,
-        (this->y + this->height / 2. + 5. - 5.*((float)glictFontNumberOfLines(this->caption.c_str())-1.))*-1.
-        );
-    glPopMatrix();
-    this->CPaint();
+	glPushMatrix();
+	glRotatef(180.0, 1.0, 0.0, 0.0);
+	if (highlighted) glTranslatef(1.5,-1.5,0.);
+	glictFontRender(
+		this->caption.c_str(),
+		"system",
+		this->x + this->width / 2. - glictFontSize(this->caption.c_str(), "system") / 2.,
+		(this->y + this->height / 2. + 5. - 5.*((float)glictFontNumberOfLines(this->caption.c_str())-1.))*-1.
+		);
+	glPopMatrix();
+	this->CPaint();
 }
 /**
   * \param r Red element of the color.
@@ -194,10 +197,10 @@ void glictButton::Paint() {
   * Paint().
   */
 void glictButton::SetBGColor(float r, float g, float b, float a) {
-    this->bgcolor.r = r;
-    this->bgcolor.g = g;
-    this->bgcolor.b = b;
-    this->bgcolor.a = a;
+	this->bgcolor.r = r;
+	this->bgcolor.g = g;
+	this->bgcolor.b = b;
+	this->bgcolor.a = a;
 }
 
 /**
@@ -210,8 +213,8 @@ void glictButton::SetBGColor(float r, float g, float b, float a) {
   * Paint(). Namely, the text color.
   */
 void glictButton::SetFGColor(float r, float g, float b, float a) {
-    this->fgcolor.r = r;
-    this->fgcolor.g = g;
-    this->fgcolor.b = b;
-    this->fgcolor.a = a;
+	this->fgcolor.r = r;
+	this->fgcolor.g = g;
+	this->fgcolor.b = b;
+	this->fgcolor.a = a;
 }

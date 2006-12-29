@@ -1,3 +1,21 @@
+    GLICT - Graphics Library Interface Creation Toolkit
+    Copyright (C) 2006 OBJECT Networks
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
 31.8.2006
 
 * Initial writing of history; anything not noted here has been done before this date
@@ -20,4 +38,47 @@
 * Added enabledness
 * MessageBox button location fixed
 
+13.9.2006
 
+* Written snippets.txt file "Takeoff Snippets"
+
+5.10.2006
+
+* <all>.cpp: Some tabfixes in source files
+* Container.cpp: Removed notice that keypress events are "in development"
+* Snippets.txt: Small updates (it contains separate "history" section)
+* History.txt: Added LGPL note
+* Fonts.h: being that void* font parameter is not changed by the function, it maked sense to change it to const void* font for all functions and function overloads. This will probably introduce some incompatibility with some code, so please just change the void* declarations into const void*. 
+* Fonts.cpp: Small stuff 
+* Glut-helper.<all> for examples: Switched to const void* to "compatibilize" with updated fonts.h
+* History.txt: Since today, every change is assigned the prefixed name of file, followed by a colon ':'
+
+16.10.2006
+
+* Container.<all>: Added containeroffsetx and containeroffsety, which are used to determine how far each object is shifted from left and from right. Used in e.g. windows, to make all objects NOT go under titlebar. Objects are really shifted internally, however by the blackbox principle, externally it's not visible, because GetPos() and friends return original positions & sizes. Each object actually looks into parent->containeroffsetx and parent->containeroffsety
+* Container.<all>: Removed unnecessary stuff in "setclip"
+* Container.<all>: Made use of containeroffsetx and containeroffsety within SetPos() and GetPos()
+* Window.<all>: Made use of containeroffsety, set it to 14
+* Messagebox.<all>: Made messagebox aware of containeroffset* changes in window
+* <all>: This ended up with disfunctional WINDOW. Need to repair, systematically.
+
+17.10.2006
+
+* Container.<all>: Fixed the containeroffset*.
+
+18.10.2006
+
+* Scrollbar.<all>: Added, done code up to scroller (meaning clickable top and bottom windows with working highlight) and declared SetMax(), SetMin(), SetValue() and SetStep() and corresponding Get*() functions
+
+19.10.2006
+
+* Scrollbar.<all>: Made it all work, scroller looks perfect
+
+5.11.2006
+
+* Discovered that GLICT test proggy does not work good, at all. It appears that bug is deeply buried within the system.
+
+27.12.2006
+
+* Container.<all>: Fixed some problems that have arisen (hopefully, the problem from 5.11.2006 too; didn't check)
+* Container.<all>: Fixed a crash occurence; another one arose, however

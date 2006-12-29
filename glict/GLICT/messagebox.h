@@ -25,24 +25,23 @@
 #include <GLICT/button.h>
 #include <GLICT/panel.h>
 class glictMessageBox : public glictWindow {
-    public:
-        glictMessageBox();
-        ~glictMessageBox();
+	public:
+		glictMessageBox();
+		~glictMessageBox();
 
-        void Paint();
-        void SetMessage(std::string msg);
-        void SetOnDismiss(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass));
+		void Paint();
+		void SetMessage(std::string msg); //< Sets the message that will be displayed on the messagebox. (Not the caption, the message itself!)
+		void SetOnDismiss(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); //< Sets function to be called upon dismiss of the msgbox. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
 		void SetHeight(int height);
 		void SetWidth(int width);
 		void SetEnabled(bool enabled);
 		void SetBGColor(float r, float g, float b, float a);
-    private:
-        glictButton btnOk;
-        glictPanel pnlMessage;
-        std::string mesg;
-        void(*OnDismissFunction)(glictPos* relmousepos, glictContainer* callerclass);
-    //    void KillYourself();
+	private:
+		glictButton btnOk;
+		glictPanel pnlMessage;
+		std::string mesg;
+		void(*OnDismissFunction)(glictPos* relmousepos, glictContainer* callerclass); //< Called upon dismiss of the msgbox. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
 
-    friend void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller);
+	friend void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller);
 };
 #endif

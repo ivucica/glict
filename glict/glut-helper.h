@@ -35,10 +35,10 @@
 
 #ifndef _glutx_
 #define _glutx_
-void glutxStrokeString(const char* txt, void* font, float x, float y) ;
-char* glutxStrokeStringExpert(const char* txt, void* font);
-void glutxBitmapString(char* txt, void* font,int x, int y) ;
-float glutxBitmapSize(char* txt, void* font);
-float glutxStrokeSize(const char* txt, void* font);
+void glutxStrokeString(const char* txt, const void* font, float x, float y) ;
+char* glutxStrokeStringExpert(const char* txt, const void* font);
+void glutxBitmapString(char* txt, const void* font,int x, int y) ;
+float glutxBitmapSize(char* txt, const void* font);
+float glutxStrokeSize(const char* txt, const void* font);
 int glutxNumberOfLines(const char* txt);
 #endif

@@ -32,10 +32,13 @@
 #ifndef _GLICT_CONTAINER_H
 #define _GLICT_CONTAINER_H
 #include <vector>
+#include <list>
 #include <string>
 #include <GLICT/types.h>
 using namespace std;
 
+
+//std::list
 
 /**
  * \brief Container class, base for all other widgets
@@ -56,74 +59,76 @@ class glictContainer  {
         virtual void Paint(); ///< Renders the element. Should contain call to CPaint(). (Does not actually render anything in this class; intended for redefinition in classes that inherit this one.)
         virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event to the class, so it can process it. Example is mouseclick or mousedown.
 
-        // the following elements are always inherited from container
-        void CPaint(); ///< Renders all children.
-        void AddObject(glictContainer* object); ///< Adds an object as a child.
-        void RemoveObject(glictContainer* object); ///< Removes an object that's a child.
-        void SetHeight(int h); ///< Sets object's height.
-        void SetWidth(int w); ///< Sets object's width.
-        void SetPos(int x, int y); ///< Sets object's position using classical access using two integers.
-        void SetPos(glictPos pos); ///< Sets object's position using predefined type. Useful when exchanging data between library's functions.
-        void GetPos(int* x, int* y); ///< Gets object's position and writes it into integers x and y.
-        void GetPos(glictPos* pos); ///< Gets object's position and writes it into predefined type. Useful when exchanging data between library's functions.
-        void GetSize(glictSize* size); ///< Gets object's size (height and width) and writes it into predefined type. TODO: integer version
-        void SetScissor(); ///< This one adjusts the clipping window through which something can be seen, and which is set by SetClip
-        void SetVisible(bool visibility); ///< Sets visibility.
-        bool GetVisible(); ///< Retrieves visibility.
+		// the following elements are always inherited from container. some MAY be overriden, in special circumstances, but it is not recommended.
+		void CPaint(); ///< Renders all children.
+		void AddObject(glictContainer* object); ///< Adds an object as a child.
+		void RemoveObject(glictContainer* object); ///< Removes an object that's a child.
+		void SetHeight(int h); ///< Sets object's height.
+		void SetWidth(int w); ///< Sets object's width.
+		void SetPos(int x, int y); ///< Sets object's position using classical access using two integers.
+		void SetPos(glictPos pos); ///< Sets object's position using predefined type. Useful when exchanging data between library's functions.
+		void GetPos(int* x, int* y); ///< Gets object's position and writes it into integers x and y.
+		void GetPos(glictPos* pos); ///< Gets object's position and writes it into predefined type. Useful when exchanging data between library's functions.
+		void GetSize(glictSize* size); ///< Gets object's size (height and width) and writes it into predefined type. TODO: integer version
+		void SetScissor(); ///< This one adjusts the clipping window through which something can be seen, and which is set by SetClip
+		void SetVisible(bool visibility); ///< Sets visibility.
+		bool GetVisible(); ///< Retrieves visibility.
 		void SetEnabled(bool enabled); ///< Sets enabledness.
 		bool GetEnabled(); ///< Retrieves enabledness.
-        void RememberTransformations(); ///< When calling parent's paint, call it's 'remember transformations' too, so clicking detection is done properly. if clicking unused, or no transformations done, then not important
-        void ResetTransformations(); ///< Resets transformations to default transf matrix (identity matrix)
-        void TransformScreenCoords(glictPos *pos); ///< Transforms screen coordinates into plane coordinates
+		void RememberTransformations(); ///< When calling parent's paint, call it's 'remember transformations' too, so clicking detection is done properly. if clicking unused, or no transformations done, then not important
+		void ResetTransformations(); ///< Resets transformations to default transf matrix (identity matrix)
+		void TransformScreenCoords(glictPos *pos); ///< Transforms screen coordinates into plane coordinates
 
-        bool CastEvent(glictEvents evt, void* wparam, long lparam); ///< Casts an event omitting the returnvalue. (deprecated, I'm lazy and don't want to rewrite code so I abuse namespace)
-        bool DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event into default event processor, omitting the widget's code.
+		bool CastEvent(glictEvents evt, void* wparam, long lparam); ///< Casts an event omitting the returnvalue. (deprecated, I'm lazy and don't want to rewrite code so I abuse namespace)
+		bool DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event into default event processor, omitting the widget's code.
 
-        void SetOnClick(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon click.
-        void SetCaption(std::string caption); ///< Sets the caption of the control, if supported.
-        std::string GetCaption(); ///< Retrieves the caption of the control, if supported.
+		void SetOnClick(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon click. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
+		void SetCaption(std::string caption); ///< Sets the caption of the control, if supported.
+		std::string GetCaption(); ///< Retrieves the caption of the control, if supported.
 
-        const char *EvtTypeDescriptor(glictEvents evt); ///< Returns string with generated event.
-        void Focus(glictContainer* callerchild); ///< Sets the focus to the current object.
+		const char *EvtTypeDescriptor(glictEvents evt); ///< Returns string with generated event.
+		void Focus(glictContainer* callerchild); ///< Sets the focus to the current object.
 
-        glictContainer* GetParent();
+		glictContainer* GetParent();
 
-        void ReportDebug(); ///< Reports debug information to stdout.
+		void ReportDebug(); ///< Reports debug information to stdout.
 
+		void RecursiveBoundaryFix(); ///< Fixes boundaries recursively up to the root of the tree (desktop, probably). Should be used only internally. FIXME: Make private/protected
 
-        int height, width; ///< Current height and width of the widget. FIX: Make private.
-        int x, y; ///< Current position of the widget. FIX: Make private
-        int left, right, top, bottom; ///< Current boundaries of the widget, calculated from height, width, x and y. FIX: Make private.
-        int clipleft, clipright, cliptop, clipbottom; ///< Current clipping boundaries of the widget. Somewhat depends on the parent's clipping. FIX: Make private.
+		int height, width; ///< Current height and width of the widget. FIXME: Make private.
+		int x, y; ///< Current position of the widget. FIXME: Make private
+		int left, right, top, bottom; ///< Current boundaries of the widget, calculated from height, width, x and y. FIXME: Make private.
+		int clipleft, clipright, cliptop, clipbottom; ///< Current clipping boundaries of the widget. Somewhat depends on the parent's clipping. FIXME: Make private.
+		int containeroffsetx, containeroffsety; ///< Offsets of container object positions.
+		char objtype[50]; ///< Short descriptive string containing name of the object. (Each class actually rewrites this one upon intialization in constructor.)
 
-        char objtype[50]; ///< Short descriptive string containing name of the object. (Each class actually rewrites this one upon intialization in constructor.)
+	private:
+		// these should be called only internally
+		void SetRect(int left, int top, int right, int bottom); ///< Internal function. Sets the boundaries of the widget.
+		void SetClip(int left, int top, int right, int bottom); ///< Internal function. Sets the clipping boundaries of the widget.
 
-    private:
-        // these should be called only internally
-        void SetRect(int left, int top, int right, int bottom); ///< Internal function. Sets the boundaries of the widget.
-        void SetClip(int left, int top, int right, int bottom); ///< Internal function. Sets the clipping boundaries of the widget.
-
-        bool visible;
+		bool visible;
 		bool enabled;
 
-    protected: // remark: protected allows access to friends, private doesnt
-        vector <glictContainer*> objects; ///< Contains all the children objects.
-        /*int height, width;
-        int x, y;
-        int left, right, top, bottom;
-        int clipleft, clipright, cliptop, clipbottom;*/
+	protected:
 
-        glictContainer* parent; ///< Pointer to class' parents.
-        unsigned int guid; ///< Unique identifier; unused so far
-        float ModelviewMatrix[16]; ///< Modelview matrix, as remembered last time RememberTransformations() was called.
+		std::vector <glictContainer*> objects; ///< Contains all the children objects.
+		/*int height, width;
+		int x, y;
+		int left, right, top, bottom;
+		int clipleft, clipright, cliptop, clipbottom;*/
 
-        void(*OnClick)(glictPos* relmousepos, glictContainer* callerclass); ///< Pointer to function specified as OnClick function.
+		glictContainer* parent; ///< Pointer to class' parents.
+		unsigned int guid; ///< Unique identifier; unused so far
+		float ModelviewMatrix[16]; ///< Modelview matrix, as remembered last time RememberTransformations() was called.
+
+		void(*OnClick)(glictPos* relmousepos, glictContainer* callerclass); ///< Pointer to function specified as OnClick function.
 
 
-        std::string caption; ///< Caption written on the control, if control supports it.
+		std::string caption; ///< Caption written on the control, if control supports it.
 
-        bool focusable;
-		
+		bool focusable;
+		vector <glictContainer*> delayedremove;
 
 
     /// \todo Remove this friend!

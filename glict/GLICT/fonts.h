@@ -27,20 +27,20 @@
 
 #include <string>
 #include <vector>
-typedef bool(*_glictFontRenderFuncBoolNoSize)(const char* text, void* font, float x, float y) ;
-typedef bool(*_glictFontRenderFuncBoolSize)(const char* text, void* font, float size, float x, float y) ;
-typedef void(*_glictFontRenderFuncVoidNoSize)(const char* text, void* font, float x, float y) ;
-typedef void(*_glictFontRenderFuncVoidSize)(const char* text, void* font, float size, float x, float y) ;
+typedef bool(*_glictFontRenderFuncBoolNoSize)(const char* text, const void* font, float x, float y) ;
+typedef bool(*_glictFontRenderFuncBoolSize)(const char* text, const void* font, float size, float x, float y) ;
+typedef void(*_glictFontRenderFuncVoidNoSize)(const char* text, const void* font, float x, float y) ;
+typedef void(*_glictFontRenderFuncVoidSize)(const char* text, const void* font, float size, float x, float y) ;
 
 
-typedef bool(*_glictFontRenderFuncBoolNoSize)(const char* text, void* font, float x, float y) ;
-typedef bool(*_glictFontRenderFuncBoolSize)(const char* text, void* font, float size, float x, float y) ;
-typedef void(*_glictFontRenderFuncVoidNoSize)(const char* text, void* font, float x, float y) ;
-typedef void(*_glictFontRenderFuncVoidSize)(const char* text, void* font, float size, float x, float y) ;
+typedef bool(*_glictFontRenderFuncBoolNoSize)(const char* text, const void* font, float x, float y) ;
+typedef bool(*_glictFontRenderFuncBoolSize)(const char* text, const void* font, float size, float x, float y) ;
+typedef void(*_glictFontRenderFuncVoidNoSize)(const char* text, const void* font, float x, float y) ;
+typedef void(*_glictFontRenderFuncVoidSize)(const char* text, const void* font, float size, float x, float y) ;
 
 
-typedef float(*_glictFontSizeFuncSize)(const char* text, void* font, float size) ;
-typedef float(*_glictFontSizeFuncNoSize)(const char* text, void* font) ;
+typedef float(*_glictFontSizeFuncSize)(const char* text, const void* font, float size) ;
+typedef float(*_glictFontSizeFuncNoSize)(const char* text, const void* font) ;
 
 
 

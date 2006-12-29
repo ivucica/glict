@@ -17,32 +17,38 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef __GLICT_WINDOW_H
-#define __GLICT_WINDOW_H
+#ifndef __GLICT_SCROLLBAR_H
+#define __GLICT_SCROLLBAR_H
 #include <string>
 #include <GLICT/container.h>
-#include <GLICT/panel.h>
 #include <GLICT/types.h>
-class glictWindow : public glictContainer {
-    public:
-        glictWindow();
-        ~glictWindow();
+class glictScrollbar : public glictContainer {
+	public:
+		glictScrollbar();
+		~glictScrollbar();
 
-        void SetBGColor(float r, float g, float b, float a);
+		void SetBGColor(float r, float g, float b, float a);
+		void SetValue(int val);
+		int GetValue();
+		void SetStep (unsigned int newstep); ///<How much is increased/decreased by each step
+		unsigned int GetStep();
+		void SetMin (int newmin);
+		int GetMin();
+		void SetMax (int newmax);
+		int GetMax();
+		// redefined functions
+		virtual void Paint();
+		bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
+	private:
+		glictColor bgcolor;
+		
+		// upper and lower "button" highlighted?
+		bool highlightup;
+		bool highlightdn;
 
-        // redefined functions
-        virtual void Paint();
-		//void AddObject(glictContainer *object);
-		//void RemoveObject(glictContainer *object);
-		//void SetHeight(int h);
-		//void SetWidth(int w);
-        virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
-    private:
-        glictColor bgcolor;
-        glictPos relmouse; // relative position of mouse acquired upon mousepress
-		glictPanel panel;
-        bool mousedown; // is mouse currently down on the window?
-    friend class glictContainer;
+		int min, max, value;
+		unsigned int step;
+		friend class glictContainer;
 };
 #endif
 
