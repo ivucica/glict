@@ -56,7 +56,7 @@ class glictContainer  {
         ~glictContainer(); ///< Destructor for the class.
 
         // the following elements are replaced, not necessarily inherited in child  classes
-        virtual void Paint(); ///< Renders the element. Should contain call to CPaint(). (Does not actually render anything in this class; intended for redefinition in classes that inherit this one.)
+        virtual void Paint(); ///< Renders the element. Should contain call to CPaint().
         virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event to the class, so it can process it. Example is mouseclick or mousedown.
 
 		// the following elements are always inherited from container. some MAY be overriden, in special circumstances, but it is not recommended.

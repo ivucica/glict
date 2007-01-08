@@ -102,7 +102,11 @@ void glictTextbox::SetBGColor(float r, float g, float b, float a) {
 	this->bgcolor.b = b;
 	this->bgcolor.a = a;
 }
-/// This is the copypasteable castevent usable in other widgets
+/** \brief Receives click event (to get focus) and keys to manipulate its caption
+  *
+  * \todo Document me!
+  */
+// Copypastable to other widgets.
 bool glictTextbox::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 	if (!GetVisible() || !GetEnabled()) return false;
 	switch (evt) {

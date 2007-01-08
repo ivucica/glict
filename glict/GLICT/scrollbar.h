@@ -22,6 +22,8 @@
 #include <string>
 #include <GLICT/container.h>
 #include <GLICT/types.h>
+
+/// Widget with two buttons and a box that can be moved left or right using aforementioned buttons. (Buttons are not glictButtons)
 class glictScrollbar : public glictContainer {
 	public:
 		glictScrollbar();
@@ -41,7 +43,7 @@ class glictScrollbar : public glictContainer {
 		bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
 	private:
 		glictColor bgcolor;
-		
+
 		// upper and lower "button" highlighted?
 		bool highlightup;
 		bool highlightdn;

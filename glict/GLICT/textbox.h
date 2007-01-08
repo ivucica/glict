@@ -22,6 +22,17 @@
 
 #include <GLICT/container.h>
 #include <GLICT/types.h>
+
+/** \brief Rectangle shaped area that accepts keypress events and changes its
+  * own caption accordingly.
+  *
+  * Rectangle shaped area that accepts keypress events and changes its own
+  * caption accordingly. If it contains focus, an underscore character is
+  * appended. No scrolling (meaning PalmOS style.)
+  *
+  * \todo If textcursor goes out of bounds of textbox, scroll the text
+  *       appropriatelly to follow the cursor
+  */
 class glictTextbox : public glictContainer {
     public:
         glictTextbox();

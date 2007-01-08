@@ -232,6 +232,9 @@ void glictContainer::SetPos(glictPos pos) {
   * This function puts the current object's position (relative to
   * parent) into specified memory locations.
   * \sa SetPos(int x, int y), GetPos(glictPos *pos)
+  * \bug Possible containeroffset*-based problem, manifests upon moving of a
+  *      window which is a child of another window by dragging. See also,
+  *      bugnote in glictWindow::CastEvent()
   */
 void glictContainer::GetPos(int* x, int* y) {
 	*x = this->x;
@@ -423,7 +426,11 @@ void glictContainer::SetScissor() {
 }
 
 /**
-  * In this class, Paint does nothing except calling SetScissor() and
+  * (This description applies for the glictContainer::Paint(). If you are
+  * reading it for some other class, then its documentation is not written
+  * yet for this function.)
+  *
+  * In glictContainer class, Paint does nothing except calling SetScissor() and
   * CPaint(). This is because as a widget the container class does not render
   * anything; it serves as a point of divergence for other classes.
   * Other widgets should define their own procedure with these two calls
@@ -477,7 +484,7 @@ void glictContainer::CPaint() {
 				}
 			}
 			delayedremove.erase(it);
-			
+
 		}
 
 
@@ -529,6 +536,16 @@ void glictContainer::CPaint() {
 }
 
 /**
+  * \param evt Event that occured
+  * \param *wparam Any kind of value that needs to be passed on to the function.
+  *               (For example if a structure needs to be passed.)
+  * \param lparam Numeric value that needed to be passed for event processing.
+  * \param *returnvalue Return value, if any, will be stored here.
+  *                     If NULL, no return value shall be stored.
+  * \return Boolean value specifying if the event was processed at all. True
+  *         means an event was caught by the widget, or by a child.
+  *
+  *
   * This function does default processing of event, so that each widget
   * does not have to reinvent the wheel. If the widget does not want to
   * process an event, it simply can call upon this function.
@@ -542,6 +559,11 @@ void glictContainer::CPaint() {
   * well. You'll also read of parameters there, as well as return value.
   *
   * \sa CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue)
+  * \todo Clicking must be handled via verifying if an element has been rendered on
+  *       certain pixel, not the way it's done right now. Currently we cannot do
+  *       custom-shaped widgets, only rectangle widgets! (This todo is not strictly
+  *       related to this function.)
+  *
   */
 bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 	//printf("Default event of type %s passing through %s (%s) with %d children\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL", this->objects.size());
@@ -660,12 +682,19 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 }
 
 /**
-  * Function that can be used in case returnvalue is not necessary, meaening
+  * \param evt Event that occured
+  * \param *wparam Any kind of value that needs to be passed on to the function.
+  *               (For example if a structure needs to be passed.)
+  * \param lparam Numeric value that needed to be passed for event processing.
+  * \return Boolean value specifying if the event was processed at all. True
+  *         means an event was caught by the widget, or by a child.
+  *
+  * Function that can be used in case returnvalue is not necessary, meaning
   * that caller is not interested in a result of the function.
   * Actually just calls to regular CastEvent with returnvalue set to NULL.
   * See the regular CastEvent for more info.
   *
-  * \sa CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
+  * \sa CastEvent(glictEvents, void*, long, void*);
   */
 bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam) {
    return this->CastEvent(evt, wparam, lparam, NULL);
@@ -696,14 +725,9 @@ bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam) {
   * do anything with the event, goes on with processing it itself.
   *
   * Container class does not do anything except pushing events on to
-  * DefaultCastEvent. (Note, there is some now-deprecated code below
-  * waiting for final expunging. It is a test to make mouseclick work using
-  * GL selection, which proved to be more painful than method
-  * currently used, and although it'd more easily allow for richer
-  * widgets, the current method should satisfy even those desires as the
-  * widget can now figure out by itself if it had a mouseclick.)
+  * DefaultCastEvent.
   *
-  * \sa DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue)
+  * \sa DefaultCastEvent()
   */
 bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 	if (!GetVisible() || !GetEnabled()) return false;

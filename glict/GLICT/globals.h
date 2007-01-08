@@ -18,6 +18,7 @@
 */
 #include <GLICT/container.h>
 #include <GLICT/types.h>
+/// Stores some global settings.
 class glictGlobalsClass {
     public:
         glictGlobalsClass();

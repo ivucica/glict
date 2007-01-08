@@ -24,6 +24,8 @@
 #include <GLICT/window.h>
 #include <GLICT/button.h>
 #include <GLICT/panel.h>
+
+/// Derived from window, this widget contains a panel with settable caption, and an OK button which closes the messagebox and possibly calls a settable function
 class glictMessageBox : public glictWindow {
 	public:
 		glictMessageBox();

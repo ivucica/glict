@@ -17,10 +17,16 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+/**
+  * \example examples/memory/main.cpp
+  * This is a simple memory game that will show you basics of use of GLICT.
+  *
+  *  There's tons of inline comments, please read them to learn things.
+  */
 
-// GLICTMemory
-// simple game made with GLICT
-// to compile you'll need GLUT
+// GLICTMemory 
+//  simple game made with GLICT 
+//  to compile you'll need GLUT 
 
 // GLUT includes
 // we use glut because it's cross platform compatible
@@ -200,7 +206,7 @@ void CardOnClick(glictPos* relmousepos, glictContainer* callerclass) {
                 msgSuccess->SetCaption("Congrats!");
                 msgSuccess->SetMessage("You've solved the game!");
                 msgSuccess->SetPos(32,32);
-                desktop.AddObject(msgSuccess);
+                window.AddObject(msgSuccess);
 
             }
         } else {

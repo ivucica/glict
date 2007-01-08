@@ -43,7 +43,7 @@ typedef float(*_glictFontSizeFuncSize)(const char* text, const void* font, float
 typedef float(*_glictFontSizeFuncNoSize)(const char* text, const void* font) ;
 
 
-
+/// Represents one font usable by GLICT. (GLICT currently uses only one, "system")
 class glictFont {
     public:
         glictFont();

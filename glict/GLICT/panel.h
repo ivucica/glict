@@ -22,6 +22,8 @@
 
 #include <GLICT/container.h>
 #include <GLICT/types.h>
+
+/// Simple rectangular widget that can contain children and has changeable background color
 class glictPanel : public glictContainer {
     public:
         glictPanel();
