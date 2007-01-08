@@ -23,6 +23,8 @@
 #include <GLICT/container.h>
 #include <GLICT/panel.h>
 #include <GLICT/types.h>
+
+/// A draggable window that can contain subelements. Similar to many other "windowing systems" (but a lot uglier and flatter)
 class glictWindow : public glictContainer {
     public:
         glictWindow();
@@ -31,12 +33,12 @@ class glictWindow : public glictContainer {
         void SetBGColor(float r, float g, float b, float a);
 
         // redefined functions
-        virtual void Paint();
+        virtual void Paint(); ///< Paints the window.
 		//void AddObject(glictContainer *object);
 		//void RemoveObject(glictContainer *object);
 		//void SetHeight(int h);
 		//void SetWidth(int w);
-        virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
+        virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Reacts to events in a way a window should.
     private:
         glictColor bgcolor;
         glictPos relmouse; // relative position of mouse acquired upon mousepress

@@ -92,7 +92,7 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 				((glictPos*)wparam)->x <= this->clipright &&
 				((glictPos*)wparam)->y >= this->cliptop &&
 				((glictPos*)wparam)->y <= this->clipbottom) {
-				printf("Within button\n");
+				//printf("Within button\n");
 				if (evt == GLICT_MOUSECLICK) {
 					//this->Focus(NULL);
 					//printf("Caught button click!\n",0,0);
@@ -115,7 +115,7 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 				//return false;
 				return true;
 			} else {
-			    printf("BUTTON DID NOT FIND THIS THING. X, Y: %d %d Clip: %d %d %d %d\n", ((glictPos*)wparam)->x, ((glictPos*)wparam)->y, clipleft, clipright, cliptop, clipbottom);
+			    //printf("BUTTON DID NOT FIND THIS THING. X, Y: %d %d Clip: %d %d %d %d\n", ((glictPos*)wparam)->x, ((glictPos*)wparam)->y, clipleft, clipright, cliptop, clipbottom);
 			}
 
 

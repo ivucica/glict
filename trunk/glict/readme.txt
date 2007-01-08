@@ -3,6 +3,14 @@
 
 \author Ivan Vucica
 
+
+\if false
+This file is not actually meant to be read stand-alone, but to be compiled
+into Doxygen documentation. I will however try to keep it readable both ways.
+(If you try hard you may read something!)
+\endif
+
+
 Visit www.objectnetworks.net for more information on our projects.
 
 \image html demoshot.jpg "GLICT in action; the UI in background is normal, the  one in front demonstrates transformations" width=50
@@ -26,7 +34,7 @@ Visit www.objectnetworks.net for more information on our projects.
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 \endcode
 
-\section Introduction
+\section one Introduction
 
 GLICT stands for Graphics Library Interface Creation Toolkit. It is designed
 as a drop-in library for simple building into existing applications, as well
@@ -40,7 +48,7 @@ to four basic liberties as defined by Free Software Foundation.
 This library provides a very simple C++ interface which uses few very simple
 functions to set up the interface and to manage it.
 
-\section Compilation of library binary
+\section two Compilation of library binary
 
 GLICT is actively developed under Win32, but occasionally test builds are
 done under GNU/Linux. 
@@ -52,7 +60,7 @@ included; for building library only choose the "library" target.
 
 To build the documentation, use the Doxyfile that's included.
 
-\section Usage
+\section three Usage
 
 All the user interface controls are C++ classes derived from glictContainer
 class. This class contains only basic functionalities and does not render
@@ -70,24 +78,24 @@ formatted for Doxygen and is set to be main page of Doxygen's documentation.)
 Before using the widgets, you should set up at least a GLICT font named 
 "system" (case sensitive). It is the font used through GLICT widget rendering.
 
-\section Development
+Take a look at snippets.txt which contains some practical code for copypasting
+into your projects (not necessarily only the first one).
+
+\section four Development
 
 This library is still deep in development. We encourage capable people to join
 the project and assist in making this a library that's easy for implementation
 everywhere.
 
-\section Todo
+\section five Todo
 
-Clicking must be handled via verifying if an element has been rendered on
-certain pixel, not the way it's done right now. Currently we cannot do
-custom-shaped widgets, only rectangle widgets!
+For detailed todo, please take a look at the Doxygen-generated documentation
 
-Effects of glScalef() are not detransformed in
-glictContainer::TransformScreenCoords()
-
-\section Contact
+\section six Contact
 
 To contact me please send an e-mail to 
 \image html ivucica.gif "\@gm41l.kom"
 Of course, replace kom with com, and put correct name of Google's mailing service on appropriate place. I feel that privacy is important, yours just like mine.
+
+
 */

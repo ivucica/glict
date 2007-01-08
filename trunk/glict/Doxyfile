@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = GLICT
-PROJECT_NUMBER         = july18_2006
+PROJECT_NUMBER         = dec30_2006
 OUTPUT_DIRECTORY       = "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/doc"
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -40,6 +40,7 @@ OPTIMIZE_OUTPUT_JAVA   = NO
 BUILTIN_STL_SUPPORT    = YES
 DISTRIBUTE_GROUP_DOC   = NO
 SUBGROUPING            = YES
+TITLE                  = "RTF Naslov"
 #---------------------------------------------------------------------------
 # Build related configuration options
 #---------------------------------------------------------------------------
@@ -115,7 +116,8 @@ RECURSIVE              = YES
 EXCLUDE                = "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/doc" \
                          "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/docimgs" \
                          "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/CVS" \
-                         "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/.objs"
+                         "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/.objs" \
+                         "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/exchndl2.cxx"
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
 EXAMPLE_PATH           = "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/examples"
@@ -140,7 +142,7 @@ VERBATIM_HEADERS       = YES
 # configuration options related to the alphabetical class index
 #---------------------------------------------------------------------------
 ALPHABETICAL_INDEX     = YES
-COLS_IN_ALPHA_INDEX    = 5
+COLS_IN_ALPHA_INDEX    = 2
 IGNORE_PREFIX          = glict
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output

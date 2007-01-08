@@ -65,6 +65,16 @@ glictWindow::glictWindow() {
 glictWindow::~glictWindow() {
 	//this->glictWindow::RemoveObject(&panel);
 }
+
+/**
+  * Paints the widget called window, simulating looks of windows on other
+  * platforms (to a very plain and flat extent), and then calls CPaint()
+  * which will paint all the subwidgets.
+  *
+  * \sa glictContainer::Paint()
+  * \sa glictContainer::CPaint()
+  * \todo Windows really need borders!
+  */
 void glictWindow::Paint() {
 	if (!GetVisible()) return;
 	//printf("window\n");
@@ -116,9 +126,24 @@ void glictWindow::SetBGColor(float r, float g, float b, float a) {
 	this->bgcolor.a = a;
 	//this->panel.SetBGColor(r,g,b,a);
 }
-
+/**
+  * \param evt Specifies the event being cast
+  * \param wparam Specifies a pointer to the event-defined parameter
+  * \param lparam Specifies a long value, an event-defined parameter
+  *
+  * Reacts to events in a way a window should, meaning, it detects a click
+  * and a drag and possibly moves the window if they occured in specific
+  * locations. Also makes use of Container::DefaultCastEvent() for default
+  * parsing of events, or letting children widgets know of stuff that
+  * happened.
+  *
+  * \bug Moving of this window by dragging has problems because of the
+  *      containeroffsets if a window is a child of another window.
+  *      Possibly a general problem with glictContainer::SetPos().
+  *      (See also, bugnote there)
+  */
 bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
-	printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
+	//printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
 	if (!GetVisible()) return false;
 	int oldx = this->x, oldy = this->y;
 
@@ -128,7 +153,7 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 			((glictPos*)wparam)->y > this->cliptop &&
 			((glictPos*)wparam)->y < this->clipbottom) {
 
-            printf("Within %s\n", this->GetCaption().c_str());
+            //printf("Within %s\n", this->GetCaption().c_str());
 
 
 			//if (evt == GLICT_MOUSECLICK) {
@@ -143,7 +168,7 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 					this->relmouse.x = ((glictPos*)wparam)->x-this->x;
 					this->relmouse.y = ((glictPos*)wparam)->y-this->y;
 					// dont to defaultcastevent as it might call a child that's below our titlebar
-                    printf("DRAG!\n");
+                    //printf("DRAG!\n");
 					return true;
 				}
 			}

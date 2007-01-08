@@ -82,3 +82,14 @@
 
 * Container.<all>: Fixed some problems that have arisen (hopefully, the problem from 5.11.2006 too; didn't check)
 * Container.<all>: Fixed a crash occurence; another one arose, however
+
+30.12.2006
+
+* examples/memory/main.cpp: you-have-won messagebox is added to the "Board" window to demonstrate possibility to add windows to other windows (although they can be added to anything). this revealed a bug with titlebar-based offsets
+* Window.cpp: Added documentation for CastEvent
+* Doxyfile: minor changes (e.g. made doxygen not parse exchndl.cxx because it's not really a part of GLICT)
+* *.*: Added at least basic class descriptions. And somewhere, some more doc.
+
+8.1.2007
+
+* *.*: Removed debugging printf's

@@ -81,13 +81,13 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
 				((glictPos*)wparam)->x < this->clipright &&
 				((glictPos*)wparam)->y > this->cliptop &&
 				((glictPos*)wparam)->y < this->clipbottom) {
-                printf("EVENT WITHIN PANEL %s (%s)...!\n", objtype, parent ? parent->objtype : "NULL");
+                //printf("EVENT WITHIN PANEL %s (%s)...!\n", objtype, parent ? parent->objtype : "NULL");
 				// if a child caught click, we dont handle it otherwise
 				return DefaultCastEvent(evt, wparam, lparam, returnvalue);
 				// otherwise we could handle it mroe but we'll simply tell we didnt proces it
 
 			} else {
-			    printf("PANEL DID NOT FIND THIS THING. X, Y: %d %d Clip: %d %d %d %d\n", ((glictPos*)wparam)->x, ((glictPos*)wparam)->y, clipleft, clipright, cliptop, clipbottom);
+			    //printf("PANEL DID NOT FIND THIS THING. X, Y: %d %d Clip: %d %d %d %d\n", ((glictPos*)wparam)->x, ((glictPos*)wparam)->y, clipleft, clipright, cliptop, clipbottom);
 			}
 			//printf("It occured outside the panel, ignored.\n");
 			break;
