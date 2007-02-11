@@ -1,6 +1,6 @@
 /*
 	GLICT - Graphics Library Interface Creation Toolkit
-	Copyright (C) 2006 OBJECT Networks
+	Copyright (C) 2006-2007 OBJECT Networks
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@
 
 #ifdef WIN32
 	// GL.h doesnt like it that we dont include windows.h in MSVC
-	#include <windows.h> 
+	#include <windows.h>
 #endif
 
 #include <vector>
@@ -45,13 +45,13 @@
 _GLICTFONTVECTOR glictFonts;
 
 /** \brief Creates the font for further use
-  * \param name Specifies the font name that'll be used when referencing to 
+  * \param name Specifies the font name that'll be used when referencing to
   * this font
   *
   * Using this function, font space is created and reserved for future use.
   * To make this font space make sense, you need to assign the render and size
   * functions. Specify the render function using SetRenderFunc(), and specify
-  * the size function using SetSizeFunc(). They are overloaded and there are 
+  * the size function using SetSizeFunc(). They are overloaded and there are
   * several flavours of each, so you have some flexibility in designing your
   * font system.
   *

@@ -1,5 +1,5 @@
 /*! \mainpage GLICT Documentation
-(c) 2006 OBJECT Networks
+(c) 2006-2007 OBJECT Networks
 
 \author Ivan Vucica
 
@@ -7,7 +7,7 @@
 \if false
 This file is not actually meant to be read stand-alone, but to be compiled
 into Doxygen documentation. I will however try to keep it readable both ways.
-(If you try hard you may read something!)
+(If you try hard you may manage to read something!)
 \endif
 
 
