@@ -1,6 +1,6 @@
 /*
 	GLICT - Graphics Library Interface Creation Toolkit
-	Copyright (C) 2006 OBJECT Networks
+	Copyright (C) 2006-2007 OBJECT Networks
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
@@ -89,9 +89,10 @@ void glictWindow::Paint() {
 	);
 	glBegin(GL_QUADS);
 	glVertex2f(this->x,this->y+12);
-	glVertex2f(this->x+this->width,this->y+12);
-	glVertex2f(this->x+this->width,this->y+this->height+12);
 	glVertex2f(this->x,this->y+this->height+12);
+	glVertex2f(this->x+this->width,this->y+this->height+12);
+	glVertex2f(this->x+this->width,this->y+12);
+
 	glEnd();
 
 
@@ -106,9 +107,9 @@ void glictWindow::Paint() {
 
 	glBegin(GL_QUADS);
 	glVertex2f(this->x,this->y);
-	glVertex2f(this->x + this->width, this->y);
-	glVertex2f(this->x + this->width, this->y+12);
 	glVertex2f(this->x, this->y+12);
+	glVertex2f(this->x + this->width, this->y+12);
+	glVertex2f(this->x + this->width, this->y);
 	glEnd();
 
 	glColor4fv(glictGlobals.windowTitleColor);

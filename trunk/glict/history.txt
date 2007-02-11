@@ -93,3 +93,8 @@
 8.1.2007
 
 * *.*: Removed debugging printf's
+
+11.2.2007
+
+* *.cpp: Fixed problems with culling.
+* *.*: Changed copyright notice to say '2006-2007'.

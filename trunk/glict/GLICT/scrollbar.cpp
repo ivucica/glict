@@ -1,6 +1,6 @@
 /*
 	GLICT - Graphics Library Interface Creation Toolkit
-	Copyright (C) 2006 OBJECT Networks
+	Copyright (C) 2006-2007 OBJECT Networks
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
@@ -59,7 +59,7 @@ glictScrollbar::~glictScrollbar() {
 }
 void glictScrollbar::Paint() {
 	if (!GetVisible()) return;
-	
+
 	// upper "button" //
 	if (!highlightup) {
 		glColor4f(
@@ -78,11 +78,11 @@ void glictScrollbar::Paint() {
 	}
 	glBegin(GL_QUADS);
 	glVertex2f(this->x,this->y);
-	glVertex2f(this->x+this->width,this->y);
-	glVertex2f(this->x+this->width,this->y+this->width);
 	glVertex2f(this->x,this->y+this->width);
+	glVertex2f(this->x+this->width,this->y+this->width);
+	glVertex2f(this->x+this->width,this->y);
 	glEnd();
-	
+
 
 	// lower "button" //
 	if (!highlightdn) {
@@ -102,9 +102,9 @@ void glictScrollbar::Paint() {
 	}
 	glBegin(GL_QUADS);
 	glVertex2f(this->x,this->y+this->height);
-	glVertex2f(this->x+this->width,this->y+this->height);
-	glVertex2f(this->x+this->width,this->y+this->height-this->width);
 	glVertex2f(this->x,this->y+this->height-this->width);
+	glVertex2f(this->x+this->width,this->y+this->height-this->width);
+	glVertex2f(this->x+this->width,this->y+this->height);
 	glEnd();
 
 	// back panel
@@ -116,9 +116,9 @@ void glictScrollbar::Paint() {
 	);
 	glBegin(GL_QUADS);
 	glVertex2f(this->x,this->y+this->width);
-	glVertex2f(this->x+this->width,this->y+this->width);
-	glVertex2f(this->x+this->width,this->y+this->height-this->width);
 	glVertex2f(this->x,this->y+this->height-this->width);
+	glVertex2f(this->x+this->width,this->y+this->height-this->width);
+	glVertex2f(this->x+this->width,this->y+this->width);
 	glEnd();
 
 	// scroller chip
@@ -130,16 +130,15 @@ void glictScrollbar::Paint() {
 	);
 	glBegin(GL_QUADS);
 	glVertex2f(
-		this->x, 
+		this->x,
 		this->y + // normal beginning coord of the object
 		this->width + // increased by height of top button
-		((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent 
+		((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
 		* (float)(this->height - this->width*2 - this->width) // which should be a height, reduced by top and bottom button's height, but also by scroller's height
 	);
-	
-	glVertex2f(this->x, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width) + this->width);
-	glVertex2f(this->x + this->width, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width) + this->width);
 	glVertex2f(this->x + this->width, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width));
+	glVertex2f(this->x + this->width, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width) + this->width);
+	glVertex2f(this->x, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width) + this->width);
 	glEnd();
 
 	this->CPaint();
@@ -147,17 +146,17 @@ void glictScrollbar::Paint() {
 	// this is here so that scissoring resumes properly
 	this->SetScissor();
 
-	
+
 	glColor4f(1., 1., 1., 1.);
 
 	glPushMatrix();
 	glRotatef(180.0, 1.0, 0.0, 0.0);
-	glictFontRender("^","system", 
-		this->x + (this->width / 2 - glictFontSize("^", "system") / 2) , 
+	glictFontRender("^","system",
+		this->x + (this->width / 2 - glictFontSize("^", "system") / 2) ,
 		this->y*-1. - 9 - width / 2 + 9/2);
-	
-	glictFontRender("V","system", 
-		this->x + (this->width / 2 - glictFontSize("V", "system") / 2) , 
+
+	glictFontRender("V","system",
+		this->x + (this->width / 2 - glictFontSize("V", "system") / 2) ,
 		-this->y - this->height + width / 2 - 9 / 2);
 	glPopMatrix();
 }
@@ -181,7 +180,7 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
 			((glictPos*)wparam)->y < this->clipbottom) {
 
 
-			
+
 
 			if (evt == GLICT_MOUSECLICK) {
 				this->Focus(this);

@@ -1,5 +1,5 @@
 GLICT DOCUMENTATION
-(c) 2006 OBJECT Networks
+(c) 2006-2007 OBJECT Networks
 
 programmed by Ivan Vucica
 
@@ -7,7 +7,7 @@ programmed by Ivan Vucica
 Visit www.objectnetworks.net for more information on our projects.
 
     GLICT - Graphics Library Interface Creation Toolkit
-    Copyright (C) 2006 OBJECT Networks
+    Copyright (C) 2006-2007 OBJECT Networks
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ All the user interface controls are C++ classes derived from glictContainer clas
 
 	// customizable functions
         virtual void Paint();
-       
+
         // the following elements are always inherited from container
         void CPaint();
         void AddObject(glictContainer* object);
@@ -47,7 +47,7 @@ All the user interface controls are C++ classes derived from glictContainer clas
         void GetPos(int* x, int* y);
         void GetPos(glictPos* pos);
         void GetSize(glictSize* size);
-        void SetScissor(); 
+        void SetScissor();
 
 Paint() is used to draw the element. This is an inheritable function and is intended to be replaced by custom controls.
 CPaint() is used to draw child elements. It sets up the clipping and draws each object.
@@ -60,7 +60,7 @@ GetPos() and GetSize() respectively get the size.
 SetScissor() prepares for drawing by activating appropriate clipping model. We do not recommend that this function is used and do not promise ongoing support for it.
 
 
-Before using the widgets, you should set up at least a GLICT font named 
+Before using the widgets, you should set up at least a GLICT font named
 "system" (case sensitive). It is the font used through GLICT widget rendering.
 
 
