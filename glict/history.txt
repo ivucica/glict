@@ -15,6 +15,8 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+If you use GLICT, you should make it a priority to contact us! We need to know
+how many people use it, so that we know if we can do critical API changes.
 
 31.8.2006
 
@@ -48,8 +50,8 @@
 * Container.cpp: Removed notice that keypress events are "in development"
 * Snippets.txt: Small updates (it contains separate "history" section)
 * History.txt: Added LGPL note
-* Fonts.h: being that void* font parameter is not changed by the function, it maked sense to change it to const void* font for all functions and function overloads. This will probably introduce some incompatibility with some code, so please just change the void* declarations into const void*. 
-* Fonts.cpp: Small stuff 
+* Fonts.h: being that void* font parameter is not changed by the function, it maked sense to change it to const void* font for all functions and function overloads. This will probably introduce some incompatibility with some code, so please just change the void* declarations into const void*.
+* Fonts.cpp: Small stuff
 * Glut-helper.<all> for examples: Switched to const void* to "compatibilize" with updated fonts.h
 * History.txt: Since today, every change is assigned the prefixed name of file, followed by a colon ':'
 
@@ -98,3 +100,24 @@
 
 * *.cpp: Fixed problems with culling.
 * *.*: Changed copyright notice to say '2006-2007'.
+
+22.2.2007
+
+* Container.cpp: Documented some more functions
+* Container.*: Added SetOnPaint() function and OnPaint() function pointer variable; added functionality
+* Types.h: Added glictRect type
+
+23.2.2007
+
+* Container.cpp: Got rid of some glPushMatrix() and glPopMatrix() when rendering in Paint(); translate and negative translate will do fine, instead
+* Main.cpp: Triangle rendering example within a window is working
+* Glut-helper.cpp: Fixed \r, \r\n and \n\r rendering. Textbox can now accept enters in the "main.cpp" example :P
+
+24.2.2007
+
+* *.cpp: Messed some more with removing redundant and adding necessary matrix code
+
+17.3.2007
+
+* Container.cpp: When calling OnClick, we no longer pass the absolute coordinates, but relative coordinates.
+* Window.cpp: Changed behavior of OnPaint()

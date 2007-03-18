@@ -146,6 +146,7 @@ bool glictFontRender(const char* text, const char* fontname, float x, float y) {
   */
 
 bool glictFontRender(const char* text, const char* fontname, float fontsize, float x, float y) {
+    glMatrixMode(GL_MODELVIEW);
 	glictFont* fnt = glictFindFont(fontname);
 	if (!fnt) printf(">>>>>>>>>>>>>>>>>>>>>>>><Font %s not found\n", fontname);
 	if (strcmp(fnt->GetName().c_str(), fontname)) printf(">>>>>>>>>>>>>>>>>>>FONT NAME DIFFERENT FROM WHAT WE SEARCHED FOR\n");
@@ -155,10 +156,11 @@ bool glictFontRender(const char* text, const char* fontname, float fontsize, flo
 		return fnt->RenderBoolSize(text, fnt->fontparam, fontsize, x, y); //
 	}
 	if (fnt->RenderBoolNoSize) {
-		glPushMatrix();
+		//glPushMatrix();
 		glScalef(fontsize, fontsize, fontsize);
 		bool r = fnt->RenderBoolNoSize(text, fnt->fontparam, x/fontsize, y/fontsize);
-		glPopMatrix();
+		glScalef(1./fontsize, 1./fontsize, 1./fontsize);
+		//glPopMatrix();
 		return r;
 	}
 	if (fnt->RenderVoidSize) {
@@ -166,10 +168,11 @@ bool glictFontRender(const char* text, const char* fontname, float fontsize, flo
 		return true;
 	}
 	if (fnt->RenderVoidNoSize) {
-		glPushMatrix();
+		//glPushMatrix();
 		glScalef(fontsize, fontsize, fontsize);
 		fnt->RenderVoidNoSize(text, fnt->fontparam, x/fontsize, y/fontsize);
-		glPopMatrix();
+		glScalef(1./fontsize, 1./fontsize, 1./fontsize);
+		//glPopMatrix();
 		return true;
 	}
 

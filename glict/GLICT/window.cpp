@@ -96,8 +96,25 @@ void glictWindow::Paint() {
 	glEnd();
 
 
+    if (this->OnPaint) {
+        glictRect r, c;
+
+        r.top = this->top+containeroffsety;
+        r.bottom = this->bottom;
+        r.left = this->left;
+        r.right = this->right;
+
+        c.top = max(this->cliptop, this->top+containeroffsety);
+        c.bottom = this->clipbottom;
+        c.left = this->clipleft;
+        c.right = this->clipright;
+        this->OnPaint(&r, &c, this);
+    }
+
+
 	this->CPaint();
 	//panel.Paint();
+
 
 	// this is here so that scissoring resumes properly
 	this->SetScissor();
@@ -114,10 +131,21 @@ void glictWindow::Paint() {
 
 	glColor4fv(glictGlobals.windowTitleColor);
 
+
+    {
+        int er;
+        if ((er =glGetError())!=GL_NO_ERROR) printf("1EROR!!!\n");
+    }
+
 	glPushMatrix();
 	glRotatef(180.0, 1.0, 0.0, 0.0);
 	glictFontRender(this->caption.c_str(),"system", this->x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) , this->y*-1. - 9.);
 	glPopMatrix();
+
+    {
+        int er;
+        if ((er =glGetError())!=GL_NO_ERROR) printf("2EROR!!!\n");
+    }
 }
 
 void glictWindow::SetBGColor(float r, float g, float b, float a) {

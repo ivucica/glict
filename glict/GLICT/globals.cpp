@@ -36,7 +36,7 @@ glictGlobalsClass::glictGlobalsClass() {
 	topFocused = NULL;
 
 
-	clippingMode = GLICT_SCISSORTEST;
+	clippingMode = GLICT_NOCLIP;
 
 }
 glictGlobalsClass::~glictGlobalsClass() {

@@ -41,7 +41,8 @@ glictMessageBox msgbox;
 glictTextbox textbox;
 
 unsigned int windowhandle;
-glictContainer desktop;
+glictContainer desktop, desktop2;
+glictWindow window2;
 int ww, wh;
 glictPos mousepos;
 void display();
@@ -110,7 +111,7 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //glEnable(GL_STENCIL_TEST);
-    glEnable(GL_SCISSOR_TEST);
+    //glEnable(GL_SCISSOR_TEST);
     glPushMatrix();
     desktop.RememberTransformations();
     desktop.Paint();
@@ -138,22 +139,60 @@ void display() {
     glEnd();
     glEnable(GL_STENCIL_TEST);
 
+    glutReportErrors();
     //printf("FINISHED PAINT.\n");
     glutSwapBuffers();
     //desktop.ReportDebug();
 }
 bool buttonstate = true;
+void onpanel2paint(glictRect* real, glictRect* clipped, glictContainer* callerclass) {
+
+
+    glPushAttrib(GL_VIEWPORT);
+    glViewport(clipped->left, glictGlobals.h - clipped->bottom, clipped->right - clipped->left, clipped->bottom - clipped->top);
+    printf("%g %g %g %g\n", clipped->left, glictGlobals.h - clipped->bottom, clipped->right - clipped->left, clipped->bottom - clipped->top);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, 200, 0, 200);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.,0.,0.);
+    glVertex2f(0, 0);
+    glColor3f(0.,1.,0.);
+    glVertex2f(100,0);
+    glColor3f(0.,0.,1.);
+    glVertex2f(100,100);
+    glEnd();
+
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+
+    glPopAttrib();
+}
+
 void onpanel5click(glictPos *a, glictContainer* callclass) {
     buttonstate = !buttonstate;
 
-    (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked\nButton\n(indeed)");
+    (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked\n(indeed)");
     (dynamic_cast<glictButton*>(callclass))->SetWidth(100);
     panela2.SetCaption(buttonstate ? "Sample Window" : textbox.GetCaption()); // window
+
     if (buttonstate)
         panela2.SetPos(10,15);
     else
         panela2.SetPos(120,90);
 }
+
 void glinit() {
     glictPanel* panela = new glictPanel;
     //panela2 = new glictWindow;
@@ -164,7 +203,7 @@ void glinit() {
     panela->SetBGColor(0.5,0.5,1.0,1.0);
     panela->AddObject((&panela2));
     panela->SetWidth(600);
-    panela->SetHeight(256);
+    panela->SetHeight(512);
 
     panela5->SetBGColor(1,0,0,1);
     panela5->SetPos(0,90);
@@ -176,6 +215,8 @@ void glinit() {
     panela2.SetWidth(400);
 
     panela2.SetCaption("Sample Window");
+    panela2.SetOnPaint(onpanel2paint);
+
     /*panela3->SetPos(12,12);
     panela2->AddObject(panela3);*/
 
@@ -193,15 +234,32 @@ void glinit() {
     msgbox.SetHeight(120);
 
     panela2.AddObject(&textbox);
-    textbox.SetPos(50,100);
+    textbox.SetPos(50,50);
     textbox.SetCaption("Text");
+    textbox.SetHeight(64);
+    textbox.SetWidth(250);
 
+    desktop2.AddObject(&window2);
+    desktop2.SetHeight(200);
+    desktop2.SetWidth(200);
+    window2.SetHeight(25);
+    window2.SetWidth(25);
+    window2.SetPos(100,100);
+
+    //glictGlobals.clippingMode = GLICT_SCISSORTEST;
 
     glictFont* sysfont = glictCreateFont("system");
+
     sysfont->SetFontParam(GLUT_STROKE_MONO_ROMAN);
     sysfont->SetRenderFunc(glutxStrokeString);
     sysfont->SetSizeFunc(glutxStrokeSize);
 
+
+/*
+		sysfont->SetFontParam(WinFontCreate("Arial", WINFONT_BOLD, 7));
+		sysfont->SetRenderFunc(WinFontDraw);
+		sysfont->SetSizeFunc(WinFontSize);
+*/
 
 }
 int main(int argc, char** argv) {

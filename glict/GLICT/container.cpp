@@ -56,6 +56,7 @@ glictContainer::glictContainer() {
 	this->parent = NULL;
 
 	this->OnClick = NULL;
+	this->OnPaint = NULL;
 
 	this->guid = rand();
 
@@ -402,8 +403,8 @@ void glictContainer::SetScissor() {
 		glDepthMask(0);
 
 		//glColor3b(rand(), rand(), rand());
-		glPushMatrix();
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 		//glLoadIdentity();
 		glLoadMatrixf(ModelviewMatrix);
 		glBegin(GL_QUADS);
@@ -489,7 +490,7 @@ void glictContainer::CPaint() {
 
 
 
-#if 0
+#if 1
 
 	glMatrixMode(GL_MODELVIEW);
 
@@ -503,6 +504,7 @@ void glictContainer::CPaint() {
 
     glBegin(GL_LINES);
 		glColor3f(1.0,0.0,0.0);
+		glVertex2f(this->clipleft,this->cliptop);
 		glVertex2f(this->clipleft,this->cliptop);
 		glVertex2f(this->clipleft,this->clipbottom);
 
@@ -522,17 +524,18 @@ void glictContainer::CPaint() {
 	if (glictGlobals.clippingMode==GLICT_SCISSORTEST) glEnable(GL_SCISSOR_TEST);
 	if (glictGlobals.clippingMode==GLICT_STENCILTEST) glEnable(GL_STENCIL_TEST);
 	glPopMatrix();
-
 #endif
 
-	glPushMatrix();
+//	glPushMatrix();
 	glTranslatef(this->x, this->y,0.0);
 	std::vector<glictContainer*>::iterator it;
 	for (it=objects.begin(); it!=objects.end(); it++) {
 		(*it)->SetScissor();
 		(*it)->Paint();
 	}
-	glPopMatrix();
+	glTranslatef(-this->x, -this->y,0.0);
+//	glPopMatrix();
+
 }
 
 /**
@@ -656,7 +659,10 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 					((glictPos*)wparam)->y < this->clipbottom) {
 					if (this->OnClick) {
 						//printf("Click on %s.\n", objtype);
-						this->OnClick((glictPos*)wparam, this);
+						glictPos relpos;
+						relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx;
+						relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety;
+						this->OnClick(&relpos, this);
 						return true;
 					}
 					// if it happened within our boundaries, let it be as if we proc'ed it!
@@ -746,6 +752,15 @@ bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam, void*
   */
 void glictContainer::SetOnClick(void(*f)(glictPos* relmousepos, glictContainer* callerclass)) {
 	this->OnClick = f;
+}
+
+/**
+  * Sets an OnPaint function that would a, for example, button use.
+  *
+  * \todo Not all widgets obey OnPaint.
+  */
+void glictContainer::SetOnPaint(void(*f)(glictRect* real, glictRect* clipped, glictContainer* callerclass)) {
+	this->OnPaint = f;
 }
 
 /**
@@ -977,10 +992,14 @@ glictContainer* glictContainer::GetParent() {
 }
 
 /**
+  * \param callerchild This object's child that asks this object to focus.
+  *
   * Sets the focus to the current object. Parameter is either the
   * child that has called the focusing function, or NULL to signify
   * that there is no child to refocus here, that the widget is supposed only
   * to refocus itself.
+  *
+  * In applications, you should mostly use NULL argument.
   */
 void glictContainer::Focus(glictContainer* callerchild) {
     //printf("FOCUSING ON %s\n", this->objtype);
@@ -1009,6 +1028,8 @@ void glictContainer::Focus(glictContainer* callerchild) {
 }
 
 /**
+  * \param vsbl New value for visibility
+  *
   * Sets whether the object is visible or not.
   */
 
@@ -1017,6 +1038,8 @@ void glictContainer::SetVisible(bool vsbl) {
 }
 
 /**
+  * \return Boolean, object's visibility
+  *
   * Retrieves whether the object is visible or not.
   */
 
@@ -1025,6 +1048,8 @@ bool glictContainer::GetVisible() {
 }
 
 /**
+  * \param enabled Object's "enabledness"
+  *
   * Sets whether the object is enabled or not.
   */
 
@@ -1033,12 +1058,24 @@ void glictContainer::SetEnabled(bool enabled) {
 }
 
 /**
+  * \return Boolean, object's "enabledness"
+  *
   * Retrieves whether the object is enabled or not.
+  *
+  *
   */
 
 bool glictContainer::GetEnabled() {
 	return this->enabled;
 }
+
+/**
+  * This function goes all the way up to the root of the tree and fixes the
+  * boundaries from up there, making sure clipping occurs properly.
+  *
+  * This function should be used only internally.
+  */
+
 
 /**
   * Describes event being passed as the parameter and returns its name as a
@@ -1070,3 +1107,4 @@ void glictContainer::RecursiveBoundaryFix() {
         //this->SetPos(x-(parent ? parent->containeroffsetx : 0),y-(parent ? parent->containeroffsety : 0));
 //    printf("Recursive boundary fix\n");
 }
+
