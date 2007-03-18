@@ -44,7 +44,7 @@ void DEBUGPRINT(char* txt, ...);
 char* glutxStrokeStringExpert(const char* txt, const void* font) {
     glPushMatrix();
     char *p;
-    for (p = (char*)txt; *p && *p!='\n'; p++) {
+    for (p = (char*)txt; *p && *p!='\n' && *p!='\r'; p++) {
         glutStrokeCharacter((void*)font,*p);
     }
     glPopMatrix();
@@ -63,6 +63,7 @@ void glutxStrokeString(const char* txt, const void* font, float x, float y) {
         //    glScalef(0.075,0.075,0.075);
         glScalef(.0075, .0075, .0075);
         fromwhere = glutxStrokeStringExpert(fromwhere,font);
+
         glPopMatrix();
         y -= 1;
     } while (*fromwhere);
@@ -99,10 +100,12 @@ float glutxStrokeSize(const char* txt, const void* font) {
     int maxsize=0;
     for (int i=0;i<len;i++) {
         size+=glutStrokeWidth((void*)font,txt[i]);
-        if (txt[i]=='\n') {
+        if (txt[i]=='\n' || txt[i]=='\r') {
             if (size>maxsize) maxsize=size;
+            if (i < len && (txt[i]=='\n' && txt[i+1]=='\r' || txt[i]=='\r' && txt[i+1]=='\n')) i++;
             size=0;
         }
+
     }
     if (size>maxsize) maxsize=size;
     size = maxsize;

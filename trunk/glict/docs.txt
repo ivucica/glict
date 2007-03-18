@@ -3,6 +3,8 @@ GLICT DOCUMENTATION
 
 programmed by Ivan Vucica
 
+If you use GLICT, you should make it a priority to contact us! We need to know
+how many people use it, so that we know if we can do critical API changes.
 
 Visit www.objectnetworks.net for more information on our projects.
 

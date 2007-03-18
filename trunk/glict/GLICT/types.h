@@ -53,13 +53,20 @@ typedef glictPos glictSize;
 
 
 /**
- * \brief Used to store all color elements supported by OpenGL - red, green, blue and alpha channel. Stored as float.
+ * \brief Used to store all color elements supported by OpenGL - red, green, blue and alpha channel. Stored as float. Values 0.f-1.f
  */
 typedef struct {
     /// Red, green, blue and alpha element.
     float r, g, b, a;
 } glictColor;
 
+/**
+ * \brief Stores a rectangular portion of the screen
+ */
+typedef struct {
+    /// Top, bottom, left and right.
+    float top, bottom, left, right;
+} glictRect;
 
 /**
  * \brief Enumerates events that can occur.
@@ -81,5 +88,6 @@ enum glictClippingMode {
     GLICT_SCISSORTEST = 1, ///< Use scissoring test; cannot be used with transformations
     GLICT_STENCILTEST = 2 ///< Use stencil testing; compatible with transformations, slow
 };
+
 
 #endif
