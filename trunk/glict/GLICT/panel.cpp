@@ -64,6 +64,22 @@ void glictPanel::Paint() {
 	glictFontRender(this->caption.c_str(), "system", 0, 0);
 	glPopMatrix();
 
+    if (this->OnPaint) {
+        glictRect r, c;
+
+        r.top = this->top+containeroffsety;
+        r.bottom = this->bottom;
+        r.left = this->left;
+        r.right = this->right;
+
+        c.top = max(this->cliptop, this->top+containeroffsety);
+        c.bottom = this->clipbottom;
+        c.left = this->clipleft;
+        c.right = this->clipright;
+        this->OnPaint(&r, &c, this);
+    }
+
+
 	this->CPaint();
 }
 void glictPanel::SetBGColor(float r, float g, float b, float a) {
