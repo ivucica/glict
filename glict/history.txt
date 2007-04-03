@@ -121,3 +121,11 @@ how many people use it, so that we know if we can do critical API changes.
 
 * Container.cpp: When calling OnClick, we no longer pass the absolute coordinates, but relative coordinates.
 * Window.cpp: Changed behavior of OnPaint()
+
+20.3.2007
+
+* Skinner.*: Files created, some initial stuff typed in
+
+29.3.2007
+
+* Panel.cpp: Panel now handles OnPaint(), too
