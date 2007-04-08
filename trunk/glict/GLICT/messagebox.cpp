@@ -39,6 +39,7 @@ glictMessageBox::glictMessageBox() {
 	pnlMessage.SetWidth(300);
 	pnlMessage.SetPos(0,0);//containeroffsety);
 	pnlMessage.SetBGColor(0.75,0.75,0.75,1.);
+    pnlMessage.SetBGActiveness(false);
 
 	this->AddObject(&btnOk);
 	btnOk.SetBGColor(0.6,0.6,0.6,1.0);
@@ -59,6 +60,8 @@ glictMessageBox::glictMessageBox() {
 	this->focusable = true;
 
 	this->OnDismissFunction = NULL;
+
+	FixContainerOffsets();
 }
 
 
@@ -69,14 +72,7 @@ glictMessageBox::~glictMessageBox() {
 void glictMessageBox::Paint() {
 	if (!GetVisible()) return;
 
-	//printf("msgbox\n");
-	//system("pause");
-	//printf("now painting window:\n");
-
-	//static_cast<glictWindow*>(this))->Paint();
 	glictWindow::Paint();
-	//printf("window painted\n");
-	//system("pause");
 }
 
 void glictMessageBox::SetMessage(std::string msg) {
@@ -95,14 +91,16 @@ void glictMessageBox::SetHeight(int h) {
 	if (this->GetEnabled())
 		pnlMessage.SetHeight(h-10 - containeroffsety);
 	else
-		pnlMessage.SetHeight(h);
+		pnlMessage.SetHeight(h - containeroffsety);
 	pnlMessage.SetPos(0,0);//containeroffsety);
+
 }
 void glictMessageBox::SetWidth(int w) {
 	glictWindow::SetWidth(w);
 
 	btnOk.SetPos(width/2 - 32, height - 21);
 	pnlMessage.SetWidth(w);
+
 }
 void glictMessageBox::SetEnabled(bool enabled) {
 	glictContainer::SetEnabled(enabled);

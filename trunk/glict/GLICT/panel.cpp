@@ -34,50 +34,64 @@ glictPanel::glictPanel() {
 	//printf("Panel generated.\n");
 
 	this->focusable = false;
+
+	this->bgactive = true;
 }
 glictPanel::~glictPanel() {
 
 }
 void glictPanel::Paint() {
 	if (!GetVisible()) return;
-	glColor4f(
-		(float)this->bgcolor.r,
-		(float)this->bgcolor.g,
-		(float)this->bgcolor.b,
-		(float)this->bgcolor.a
-	);
-	glBegin(GL_QUADS);
-	glVertex2f(this->x,this->y);
-	glVertex2f(this->x,this->y+this->height);
-	glVertex2f(this->x+this->width,this->y+this->height);
-	glVertex2f(this->x+this->width,this->y);
 
-
-	glEnd();
-
+	if (this->bgactive) {
+        glColor4f(
+            (float)this->bgcolor.r,
+            (float)this->bgcolor.g,
+            (float)this->bgcolor.b,
+            (float)this->bgcolor.a
+        );
+        glBegin(GL_QUADS);
+        glVertex2f(this->x,this->y);
+        glVertex2f(this->x,this->y+this->height);
+        glVertex2f(this->x+this->width,this->y+this->height);
+        glVertex2f(this->x+this->width,this->y);
+        glEnd();
+	}
 
 	glColor4f(1., 1., 1., 1.);
-	glPushMatrix();
-	glTranslatef(this->x, this->y+10.,0);
-	glRotatef(180.0, 1.0, 0.0, 0.0);
-	glColor4f(1.,1.,1.,1.);
-	glictFontRender(this->caption.c_str(), "system", 0, 0);
+
+    glPushMatrix(); // must remain here because of glictFontRender
+
+		
+		glTranslatef(this->x, this->y,0);
+		glRotatef(180.0, 1.0, 0.0, 0.0);
+		
+		glColor4f(1.,1.,1.,1.);
+		glictFontRender(this->caption.c_str(), "system", 0, -10);
+	    
+		
+		glRotatef(180.0, -1.0, 0.0, 0.0);
+		glTranslatef(-this->x, -this->y,0);
+		
+	    
 	glPopMatrix();
 
-    if (this->OnPaint) {
-        glictRect r, c;
+	glPushMatrix();
+		if (this->OnPaint) {
+			glictRect r, c;
 
-        r.top = this->top+containeroffsety;
-        r.bottom = this->bottom;
-        r.left = this->left;
-        r.right = this->right;
+			r.top = this->top+containeroffsety;
+			r.bottom = this->bottom;
+			r.left = this->left+containeroffsetx;
+			r.right = this->right;
 
-        c.top = max(this->cliptop, this->top+containeroffsety);
-        c.bottom = this->clipbottom;
-        c.left = this->clipleft;
-        c.right = this->clipright;
-        this->OnPaint(&r, &c, this);
-    }
+			c.top = max(this->cliptop, this->top+containeroffsety);
+			c.bottom = this->clipbottom;
+			c.left = max(this->clipleft, this->left+containeroffsetx);
+			c.right = this->clipright;
+			this->OnPaint(&r, &c, this);
+		}
+	glPopMatrix();
 
 
 	this->CPaint();
@@ -112,4 +126,8 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
 	}
 
 	return false;
+}
+
+void glictPanel::SetBGActiveness(bool bg) {
+    bgactive = bg;
 }

@@ -31,10 +31,11 @@
 #include <GLICT/textbox.h>
 #include <GLICT/globals.h>
 #include <GLICT/fonts.h>
+#include <GLICT/skinner.h>
 //#include <GLICT/types.h>
 
 #include "glut-helper.h"
-
+#include "texload.h"
 glictWindow panela2;
 glictPanel panela4;
 glictMessageBox msgbox;
@@ -45,6 +46,7 @@ glictContainer desktop, desktop2;
 glictWindow window2;
 int ww, wh;
 glictPos mousepos;
+glictSkinner skinner;
 void display();
 
 
@@ -110,7 +112,7 @@ void display() {
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //glEnable(GL_STENCIL_TEST);
+    glEnable(GL_STENCIL_TEST);
     //glEnable(GL_SCISSOR_TEST);
     glPushMatrix();
     desktop.RememberTransformations();
@@ -129,7 +131,7 @@ void display() {
 
     glPopMatrix();
 */
-    //glDisable(GL_STENCIL_TEST);
+    glDisable(GL_STENCIL_TEST);
     glBegin(GL_QUADS);
     glColor4f(0.5,0.5,0.5,1.0);
     glVertex2f(mousepos.x, mousepos.y);
@@ -138,6 +140,13 @@ void display() {
     glVertex2f(mousepos.x, mousepos.y-10);
     glEnd();
     glEnable(GL_STENCIL_TEST);
+
+    /*glEnable(GL_ALPHA_TEST);
+    {
+        glictSize s = {100, 100};
+        skinner.Paint(&s);
+    }
+    glDisable(GL_ALPHA_TEST);*/
 
     glutReportErrors();
     //printf("FINISHED PAINT.\n");
@@ -151,17 +160,19 @@ void onpanel2paint(glictRect* real, glictRect* clipped, glictContainer* callercl
     glPushAttrib(GL_VIEWPORT);
     glViewport(clipped->left, glictGlobals.h - clipped->bottom, clipped->right - clipped->left, clipped->bottom - clipped->top);
     printf("%g %g %g %g\n", clipped->left, glictGlobals.h - clipped->bottom, clipped->right - clipped->left, clipped->bottom - clipped->top);
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
 
     glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    gluOrtho2D(0, 200, 0, 200);
+    //glPushMatrix();
+    //glLoadIdentity();
+    //gluOrtho2D(0, 200, 0, 200);
+
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
 
+    glTranslatef(100, 200, 0);
     glBegin(GL_TRIANGLES);
     glColor3f(1.,0.,0.);
     glVertex2f(0, 0);
@@ -174,8 +185,8 @@ void onpanel2paint(glictRect* real, glictRect* clipped, glictContainer* callercl
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
+    //glMatrixMode(GL_PROJECTION);
+    //glPopMatrix();
 
     glPopAttrib();
 }
@@ -188,10 +199,21 @@ void onpanel5click(glictPos *a, glictContainer* callclass) {
     panela2.SetCaption(buttonstate ? "Sample Window" : textbox.GetCaption()); // window
 
     if (buttonstate)
-        panela2.SetPos(10,15);
+        panela2.SetPos(0,0);
     else
         panela2.SetPos(120,90);
 }
+
+
+
+
+		glictWindow login;
+		glictPanel pnlLogin;
+		glictPanel pnlLoginProtocol, pnlLoginServer, pnlLoginUsername, pnlLoginPassword;
+		glictTextbox txtLoginProtocol, txtLoginServer, txtLoginUsername, txtLoginPassword;
+		glictButton btnLoginLogin, btnLoginCancel;
+
+
 
 void glinit() {
     glictPanel* panela = new glictPanel;
@@ -210,7 +232,7 @@ void glinit() {
     panela->AddObject(panela5);
 
     panela2.SetBGColor(0.2,1.0,0.2,1.0);
-    panela2.SetPos(10,15);
+    panela2.SetPos(0,0);
     panela2.SetHeight(50);
     panela2.SetWidth(400);
 
@@ -234,7 +256,7 @@ void glinit() {
     msgbox.SetHeight(120);
 
     panela2.AddObject(&textbox);
-    textbox.SetPos(50,50);
+    textbox.SetPos(50,0);
     textbox.SetCaption("Text");
     textbox.SetHeight(64);
     textbox.SetWidth(250);
@@ -246,7 +268,105 @@ void glinit() {
     window2.SetWidth(25);
     window2.SetPos(100,100);
 
-    //glictGlobals.clippingMode = GLICT_SCISSORTEST;
+
+
+
+
+
+
+	panela->AddObject(&login);
+	login.SetWidth(300);
+	login.SetHeight(180);
+	login.SetCaption("Log in");
+	login.AddObject(&pnlLogin);
+	pnlLogin.SetCaption("Please enter the username, password and \n"
+	                    "server address of the server to connect to.\n"
+	                    "\n"
+	                    "We advise you not to connect to CipSoft's\n"
+	                    "servers using this client, as this is a \n"
+	                    "breach of Tibia Rules.");
+	pnlLogin.SetWidth(300);
+	pnlLogin.SetPos(0,0);
+	pnlLogin.SetHeight(92);
+	pnlLogin.SetBGActiveness(false);
+
+    char tmp[256];
+
+	login.AddObject(&pnlLoginProtocol);
+	pnlLoginProtocol.SetCaption("Protocol:");
+	pnlLoginProtocol.SetPos(0, 5*15);
+	pnlLoginProtocol.SetHeight(14);
+	pnlLoginProtocol.SetWidth(70);
+	pnlLoginProtocol.SetBGActiveness(false);
+	login.AddObject(&txtLoginProtocol);
+	txtLoginProtocol.SetPos(100, 5*15);
+	txtLoginProtocol.SetHeight(14);
+	txtLoginProtocol.SetWidth(150);
+
+    txtLoginProtocol.SetCaption(tmp);
+
+	login.AddObject(&pnlLoginServer);
+	pnlLoginServer.SetCaption("Server:");
+	pnlLoginServer.SetPos(0, 6*15);
+	pnlLoginServer.SetHeight(14);
+	pnlLoginServer.SetWidth(70);
+	pnlLoginServer.SetBGActiveness(false);
+	login.AddObject(&txtLoginServer);
+	txtLoginServer.SetPos(100, 6*15);
+	txtLoginServer.SetHeight(14);
+	txtLoginServer.SetWidth(150);
+
+	txtLoginServer.SetCaption( tmp );
+
+	login.AddObject(&pnlLoginUsername);
+	pnlLoginUsername.SetCaption("Username:");
+	pnlLoginUsername.SetPos(0, 7*15);
+	pnlLoginUsername.SetHeight(14);
+	pnlLoginUsername.SetWidth(70);
+	pnlLoginUsername.SetBGActiveness(false);
+	login.AddObject(&txtLoginUsername);
+	txtLoginUsername.SetPos(100, 7*15);
+	txtLoginUsername.SetHeight(14);
+	txtLoginUsername.SetWidth(150);
+
+	txtLoginUsername.SetCaption(tmp);
+
+	login.AddObject(&pnlLoginPassword);
+	pnlLoginPassword.SetCaption("Password:");
+	pnlLoginPassword.SetPos(0, 8*15);
+	pnlLoginPassword.SetHeight(14);
+	pnlLoginPassword.SetWidth(70);
+	pnlLoginPassword.SetBGActiveness(false);
+	login.AddObject(&txtLoginPassword);
+	txtLoginPassword.SetPos(100, 8*15);
+	txtLoginPassword.SetHeight(14);
+	txtLoginPassword.SetWidth(150);
+	txtLoginPassword.SetPassProtectCharacter('*');
+
+	txtLoginPassword.SetCaption(tmp);
+
+	login.AddObject(&btnLoginLogin);
+	btnLoginLogin.SetPos(170, 14 + 9*15);
+	btnLoginLogin.SetWidth(130);
+	btnLoginLogin.SetCaption("Log in");
+	btnLoginLogin.SetBGColor(.6,.6,.6,1.);
+
+	login.AddObject(&btnLoginCancel);
+	btnLoginCancel.SetPos(0, 14 + 9*15);
+	btnLoginCancel.SetWidth(130);
+	btnLoginCancel.SetCaption("Cancel");
+	btnLoginCancel.SetBGColor(.6,.6,.6,1.);
+
+
+
+
+
+
+
+
+
+
+    glictGlobals.clippingMode = GLICT_SCISSORTEST;
 
     glictFont* sysfont = glictCreateFont("system");
 
@@ -254,6 +374,69 @@ void glinit() {
     sysfont->SetRenderFunc(glutxStrokeString);
     sysfont->SetSizeFunc(glutxStrokeSize);
 
+    {
+        glictSize elementsize = {20, 20};
+        skinner.SetTL(BitmapLoad("topleft.bmp"), &elementsize);
+        skinner.SetTR(BitmapLoad("topright.bmp"), &elementsize);
+        skinner.SetBL(BitmapLoad("bottomleft.bmp"), &elementsize);
+        skinner.SetBR(BitmapLoad("bottomright.bmp"), &elementsize);
+
+        skinner.SetTop(BitmapLoad("top.bmp"), &elementsize);
+        skinner.SetLeft(BitmapLoad("left.bmp"), &elementsize);
+        skinner.SetRight(BitmapLoad("right.bmp"), &elementsize);
+        skinner.SetBottom(BitmapLoad("bottom.bmp"), &elementsize);
+
+        skinner.SetCenter(BitmapLoad("center.bmp"), &elementsize);
+
+
+    }
+
+    if (false) {
+        glictSkinner *skn = new glictSkinner, *skn2 = new glictSkinner;
+        glictSize elementsize = {8, 8};
+        skn->SetTL(BitmapLoad("topleft.bmp"), &elementsize);
+        skn->SetTR(BitmapLoad("topright.bmp"), &elementsize);
+        skn->SetBL(BitmapLoad("bottomleft.bmp"), &elementsize);
+        skn->SetBR(BitmapLoad("bottomright.bmp"), &elementsize);
+
+        skn->SetTop(BitmapLoad("top.bmp"), &elementsize);
+        skn->SetLeft(BitmapLoad("left.bmp"), &elementsize);
+        skn->SetRight(BitmapLoad("right.bmp"), &elementsize);
+        skn->SetBottom(BitmapLoad("bottom.bmp"), &elementsize);
+
+        skn->SetCenter(BitmapLoad("center.bmp"), &elementsize);
+
+
+
+
+        skn2->SetTL(BitmapLoad("toplefth.bmp"), &elementsize);
+        skn2->SetTR(BitmapLoad("toprighth.bmp"), &elementsize);
+        skn2->SetBL(BitmapLoad("bottomlefth.bmp"), &elementsize);
+        skn2->SetBR(BitmapLoad("bottomrighth.bmp"), &elementsize);
+
+        skn2->SetTop(BitmapLoad("toph.bmp"), &elementsize);
+        skn2->SetLeft(BitmapLoad("lefth.bmp"), &elementsize);
+        skn2->SetRight(BitmapLoad("righth.bmp"), &elementsize);
+        skn2->SetBottom(BitmapLoad("bottomh.bmp"), &elementsize);
+
+        skn2->SetCenter(BitmapLoad("centerh.bmp"), &elementsize);
+
+
+        glictGlobals.windowBodySkin = skn;
+
+        glictGlobals.buttonSkin = skn;
+        glictGlobals.buttonHighlightSkin = skn2;
+        glictGlobals.buttonTextColor.r = 0;
+        glictGlobals.buttonTextColor.g = 0;
+        glictGlobals.buttonTextColor.b = 0;
+        glictGlobals.buttonTextColor.a = 1;
+
+        glictGlobals.windowTitleColor[0] = 0;
+        glictGlobals.windowTitleColor[1] = 0;
+        glictGlobals.windowTitleColor[2] = 0;
+        glictGlobals.windowTitleColor[3] = 1;
+
+    }
 
 /*
 		sysfont->SetFontParam(WinFontCreate("Arial", WINFONT_BOLD, 7));
@@ -282,6 +465,8 @@ int main(int argc, char** argv) {
 
     glutKeyboardFunc(key);
 //    glutIdleFunc (display);
+
+
 
     //glutPassiveMotionFunc(passivemouse);
 

@@ -34,7 +34,11 @@ class glictPanel : public glictContainer {
         // redefined functions
         void Paint();
         bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
+
+        void SetBGActiveness(bool bg);
+
     private:
         glictColor bgcolor;
+        bool bgactive;
 };
 #endif

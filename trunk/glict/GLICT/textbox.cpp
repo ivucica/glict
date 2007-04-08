@@ -44,6 +44,7 @@ glictTextbox::~glictTextbox() {
 }
 void glictTextbox::Paint() {
 	if (!GetVisible()) return;
+
 	glColor4f(
 		(float)this->bgcolor.r,
 		(float)this->bgcolor.g,
@@ -76,7 +77,6 @@ void glictTextbox::Paint() {
 
 
 	glColor4f(1., 1., 1., 1.);
-	glPushMatrix();
 	glTranslatef(this->x, this->y+10.,0);
 	glRotatef(180.0, 1.0, 0.0, 0.0);
 	glColor4f(1.,1.,1.,1.);
@@ -84,8 +84,9 @@ void glictTextbox::Paint() {
 		glictFontRender(asterisked, "system", 10, 0, 0);
 	else
 		glictFontRender(this->caption.c_str(), "system", 10, 0, 0);
+    glRotatef(180.0, -1.0, 0.0, 0.0);
+    glTranslatef(-this->x, -(this->y+10.),0);
 
-	glPopMatrix();
 
 	if (glictGlobals.topFocused==this) {
 		caption = oldcaption;

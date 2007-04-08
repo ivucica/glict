@@ -17,19 +17,30 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <GLICT/container.h>
+#include <GLICT/skinner.h>
 #include <GLICT/types.h>
+
+
+typedef void (*GLICTDEBUGCALLBACKPROC )(unsigned int len, const char *string);
+
 /// Stores some global settings.
 class glictGlobalsClass {
     public:
         glictGlobalsClass();
         ~glictGlobalsClass();
-        float windowTitleBgColor[4];
-        float windowTitleColor[4];
+
+        float windowTitleBgColor[4]; float windowTitleColor[4]; glictSkinner *windowTitleSkin;
+        glictSkinner *windowBodySkin;
+        glictSkinner *buttonSkin, *buttonHighlightSkin;
+        glictColor buttonTextColor, buttonHighlightTextColor;
+
         float w,h;
         glictPos lastMousePos; // last coordinates where user clicked
         glictClippingMode clippingMode;
         glictContainer* topFocused;
-
+		
+		GLICTDEBUGCALLBACKPROC debugCallback;
+	
 };
 extern glictGlobalsClass glictGlobals;
 

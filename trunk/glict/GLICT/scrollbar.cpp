@@ -149,7 +149,7 @@ void glictScrollbar::Paint() {
 
 	glColor4f(1., 1., 1., 1.);
 
-	glPushMatrix();
+
 	glRotatef(180.0, 1.0, 0.0, 0.0);
 	glictFontRender("^","system",
 		this->x + (this->width / 2 - glictFontSize("^", "system") / 2) ,
@@ -158,7 +158,8 @@ void glictScrollbar::Paint() {
 	glictFontRender("V","system",
 		this->x + (this->width / 2 - glictFontSize("V", "system") / 2) ,
 		-this->y - this->height + width / 2 - 9 / 2);
-	glPopMatrix();
+
+    glRotatef(180.0, -1.0, 0.0, 0.0);
 }
 
 void glictScrollbar::SetBGColor(float r, float g, float b, float a) {

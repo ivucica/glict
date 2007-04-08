@@ -84,7 +84,7 @@ class glictContainer  {
 
 		void SetOnClick(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon click. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
 		void SetOnPaint(void(*OnPaintFunction)(glictRect* real, glictRect* clipped, glictContainer* callerclass)); ///< Sets a function to execute whenever drawing. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
-		void SetCaption(std::string caption); ///< Sets the caption of the control, if supported.
+		void SetCaption(const std::string caption); ///< Sets the caption of the control, if supported.
 		std::string GetCaption(); ///< Retrieves the caption of the control, if supported.
 
 		const char *EvtTypeDescriptor(glictEvents evt); ///< Returns string with generated event.
@@ -95,6 +95,7 @@ class glictContainer  {
 		void ReportDebug(); ///< Reports debug information to stdout.
 
 		void RecursiveBoundaryFix(); ///< Fixes boundaries recursively up to the root of the tree (desktop, probably). Should be used only internally. FIXME: Make private/protected
+		virtual void FixContainerOffsets(); ///< Fixes container offsets. Should be used only internally.
 
 		int height, width; ///< Current height and width of the widget. FIXME: Make private.
 		int x, y; ///< Current position of the widget. FIXME: Make private
