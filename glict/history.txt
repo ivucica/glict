@@ -129,3 +129,22 @@ how many people use it, so that we know if we can do critical API changes.
 29.3.2007
 
 * Panel.cpp: Panel now handles OnPaint(), too
+
+4.4.2007
+
+* Skinner.*: Finished
+* Globals.*, Button.*: Added skinning support
+* Button.*: Foreground color is now set in globals
+* Window.*: Added body skinning
+* Panel.*: Added ability to turn off background rendering
+* *.*: Completely revamped the containeroffset system to support skinning etc.
+
+5.4.2007:
+
+* Container.cpp: Fixed minor containeroffset bugs
+* *.*: Noticed dependancy upon GLUT, ######******>>>>>FIXME!!!!
+
+7.4.2007:
+
+* Globals.*: Added debug callback support
+* Container.*: Fixed a containeroffset* related issue when calling OnClick

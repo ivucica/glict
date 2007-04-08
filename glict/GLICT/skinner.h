@@ -19,7 +19,7 @@
 
 #ifndef __GLICT_SKINNER_H
 #define __GLICT_SKINNER_H
-
+#include <windows.h>
 #include <GL/gl.h>
 #include <GLICT/types.h>
 
@@ -33,19 +33,36 @@ class glictSkinner {
         glictSkinner();
         ~glictSkinner();
 
-        void Paint();
-        void SetSize(glictSize size);                   ///< Total size of the skinned rectangle
+        void Paint(glictSize *size); ///< Paints a skinned rectangle of specified total size
 
         // first, the corner parts. their both height and width get specified.
-        void SetTL(GLuint textureid, glictSize size);   ///< Sets the top left portion's texture ID and size. You need to set up the texture yourself.
-        void SetTR(GLuint textureid, glictSize size);   ///< Sets the top right portion's texture ID and size. You need to set up the texture yourself.
-        void SetBL(GLuint textureid, glictSize size);   ///< Sets the bottom left portion's texture ID and size. You need to set up the texture yourself.
-        void SetBR(GLuint textureid, glictSize size);   ///< Sets the bottom right portion's texture ID and size. You need to set up the texture yourself.
+        // look at how beautifully "aligned" the texxt is :)
+        void SetTL(GLuint textureid, glictSize *size);    ///< Sets the top left portion's texture ID and size. You need to set up the texture yourself.
+        void SetTR(GLuint textureid, glictSize *size);    ///< Sets the top right portion's texture ID and size. You need to set up the texture yourself.
+        void SetBL(GLuint textureid, glictSize *size);    ///< Sets the bottom left portion's texture ID and size. You need to set up the texture yourself.
+        void SetBR(GLuint textureid, glictSize *size);    ///< Sets the bottom right portion's texture ID and size. You need to set up the texture yourself.
+
+        void SetTop(GLuint textureid, glictSize *size);   ///< Sets the top middle portion's texture ID and size. This one will be tiled. You need to set up the texture yourself.
+        void SetLeft(GLuint textureid, glictSize *size);  ///< Sets the left middle portion's texture ID and size. This one will be tiled. You need to set up the texture yourself.
+        void SetRight(GLuint textureid, glictSize *size); ///< Sets the right middle portion's texture ID and size. This one will be tiled.You need to set up the texture yourself.
+        void SetBottom(GLuint textureid, glictSize *size);///< Sets the bottom middle portion's texture ID and size. This one will be tiled.You need to set up the texture yourself.
+
+        void SetCenter(GLuint textureid, glictSize *size);///< Sets the central portion's texture ID and size. This one will be tiled.You need to set up the texture yourself.
+
+        glictSize *GetTopSize();
+        glictSize *GetLeftSize();
     private:
         GLuint topleft; glictSize toplefts;
         GLuint topright; glictSize toprights;
         GLuint bottomleft; glictSize bottomlefts;
         GLuint bottomright; glictSize bottomrights;
+
+        GLuint top; glictSize tops;
+        GLuint left; glictSize lefts;
+        GLuint right; glictSize rights;
+        GLuint bottom; glictSize bottoms;
+
+        GLuint center; glictSize centers;
 
         glictSize size;
 };

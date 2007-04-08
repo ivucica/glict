@@ -39,6 +39,8 @@ class glictWindow : public glictContainer {
 		//void SetHeight(int h);
 		//void SetWidth(int w);
         virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Reacts to events in a way a window should.
+
+        void FixContainerOffsets();
     private:
         glictColor bgcolor;
         glictPos relmouse; // relative position of mouse acquired upon mousepress

@@ -42,11 +42,8 @@ glictWindow::glictWindow() {
 
 	this->mousedown = false;
 
-
 	this->relmouse.x = 0;
 	this->relmouse.y = 0;
-
-
 
 	this->SetHeight(100);
 	this->SetWidth(100);
@@ -79,36 +76,49 @@ void glictWindow::Paint() {
 	if (!GetVisible()) return;
 	//printf("window\n");
 
+    if (!glictGlobals.windowBodySkin) { // if not skinned
+        glColor4f(
+            (float)this->bgcolor.r,
+            (float)this->bgcolor.g,
+            (float)this->bgcolor.b,
+            (float)this->bgcolor.a
+        );
+        glBegin(GL_QUADS);
+        glVertex2f(this->x,this->y+12);
+        glVertex2f(this->x,this->y+this->height+12);
+        glVertex2f(this->x+this->width,this->y+this->height+12);
+        glVertex2f(this->x+this->width,this->y+12);
+        glEnd();
+    } else if (!glictGlobals.windowTitleSkin) { // if there's no title skin, but there's body skin
+        glictSize s = {this->width + containeroffsetx*2, this->height + containeroffsety*2 };
 
+        glTranslatef(this->x, this->y, 0);
+        glictGlobals.windowBodySkin->Paint(&s);
+        glTranslatef(-this->x, -this->y, 0);
+    } else { // if skinned both title and body
+        glictSize s = {this->width, this->height};
 
-	glColor4f(
-		(float)this->bgcolor.r,
-		(float)this->bgcolor.g,
-		(float)this->bgcolor.b,
-		(float)this->bgcolor.a
-	);
-	glBegin(GL_QUADS);
-	glVertex2f(this->x,this->y+12);
-	glVertex2f(this->x,this->y+this->height+12);
-	glVertex2f(this->x+this->width,this->y+this->height+12);
-	glVertex2f(this->x+this->width,this->y+12);
-
-	glEnd();
+        glTranslatef(this->x + this->containeroffsetx , this->y + this->containeroffsety, 0);
+        glictGlobals.windowBodySkin->Paint(&s);
+        glTranslatef(-(this->x + this->containeroffsetx), -(this->y + this->containeroffsety), 0);
+    }
 
 
     if (this->OnPaint) {
         glictRect r, c;
 
-        r.top = this->top+containeroffsety;
+        r.top = this->top;
         r.bottom = this->bottom;
         r.left = this->left;
         r.right = this->right;
 
-        c.top = max(this->cliptop, this->top+containeroffsety);
-        c.bottom = this->clipbottom;
-        c.left = this->clipleft;
-        c.right = this->clipright;
+        c.top = max(this->cliptop, this->top + containeroffsety);
+        c.bottom = min(this->clipbottom, this->bottom - containeroffsety);
+        c.left = max(this->clipleft, this->left + containeroffsetx);
+        c.right = min(this->clipright, this->right - containeroffsety);;
+
         this->OnPaint(&r, &c, this);
+
     }
 
 
@@ -119,33 +129,34 @@ void glictWindow::Paint() {
 	// this is here so that scissoring resumes properly
 	this->SetScissor();
 
-
-	glColor4fv(glictGlobals.windowTitleBgColor);
-
-	glBegin(GL_QUADS);
-	glVertex2f(this->x,this->y);
-	glVertex2f(this->x, this->y+12);
-	glVertex2f(this->x + this->width, this->y+12);
-	glVertex2f(this->x + this->width, this->y);
-	glEnd();
+    if (!glictGlobals.windowBodySkin && !glictGlobals.windowTitleSkin) {
+        glColor4fv(glictGlobals.windowTitleBgColor);
+        glBegin(GL_QUADS);
+        glVertex2f(this->x,this->y);
+        glVertex2f(this->x, this->y+12);
+        glVertex2f(this->x + this->width, this->y+12);
+        glVertex2f(this->x + this->width, this->y);
+        glEnd();
+    }
 
 	glColor4fv(glictGlobals.windowTitleColor);
 
-
+/*
     {
         int er;
         if ((er =glGetError())!=GL_NO_ERROR) printf("1EROR!!!\n");
     }
+*/
 
-	glPushMatrix();
 	glRotatef(180.0, 1.0, 0.0, 0.0);
-	glictFontRender(this->caption.c_str(),"system", this->x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) , this->y*-1. - 9.);
-	glPopMatrix();
+	glictFontRender(this->caption.c_str(),"system", this->x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize()->w : 0) , this->y*-1. - 9.);
+	glRotatef(180.0, -1.0, 0.0, 0.0);
 
-    {
+
+    /*{
         int er;
         if ((er =glGetError())!=GL_NO_ERROR) printf("2EROR!!!\n");
-    }
+    }*/
 }
 
 void glictWindow::SetBGColor(float r, float g, float b, float a) {
@@ -185,17 +196,13 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
             //printf("Within %s\n", this->GetCaption().c_str());
 
 
-			//if (evt == GLICT_MOUSECLICK) {
-				//this->Focus(this);
-			//}
-
-			if (((glictPos*)wparam)->y <= this->cliptop+this->containeroffsety) {
+			if (((glictPos*)wparam)->y <= this->cliptop + containeroffsety) {
 				if (evt == GLICT_MOUSEDOWN) {
 
 					this->Focus(NULL);
 					this->mousedown = true;
-					this->relmouse.x = ((glictPos*)wparam)->x-this->x;
-					this->relmouse.y = ((glictPos*)wparam)->y-this->y;
+					this->relmouse.x = ((glictPos*)wparam)->x-this->x ;
+					this->relmouse.y = ((glictPos*)wparam)->y-this->y ;
 					// dont to defaultcastevent as it might call a child that's below our titlebar
                     //printf("DRAG!\n");
 					return true;
@@ -204,7 +211,7 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 
 
 			if (evt == GLICT_MOUSEDOWN) {
-				// we dont want anyone else to catch this one so return true
+				// we dont want any child to catch this one so return true
 
 				if (GetEnabled())
 					DefaultCastEvent(evt,wparam,lparam,returnvalue);
@@ -244,23 +251,20 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 	return false;
 }
 
-/*
-void glictWindow::AddObject(glictContainer *object) {
-	int x, y;
-    this->GetPos(&x, &y);
-	panel.AddObject(object);
-	this->SetPos(x,y);
-}
+void glictWindow::FixContainerOffsets() {
+    if (!glictGlobals.windowBodySkin && !glictGlobals.windowTitleSkin) {// revert to defaults
+        this->containeroffsetx = 0;
+        this->containeroffsety = 12;
+    } else {
+        if (!glictGlobals.windowTitleSkin) { // all is placed inside body
+            this->containeroffsetx = glictGlobals.windowBodySkin->GetLeftSize()->w;
+            this->containeroffsety = glictGlobals.windowBodySkin->GetTopSize()->h;
 
-void glictWindow::RemoveObject(glictContainer *object) {
-	panel.RemoveObject(object);
+
+        } else { // there are separate body and titlebar skin
+            this->containeroffsetx = glictGlobals.windowBodySkin->GetLeftSize()->w; // FIXME should not work this way
+            this->containeroffsety = glictGlobals.windowBodySkin->GetTopSize()->h;
+        }
+    }
+    printf("%s container offsets %d %d\n", objtype,  containeroffsetx, containeroffsety);
 }
-void glictWindow::SetHeight(int h) {
-	panel.SetHeight(h);
-	this->glictContainer::SetHeight(h);
-}
-void glictWindow::SetWidth(int w) {
-	panel.SetWidth(w);
-	this->glictContainer::SetWidth(w);
-}
-*/

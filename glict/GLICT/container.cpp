@@ -27,7 +27,8 @@
 
 
 #include <stdlib.h>
-#include <GL/glut.h>
+#include <windows.h>
+#include <GL/gl.h>
 #include <stdio.h>
 #include <stdlib.h>
 //#include <time.h>
@@ -93,8 +94,8 @@ glictContainer::~glictContainer() {
   */
 void glictContainer::ResetTransformations() {
 	glPushMatrix();
-	glLoadIdentity();
-	this->RememberTransformations();
+		glLoadIdentity();
+		this->RememberTransformations();
 	glPopMatrix();
 }
 /**
@@ -145,7 +146,7 @@ void glictContainer::RemoveObject(glictContainer* object) {
   * \sa SetWidth(int w), GetSize(glictSize* size)
   */
 void glictContainer::SetHeight(int h) {
-	//this->SetRect(this->left, this->top, this->right + this->containeroffsetx, this->bottom + h - this->height );
+
 	this->height = h;
 
     this->RecursiveBoundaryFix();
@@ -160,7 +161,7 @@ void glictContainer::SetHeight(int h) {
   * \sa SetHeight(int h), GetSize(glictSize* size)
   */
 void glictContainer::SetWidth(int w) {
-	//this->SetRect(this->left, this->top, this->right + w - this->width + this->containeroffsetx, this->bottom);
+
 	this->width = w;
 
 	this->RecursiveBoundaryFix();
@@ -179,21 +180,26 @@ void glictContainer::SetPos(int x, int y) {
 	//printf("Postavka pozicije %s (%s) %s na %d %d\n", objtype, (parent ? parent->objtype : "NULL"), this->caption.c_str(), x, y);
 	//printf("This->x %d This->y %d\n", this->x, this->y);
 
+    this->FixContainerOffsets(); // in case the skin got just turned on, we'll have to fix the container offsets
 
-
-	if (!parent) {
+    if (!parent) {
 	    this->SetRect(x, y, x+width, y+height);
 
         this->x = x;
         this->y = y;
-
     } else {
-	    this->SetRect(parent->left + x, parent->top + y + parent->containeroffsety, parent->left + x + width, parent->top + y + height + parent->containeroffsety);
+        this->SetRect(
+            parent->left + x + parent->containeroffsetx,
+            parent->top + y+ parent->containeroffsety ,
+            parent->left + x + width+ parent->containeroffsetx + containeroffsetx*2,
+            parent->top + y + height+ parent->containeroffsety + containeroffsety*2
+        );
+
 
         this->x = x;
-        this->y = y + parent->containeroffsety;
+        this->y = y;
+    }
 
-	}
 
 
 	glictSize size;
@@ -207,12 +213,13 @@ void glictContainer::SetPos(int x, int y) {
 //  check if we can still keep this way of doing things instead of sicko "setpos" recursively
 		(*it)->GetSize(&size);
 
-		//printf("Postavljam dijete %s od %s (size: %d %d)\n", (*it)->objtype, objtype, size.w, size.h);
-		(*it)->SetRect(this->left + x, this->top + this->containeroffsety, this->left + x + size.w, this->top + y + size.h  + this->containeroffsety);
-		//(*it)->SetClip(max(this->left + x, this->clipleft), max(this->top + y, this->cliptop), min(this->left + x + size.w, this->clipright), min(this->top + y + size.h, this->clipbottom));
+
+
+		(*it)->SetRect(this->left + x, this->top, this->left + x + size.w, this->top + y + size.h );
+
+
 #endif
 	}
-	//if (parent) this->y -= parent->containeroffsety;
 }
 
 /**
@@ -240,11 +247,6 @@ void glictContainer::SetPos(glictPos pos) {
 void glictContainer::GetPos(int* x, int* y) {
 	*x = this->x;
 	*y = this->y;
-
-	if (parent) {
-		(*x)-=parent->containeroffsetx;
-		(*y)-=parent->containeroffsety;
-	}
 }
 
 /**
@@ -257,10 +259,6 @@ void glictContainer::GetPos(int* x, int* y) {
 void glictContainer::GetPos(glictPos* pos) {
 	pos->x = this->x;
 	pos->y = this->y;
-	if (parent) {
-		pos->x -= parent->containeroffsetx;
-		pos->y -= parent->containeroffsety;
-	}
 }
 /* TODO (Khaos#2#): GetWidth(w);
 					GetHeight(h) */
@@ -300,16 +298,13 @@ void glictContainer::SetRect(int left, int top, int right, int bottom) {
 	//printf("%s s parentom %s postaje %d %d %d %d\n", this->objtype, (parent ? parent->objtype : "NULL"), left, right, top, bottom);
 	this->left = left;
 	this->right = right;
-	this->top = top;
-	this->bottom = bottom;
+	this->top = top ;
+	this->bottom = bottom ;
 
-	if (!this->parent) {
-		//printf("Sada, %s s parentom %s sebe postavlja na clip %d %d %d %d\n", this->objtype, (parent ? parent->objtype : "NULL"), left, right, top, bottom);
-		this->SetClip(left,top,right,bottom + containeroffsety);
-	} else {
-		//if (!strcmp("Button", objtype)) printf("Sada, %s s parentom %s sebe postavlja na clip %d %d %d %d (otac r %d moj r %d)\n", this->objtype, (parent ? parent->objtype : "NULL"), max(parent->left, left), min(parent->right, right), max(parent->top, top), min(parent->bottom, bottom), parent->right, right);
-		this->SetClip(max(parent->clipleft, left), max(parent->cliptop, top), min(parent->clipright, right), min(parent->clipbottom + parent->containeroffsety, bottom+containeroffsety));
-	}
+
+    //printf("Sada, %s s parentom %s sebe postavlja na clip %d %d %d %d\n", this->objtype, (parent ? parent->objtype : "NULL"), left, right, top, bottom);
+    this->SetClip(left,top,right,bottom );
+
 }
 
 /**
@@ -333,9 +328,9 @@ void glictContainer::SetRect(int left, int top, int right, int bottom) {
 void glictContainer::SetClip(int left, int top, int right, int bottom) {
 
 	this->clipleft = left;
-	this->clipright = right;
-	this->cliptop = top;
-	this->clipbottom = bottom;
+	this->clipright = right ;
+	this->cliptop = top ;
+	this->clipbottom = bottom ;
 
 	//printf("%s s parentom %s clippa kao %d %d %d %d\n", this->objtype, (parent ? parent->objtype : "NULL"), clipleft, clipright, cliptop, clipbottom);
 
@@ -405,14 +400,14 @@ void glictContainer::SetScissor() {
 		//glColor3b(rand(), rand(), rand());
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
-		//glLoadIdentity();
-		glLoadMatrixf(ModelviewMatrix);
-		glBegin(GL_QUADS);
-			glVertex2f(this->clipleft, this->clipbottom);
-			glVertex2f(this->clipright, this->clipbottom);
-			glVertex2f(this->clipright, this->cliptop);
-			glVertex2f(this->clipleft, this->cliptop);
-		glEnd();
+			//glLoadIdentity();
+			glLoadMatrixf(ModelviewMatrix);
+			glBegin(GL_QUADS);
+				glVertex2f(this->clipleft, this->clipbottom);
+				glVertex2f(this->clipright, this->clipbottom);
+				glVertex2f(this->clipright, this->cliptop);
+				glVertex2f(this->clipleft, this->cliptop);
+			glEnd();
 		glPopMatrix();
 
 		//glEnable(GL_STENCIL_TEST);
@@ -490,7 +485,7 @@ void glictContainer::CPaint() {
 
 
 
-#if 1
+#if 0
 
 	glMatrixMode(GL_MODELVIEW);
 
@@ -504,21 +499,23 @@ void glictContainer::CPaint() {
 
     glBegin(GL_LINES);
 		glColor3f(1.0,0.0,0.0);
-		glVertex2f(this->clipleft,this->cliptop);
-		glVertex2f(this->clipleft,this->cliptop);
 		glVertex2f(this->clipleft,this->clipbottom);
+		glVertex2f(this->clipleft,this->cliptop);
 
 		glColor3f(0.0,1.0,0.0);
-		glVertex2f(this->clipleft,this->clipbottom);
 		glVertex2f(this->clipright,this->clipbottom);
+		glVertex2f(this->clipleft,this->clipbottom);
+
 
 		glColor3f(0.0,0.0,1.0);
-		glVertex2f(this->clipright,this->clipbottom);
 		glVertex2f(this->clipright,this->cliptop);
+		glVertex2f(this->clipright,this->clipbottom);
+
 
 		glColor3f(1.0,1.0,0.0);
-		glVertex2f(this->clipright,this->cliptop);
 		glVertex2f(this->clipleft,this->cliptop);
+		glVertex2f(this->clipright,this->cliptop);
+
 	glEnd();
 
 	if (glictGlobals.clippingMode==GLICT_SCISSORTEST) glEnable(GL_SCISSOR_TEST);
@@ -526,16 +523,18 @@ void glictContainer::CPaint() {
 	glPopMatrix();
 #endif
 
-//	glPushMatrix();
-	glTranslatef(this->x, this->y,0.0);
-	std::vector<glictContainer*>::iterator it;
-	for (it=objects.begin(); it!=objects.end(); it++) {
-		(*it)->SetScissor();
-		(*it)->Paint();
-	}
-	glTranslatef(-this->x, -this->y,0.0);
-//	glPopMatrix();
+	if (objects.size()) {
+		glPushMatrix();
+			glTranslatef(this->x + containeroffsetx, this->y + containeroffsety,0.0);
 
+			std::vector<glictContainer*>::iterator it;
+			for (it=objects.begin(); it!=objects.end(); it++) {
+				(*it)->SetScissor();
+				(*it)->Paint();
+			}
+			glTranslatef(-this->x - containeroffsetx, -this->y - containeroffsety,0.0);
+		glPopMatrix();
+	}
 }
 
 /**
@@ -596,15 +595,18 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 			std::vector<glictContainer*>::reverse_iterator it;
 			//vector<glictContainer*>::iterator it;
 
-			if (((glictPos*)wparam)->x > this->clipleft &&
-					 ((glictPos*)wparam)->x < this->clipright &&
-					 ((glictPos*)wparam)->y > this->cliptop &&
-					 ((glictPos*)wparam)->y < this->clipbottom) {
+			if  (((glictPos*)wparam)->x > this->clipleft &&
+                 ((glictPos*)wparam)->x < this->clipright &&
+                 ((glictPos*)wparam)->y > this->cliptop &&
+                 ((glictPos*)wparam)->y < this->clipbottom) {
+/*                    ((glictPos*)wparam)->x -= containeroffsetx;
+                    ((glictPos*)wparam)->y -= containeroffsety;*/
 					if (objects.size()) {
 						for (it=objects.rbegin(); it != objects.rend(); it++) {
 						//for (it=objects.begin(); it!=objects.end(); it++) {
 							if (it != objects.rend() && *it ) {
 								//printf("Testing %s (%s)\n", (*it)->objtype, this->objtype );
+
 								if ((*it)->CastEvent(evt, wparam, lparam, returnvalue)) {
 									//printf("%s (%s) returned true\n", (*it)->objtype, this->objtype );
 									return true;
@@ -612,14 +614,17 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 							}
 						}
 					}
+
+                    /*((glictPos*)wparam)->x += containeroffsetx;
+                    ((glictPos*)wparam)->y += containeroffsety;*/
 			}
 
 
 			//printf("Passing on to specific mouseevent processing in %s (%s).\n", objtype, parent ? parent->objtype : "NULL");
 			if (evt == GLICT_MOUSEDOWN) {
 				//printf("Mouse down\n");
-				glictGlobals.lastMousePos.x = ((glictPos*)wparam)->x; // remembers x and y when pressing the mouse down
-				glictGlobals.lastMousePos.y = ((glictPos*)wparam)->y;
+				glictGlobals.lastMousePos.x = ((glictPos*)wparam)->x ; // remembers x and y when pressing the mouse down
+				glictGlobals.lastMousePos.y = ((glictPos*)wparam)->y ;
 				if (focusable) {
 					if (((glictPos*)wparam)->x > this->clipleft &&
 					 ((glictPos*)wparam)->x < this->clipright &&
@@ -647,10 +652,6 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 					//Considering it dragging. Ignoring!
 				}
 			} else { // not mousedown , not mouseup? mouseclick!
-
-				glictPos relmousepos;
-				relmousepos.x = ((glictPos*)wparam)->x - this->left;
-				relmousepos.y = ((glictPos*)wparam)->y - this->top;
 
 
 				if (((glictPos*)wparam)->x > this->clipleft &&
@@ -971,7 +972,7 @@ void glictContainer::TransformScreenCoords(glictPos *pos) {
   * If the object that derived from this class supports captions, then this
   * function will change the caption being displayed on it.
   */
-void glictContainer::SetCaption(std::string caption) {
+void glictContainer::SetCaption(const std::string caption) {
 	this->caption = caption;
 }
 /**
@@ -1104,7 +1105,15 @@ void glictContainer::RecursiveBoundaryFix() {
         parent->RecursiveBoundaryFix();
     else
         this->SetPos(x,y);
-        //this->SetPos(x-(parent ? parent->containeroffsetx : 0),y-(parent ? parent->containeroffsety : 0));
-//    printf("Recursive boundary fix\n");
+}
+
+/**
+  * In case user sets a new skin, we need to fix container offsets.
+  * Each widget should redefine it and use appropriate skin element's properties.
+  *
+  * This function should be used only internally.
+  */
+void glictContainer::FixContainerOffsets() {
+
 }
 

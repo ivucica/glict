@@ -18,7 +18,7 @@
 */
 
 /**
- * \file container.cpp
+ * \file button.cpp
  * \brief Button class code
  * \sa glictButton
  */
@@ -140,51 +140,88 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
   */
 void glictButton::Paint() {
 	if (!GetVisible()) return;
+
+	
+	if (glictGlobals.debugCallback) {
+		glictGlobals.debugCallback(strlen("glictButton::Paint()"), "glictButton::Paint()");
+	}
+
 	this->SetScissor();
-	if (!highlighted) {
-		glColor4f(
-			(float)this->bgcolor.r,
-			(float)this->bgcolor.g,
-			(float)this->bgcolor.b,
-			(float)this->bgcolor.a
-		);
+
+	if (!((glictGlobals.buttonSkin && !highlighted) || (glictGlobals.buttonHighlightSkin && highlighted))) {
+        if (!highlighted) {
+            glColor4f(
+                (float)this->bgcolor.r,
+                (float)this->bgcolor.g,
+                (float)this->bgcolor.b,
+                (float)this->bgcolor.a
+            );
+        }
+
+        else {
+            glColor4f(
+                this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
+                this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
+                this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
+                this->bgcolor.a
+
+                //0.95, 0.95, 0.95, 1.
+        );
+        }
+        glBegin(GL_QUADS);
+        glVertex2f(this->x,this->y);
+        glVertex2f(this->x,this->y+this->height);
+        glVertex2f(this->x+this->width,this->y+this->height);
+        glVertex2f(this->x+this->width,this->y);
+        glEnd();
+	} else {
+        glictSize s = {this->width, this->height};
+//        glPushMatrix();
+        glTranslatef(this->x, this->y, 0);
+        if (!highlighted)
+            glictGlobals.buttonSkin->Paint(&s);
+        else
+            glictGlobals.buttonHighlightSkin->Paint(&s);
+        glTranslatef(-this->x, -this->y, 0);
+//        glPopMatrix();
 	}
 
-	else {
-		glColor4f(
-			this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
-			this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
-			this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
-			this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
 
-			//0.95, 0.95, 0.95, 1.
-	);
-	/*printf("Hilited RGBA: %f %f %f %f\n", this->bgcolor.r < 128 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
-			this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
-			this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
-			this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
-);*/
-//        printf("RENDERING HIGHLIGHTED BUTTON\n");
-	}
-	glBegin(GL_QUADS);
-	glVertex2f(this->x,this->y);
-	glVertex2f(this->x,this->y+this->height);
-	glVertex2f(this->x+this->width,this->y+this->height);
-	glVertex2f(this->x+this->width,this->y);
-	glEnd();
 
-	glColor4f(1., 1., 1., 1.);
+    if (!highlighted) {
+        glColor4f(
+            glictGlobals.buttonTextColor.r,
+            glictGlobals.buttonTextColor.g,
+            glictGlobals.buttonTextColor.b,
+            glictGlobals.buttonTextColor.a
+        );
+    } else {
+        glColor4f(
+            glictGlobals.buttonHighlightTextColor.r,
+            glictGlobals.buttonHighlightTextColor.g,
+            glictGlobals.buttonHighlightTextColor.b,
+            glictGlobals.buttonHighlightTextColor.a
+
+            //0.95, 0.95, 0.95, 1.
+        );
+    }
+
+
 
 	glPushMatrix();
 	glRotatef(180.0, 1.0, 0.0, 0.0);
 	if (highlighted) glTranslatef(1.5,-1.5,0.);
+
 	glictFontRender(
 		this->caption.c_str(),
 		"system",
 		this->x + this->width / 2. - glictFontSize(this->caption.c_str(), "system") / 2.,
 		(this->y + this->height / 2. + 5. - 5.*((float)glictFontNumberOfLines(this->caption.c_str())-1.))*-1.
 		);
+	if (highlighted) glTranslatef(-1.5,1.5,0.);
+    glRotatef(180.0, -1.0, 0.0, 0.0);
 	glPopMatrix();
+
 	this->CPaint();
 }
 /**

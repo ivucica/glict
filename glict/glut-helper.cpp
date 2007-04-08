@@ -42,6 +42,7 @@
 void DEBUGPRINT(char* txt, ...);
 
 char* glutxStrokeStringExpert(const char* txt, const void* font) {
+
     glPushMatrix();
     char *p;
     for (p = (char*)txt; *p && *p!='\n' && *p!='\r'; p++) {
@@ -52,10 +53,11 @@ char* glutxStrokeStringExpert(const char* txt, const void* font) {
 }
 #include <stdio.h>
 void glutxStrokeString(const char* txt, const void* font, float x, float y) {
+
     char* fromwhere=(char*)txt;
     do {
         if (fromwhere!=txt) fromwhere++;
-        glPushMatrix();
+
         glTranslatef(x,y,0);
         //if (font==GLUT_STROKE_ROMAN)
         //    glScalef(0.1,0.075,0.075);
@@ -64,7 +66,8 @@ void glutxStrokeString(const char* txt, const void* font, float x, float y) {
         glScalef(.0075, .0075, .0075);
         fromwhere = glutxStrokeStringExpert(fromwhere,font);
 
-        glPopMatrix();
+        glScalef(1./.0075, 1./.0075, 1./.0075);
+        glTranslatef(-x,-y,0);
         y -= 1;
     } while (*fromwhere);
     //printf("Rendered %s\n", txt);
