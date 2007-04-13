@@ -69,7 +69,7 @@ class glictContainer  {
 		void SetPos(glictPos pos); ///< Sets object's position using predefined type. Useful when exchanging data between library's functions.
 		void GetPos(int* x, int* y); ///< Gets object's position and writes it into integers x and y.
 		void GetPos(glictPos* pos); ///< Gets object's position and writes it into predefined type. Useful when exchanging data between library's functions.
-		void GetSize(glictSize* size); ///< Gets object's size (height and width) and writes it into predefined type. TODO: integer version
+		void GetSize(glictSize* size); ///< Gets object's size (height and width) and writes it into predefined type.
 		void SetScissor(); ///< This one adjusts the clipping window through which something can be seen, and which is set by SetClip
 		void SetVisible(bool visibility); ///< Sets visibility.
 		bool GetVisible(); ///< Retrieves visibility.
@@ -78,6 +78,8 @@ class glictContainer  {
 		void RememberTransformations(); ///< When calling parent's paint, call it's 'remember transformations' too, so clicking detection is done properly. if clicking unused, or no transformations done, then not important
 		void ResetTransformations(); ///< Resets transformations to default transf matrix (identity matrix)
 		void TransformScreenCoords(glictPos *pos); ///< Transforms screen coordinates into plane coordinates
+        unsigned int GetHeight(); ///< Returns object's height
+        unsigned int GetWidth(); ///< Returns object's width
 
 		bool CastEvent(glictEvents evt, void* wparam, long lparam); ///< Casts an event omitting the returnvalue. (deprecated, I'm lazy and don't want to rewrite code so I abuse namespace)
 		bool DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event into default event processor, omitting the widget's code.

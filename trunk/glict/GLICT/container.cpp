@@ -260,8 +260,6 @@ void glictContainer::GetPos(glictPos* pos) {
 	pos->x = this->x;
 	pos->y = this->y;
 }
-/* TODO (Khaos#2#): GetWidth(w);
-					GetHeight(h) */
 /* TODO (Khaos#2#): GetSize(w,h); */
 
 /**
@@ -274,6 +272,26 @@ void glictContainer::GetPos(glictPos* pos) {
 void glictContainer::GetSize(glictSize* size) {
 	size->w = this->width;
 	size->h = this->height;
+}
+
+/**
+  * \return Current width of the object.
+  *
+  * Retrieves width of the object and returns it as a value.
+  * \sa SetWidth(int w), GetSize(glictSize* size)
+  */
+unsigned int glictContainer::GetWidth() {
+    return width;
+}
+
+/**
+  * \return Current height of the object.
+  *
+  * Retrieves height of the object and returns it as a value.
+  * \sa SetHeight(int h), GetSize(glictSize* size)
+  */
+unsigned int glictContainer::GetHeight() {
+    return height;
 }
 
 /**

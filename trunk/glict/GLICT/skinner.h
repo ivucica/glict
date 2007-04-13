@@ -51,6 +51,8 @@ class glictSkinner {
 
         glictSize *GetTopSize();
         glictSize *GetLeftSize();
+        glictSize *GetRightSize();
+        glictSize *GetBottomSize();
     private:
         GLuint topleft; glictSize toplefts;
         GLuint topright; glictSize toprights;

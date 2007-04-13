@@ -17,6 +17,7 @@
 	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "messagebox.h"
+#include "globals.h"
 #include <GL/glut.h>
 
 void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller) {
@@ -89,9 +90,9 @@ void glictMessageBox::SetHeight(int h) {
 
 	btnOk.SetPos(width/2 - 32, height - 21);
 	if (this->GetEnabled())
-		pnlMessage.SetHeight(h-10 - containeroffsety);
+		pnlMessage.SetHeight(h-10 - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize()->h : 0));
 	else
-		pnlMessage.SetHeight(h - containeroffsety);
+		pnlMessage.SetHeight(h - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize()->h : 0));
 	pnlMessage.SetPos(0,0);//containeroffsety);
 
 }

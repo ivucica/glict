@@ -90,7 +90,7 @@ void glictWindow::Paint() {
         glVertex2f(this->x+this->width,this->y+12);
         glEnd();
     } else if (!glictGlobals.windowTitleSkin) { // if there's no title skin, but there's body skin
-        glictSize s = {this->width + containeroffsetx*2, this->height + containeroffsety*2 };
+        glictSize s = {this->width + glictGlobals.windowBodySkin->GetLeftSize()->w + glictGlobals.windowBodySkin->GetRightSize()->w, this->height + glictGlobals.windowBodySkin->GetTopSize()->h + glictGlobals.windowBodySkin->GetBottomSize()->h};
 
         glTranslatef(this->x, this->y, 0);
         glictGlobals.windowBodySkin->Paint(&s);
@@ -107,15 +107,15 @@ void glictWindow::Paint() {
     if (this->OnPaint) {
         glictRect r, c;
 
-        r.top = this->top;
-        r.bottom = this->bottom;
-        r.left = this->left;
-        r.right = this->right;
+        r.top = this->top + containeroffsety;
+        r.bottom = this->bottom - containeroffsety ; //- (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize()->h : 0) ;
+        r.left = this->left + containeroffsetx;
+        r.right = this->right - containeroffsetx;// - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetRightSize()->w : 0) ;
 
         c.top = max(this->cliptop, this->top + containeroffsety);
-        c.bottom = min(this->clipbottom, this->bottom - containeroffsety);
+        c.bottom = min(this->clipbottom, this->bottom - containeroffsety); //- (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize()->h : 0) );
         c.left = max(this->clipleft, this->left + containeroffsetx);
-        c.right = min(this->clipright, this->right - containeroffsety);;
+        c.right = min(this->clipright, this->right - containeroffsetx); //- (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetRightSize()->w : 0) );
 
         this->OnPaint(&r, &c, this);
 
@@ -149,7 +149,7 @@ void glictWindow::Paint() {
 */
 
 	glRotatef(180.0, 1.0, 0.0, 0.0);
-	glictFontRender(this->caption.c_str(),"system", this->x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize()->w : 0) , this->y*-1. - 9.);
+	glictFontRender(this->caption.c_str(),"system", this->x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize()->w : 0) , this->y*-1. - 10. - (glictGlobals.windowBodySkin ? (glictGlobals.windowBodySkin->GetTopSize()->h/2 - 10./2.) : 0));
 	glRotatef(180.0, -1.0, 0.0, 0.0);
 
 
@@ -266,5 +266,5 @@ void glictWindow::FixContainerOffsets() {
             this->containeroffsety = glictGlobals.windowBodySkin->GetTopSize()->h;
         }
     }
-    printf("%s container offsets %d %d\n", objtype,  containeroffsetx, containeroffsety);
+    //printf("%s container offsets %d %d\n", objtype,  containeroffsetx, containeroffsety);
 }

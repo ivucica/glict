@@ -148,3 +148,9 @@ how many people use it, so that we know if we can do critical API changes.
 
 * Globals.*: Added debug callback support
 * Container.*: Fixed a containeroffset* related issue when calling OnClick
+
+9.4.2007:
+
+* *.*: Fixed various skinning related issues (esp. if the height and width did not match)
+* Globals.*: Added textboxskin, paneltextcolor, textboxtextcolor...
+* Container.*: Added GetHeight() and GetWidth()

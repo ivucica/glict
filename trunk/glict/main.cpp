@@ -182,6 +182,7 @@ void onpanel2paint(glictRect* real, glictRect* clipped, glictContainer* callercl
     glVertex2f(100,100);
     glEnd();
 
+    glColor3f(1,1,1);
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 
@@ -244,6 +245,7 @@ void glinit() {
 
     panela2.AddObject(&panela4);
     panela4.SetHeight(128);
+    panela4.SetCaption("pnl");
 
     panela5->SetOnClick(onpanel5click);
     panela5->SetWidth(64);
@@ -391,7 +393,7 @@ void glinit() {
 
     }
 
-    if (false) {
+    if (true) {
         glictSkinner *skn = new glictSkinner, *skn2 = new glictSkinner;
         glictSize elementsize = {8, 8};
         skn->SetTL(BitmapLoad("topleft.bmp"), &elementsize);
@@ -435,6 +437,12 @@ void glinit() {
         glictGlobals.windowTitleColor[1] = 0;
         glictGlobals.windowTitleColor[2] = 0;
         glictGlobals.windowTitleColor[3] = 1;
+
+        glictGlobals.panelTextColor.r = 0;
+        glictGlobals.panelTextColor.g = 0;
+        glictGlobals.panelTextColor.b = 0;
+        glictGlobals.panelTextColor.a = 1;
+
 
     }
 
