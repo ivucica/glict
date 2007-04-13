@@ -141,7 +141,7 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 void glictButton::Paint() {
 	if (!GetVisible()) return;
 
-	
+
 	if (glictGlobals.debugCallback) {
 		glictGlobals.debugCallback(strlen("glictButton::Paint()"), "glictButton::Paint()");
 	}

@@ -32,15 +32,18 @@ class glictGlobalsClass {
         float windowTitleBgColor[4]; float windowTitleColor[4]; glictSkinner *windowTitleSkin;
         glictSkinner *windowBodySkin;
         glictSkinner *buttonSkin, *buttonHighlightSkin;
+        glictSkinner *textboxSkin;
         glictColor buttonTextColor, buttonHighlightTextColor;
+        glictColor panelTextColor;
+        glictColor textboxTextColor;
 
         float w,h;
         glictPos lastMousePos; // last coordinates where user clicked
         glictClippingMode clippingMode;
         glictContainer* topFocused;
-		
+
 		GLICTDEBUGCALLBACKPROC debugCallback;
-	
+
 };
 extern glictGlobalsClass glictGlobals;
 

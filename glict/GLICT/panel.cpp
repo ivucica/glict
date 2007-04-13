@@ -62,18 +62,19 @@ void glictPanel::Paint() {
 
     glPushMatrix(); // must remain here because of glictFontRender
 
-		
+
 		glTranslatef(this->x, this->y,0);
 		glRotatef(180.0, 1.0, 0.0, 0.0);
-		
-		glColor4f(1.,1.,1.,1.);
+
+		glColor4f(glictGlobals.panelTextColor.r , glictGlobals.panelTextColor.g, glictGlobals.panelTextColor.b, glictGlobals.panelTextColor.a);
 		glictFontRender(this->caption.c_str(), "system", 0, -10);
-	    
-		
+		glColor4f(1., 1., 1., 1.);
+
+
 		glRotatef(180.0, -1.0, 0.0, 0.0);
 		glTranslatef(-this->x, -this->y,0);
-		
-	    
+
+
 	glPopMatrix();
 
 	glPushMatrix();

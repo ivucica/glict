@@ -35,7 +35,7 @@ void glictSkinner::Paint(glictSize *size) {
 
     if (topleft) {
         x1 = y1 = 0;
-        x2 = toplefts.w; y2 = toplefts.h;
+        x2 = toplefts.w+1; y2 = toplefts.h+1;
         glBindTexture(GL_TEXTURE_2D, topleft);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 0);
@@ -50,8 +50,8 @@ void glictSkinner::Paint(glictSize *size) {
     }
 
     if (topright) {
-        x1 = size->w - toprights.w; y1 = 0;
-        x2 = size->w; y2 = toprights.h;
+        x1 = size->w - toprights.w -1; y1 = 0;
+        x2 = size->w; y2 = toprights.h + 1;
         glBindTexture(GL_TEXTURE_2D, topright);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 0);
@@ -66,26 +66,23 @@ void glictSkinner::Paint(glictSize *size) {
     }
 
     if (bottomleft) {
-        x1 = 0; y1 = size->h - bottomlefts.h;
-        x2 = bottomlefts.w; y2 = size->h;
+        x1 = 0; y1 = size->h - bottomlefts.h - 1;
+        x2 = bottomlefts.w + 1; y2 = size->h;
         glBindTexture(GL_TEXTURE_2D, bottomleft);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 0);
         glVertex2f(x1, y1);
-        glColor3f(0, 0, 1);
         glTexCoord2f(0, 1);
         glVertex2f(x1, y2);
-        glColor3f(1, 1, 0);
         glTexCoord2f(1, 1);
         glVertex2f(x2, y2);
-        glColor3f(0, 0, 1);
         glTexCoord2f(1, 0);
         glVertex2f(x2, y1);
         glEnd();
     }
 
     if (bottomright) {
-        x1 = size->w - bottomrights.w; y1 = size->h - bottomrights.h;
+        x1 = size->w - bottomrights.w - 1; y1 = size->h - bottomrights.h - 1;
         x2 = size->w; y2 = size->h;
         glBindTexture(GL_TEXTURE_2D, bottomright);
         glBegin(GL_QUADS);
@@ -105,7 +102,7 @@ void glictSkinner::Paint(glictSize *size) {
     if (top) {
         for (int pos = topleft ? toplefts.w : 0; pos < size->w - (topright ? toprights.w : 0); pos+=tops.w) {
             x1 = pos; y1 = 0;
-            x2 = min(size->w - (topright ? toprights.w : 0), pos + tops.w); y2 = tops.h;
+            x2 = min(size->w - (topright ? toprights.w : 0) , pos + tops.w) + 1; y2 = tops.h + 1;
             glBindTexture(GL_TEXTURE_2D, top);
             glBegin(GL_QUADS);
             glTexCoord2f(0, 0);
@@ -122,8 +119,8 @@ void glictSkinner::Paint(glictSize *size) {
 
     if (bottom) {
         for (int pos = bottomleft ? bottomlefts.w : 0; pos < size->w - (bottomright ? bottomrights.w : 0); pos+=bottoms.w) {
-            x1 = pos; y1 = size->h - bottoms.h;
-            x2 = min(size->w - (bottomright ? bottomrights.w : 0), pos + bottoms.w); y2 = size->h;
+            x1 = pos; y1 = size->h - bottoms.h - 1;
+            x2 = min(size->w - (bottomleft ? bottomlefts.w : 0), pos + bottoms.w) + 1; y2 = size->h;
             glBindTexture(GL_TEXTURE_2D, bottom);
             glBegin(GL_QUADS);
             glTexCoord2f(0, 0);
@@ -143,7 +140,7 @@ void glictSkinner::Paint(glictSize *size) {
     if (left) {
         for (int pos = topleft ? toplefts.h : 0; pos < size->h - (bottomleft ? bottomlefts.w : 0); pos+=lefts.h) {
             x1 = 0; y1 = pos;
-            x2 = lefts.w; y2 = min(size->h - (bottomleft ? bottomlefts.w : 0), pos + bottoms.h);
+            x2 = lefts.w; y2 = min(size->h - (bottomleft ? bottomlefts.h : 0), pos + lefts.h);
             glBindTexture(GL_TEXTURE_2D, left);
             glBegin(GL_QUADS);
             glTexCoord2f(0, 0);
@@ -162,7 +159,7 @@ void glictSkinner::Paint(glictSize *size) {
     if (right) {
         for (int pos = topright ? toprights.h : 0; pos < size->h - (bottomright ? bottomrights.w : 0); pos+=rights.h) {
             x1 = size->w - rights.w; y1 = pos;
-            x2 = size->w; y2 = min(size->h - (bottomright ? bottomrights.w : 0), pos + bottoms.h);
+            x2 = size->w; y2 = min(size->h - (bottomright ? bottomrights.w : 0), pos + rights.h);
             glBindTexture(GL_TEXTURE_2D, right);
             glBegin(GL_QUADS);
             glTexCoord2f(0, 0);
@@ -182,10 +179,10 @@ void glictSkinner::Paint(glictSize *size) {
         for (int pos = topleft ? toplefts.w : 0; pos < size->w - (topright ? toprights.w : 0); pos+=tops.w) {
             for (int pos2 = topleft ? toplefts.h : 0; pos2 < size->h - (bottomleft ? bottomlefts.w : 0); pos2+=lefts.h) {
                 y1 = pos2;
-                y2 = min(size->h - (bottomright ? bottomrights.w : 0), pos2 + bottoms.h);
+                y2 = min(size->h - (bottomright ? bottomrights.w : 0), pos2 + centers.h);
 
                 x1 = pos;
-                x2 = min(size->w - (topright ? toprights.w : 0), pos + tops.w);
+                x2 = min(size->w - (topright ? toprights.w : 0), pos + centers.w);
 
 
                 glBindTexture(GL_TEXTURE_2D, center);
@@ -252,4 +249,10 @@ glictSize *glictSkinner::GetLeftSize() {
 }
 glictSize *glictSkinner::GetTopSize() {
     return &(this->tops);
+}
+glictSize *glictSkinner::GetRightSize() {
+    return &(this->rights);
+}
+glictSize *glictSkinner::GetBottomSize() {
+    return &(this->bottoms);
 }

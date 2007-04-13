@@ -45,18 +45,30 @@ glictTextbox::~glictTextbox() {
 void glictTextbox::Paint() {
 	if (!GetVisible()) return;
 
-	glColor4f(
-		(float)this->bgcolor.r,
-		(float)this->bgcolor.g,
-		(float)this->bgcolor.b,
-		(float)this->bgcolor.a
-	);
-	glBegin(GL_QUADS);
-	glVertex2f(this->x,this->y);
-	glVertex2f(this->x,this->y+this->height);
-	glVertex2f(this->x+this->width,this->y+this->height);
-	glVertex2f(this->x+this->width,this->y);
-	glEnd();
+
+    if (!glictGlobals.textboxSkin) {
+        glColor4f(
+            (float)this->bgcolor.r,
+            (float)this->bgcolor.g,
+            (float)this->bgcolor.b,
+            (float)this->bgcolor.a
+        );
+        glBegin(GL_QUADS);
+        glVertex2f(this->x,this->y);
+        glVertex2f(this->x,this->y+this->height);
+        glVertex2f(this->x+this->width,this->y+this->height);
+        glVertex2f(this->x+this->width,this->y);
+        glEnd();
+    } else {
+        glictSize s = {this->width, this->height};
+
+        glTranslatef(this->x, this->y, 0);
+        glictGlobals.textboxSkin->Paint(&s);
+        glTranslatef(-this->x, -this->y, 0);
+
+
+    }
+
 
 	std::string oldcaption;
 	char* asterisked=NULL;
@@ -76,14 +88,15 @@ void glictTextbox::Paint() {
 	}
 
 
-	glColor4f(1., 1., 1., 1.);
+
 	glTranslatef(this->x, this->y+10.,0);
 	glRotatef(180.0, 1.0, 0.0, 0.0);
-	glColor4f(1.,1.,1.,1.);
+	glColor4f(glictGlobals.textboxTextColor.r, glictGlobals.textboxTextColor.g, glictGlobals.textboxTextColor.b, glictGlobals.textboxTextColor.a);
 	if (asterisked && glictGlobals.topFocused != this)
-		glictFontRender(asterisked, "system", 10, 0, 0);
+		glictFontRender(asterisked, "system", 10, (glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) , -(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0));
 	else
-		glictFontRender(this->caption.c_str(), "system", 10, 0, 0);
+		glictFontRender(this->caption.c_str(), "system", 10, (glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) , -(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0));
+    glColor4f(1., 1., 1., 1.);
     glRotatef(180.0, -1.0, 0.0, 0.0);
     glTranslatef(-this->x, -(this->y+10.),0);
 
