@@ -154,3 +154,9 @@ how many people use it, so that we know if we can do critical API changes.
 * *.*: Fixed various skinning related issues (esp. if the height and width did not match)
 * Globals.*: Added textboxskin, paneltextcolor, textboxtextcolor...
 * Container.*: Added GetHeight() and GetWidth()
+
+14.4.2007:
+
+* Panel.*: Added virtual area and scrollbar support
+* Container.*: Some descriptions fixed
+* Main.cpp: Added check for virtual area panels
