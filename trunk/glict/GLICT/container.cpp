@@ -146,11 +146,8 @@ void glictContainer::RemoveObject(glictContainer* object) {
   * \sa SetWidth(int w), GetSize(glictSize* size)
   */
 void glictContainer::SetHeight(int h) {
-
 	this->height = h;
-
     this->RecursiveBoundaryFix();
-
 }
 
 /**
@@ -161,9 +158,7 @@ void glictContainer::SetHeight(int h) {
   * \sa SetHeight(int h), GetSize(glictSize* size)
   */
 void glictContainer::SetWidth(int w) {
-
 	this->width = w;
-
 	this->RecursiveBoundaryFix();
 }
 

@@ -112,8 +112,8 @@ void display() {
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glEnable(GL_STENCIL_TEST);
-    //glEnable(GL_SCISSOR_TEST);
+    //glEnable(GL_STENCIL_TEST);
+    glEnable(GL_SCISSOR_TEST);
     glPushMatrix();
     desktop.RememberTransformations();
     desktop.Paint();
@@ -221,6 +221,7 @@ void glinit() {
     //panela2 = new glictWindow;
     glictPanel* panela3 = new glictPanel;
     glictButton* panela5 = new glictButton;
+    glictButton* panela6 = new glictButton;
 
     desktop.AddObject((panela));
     panela->SetBGColor(0.5,0.5,1.0,1.0);
@@ -243,9 +244,16 @@ void glinit() {
     /*panela3->SetPos(12,12);
     panela2->AddObject(panela3);*/
 
+
     panela2.AddObject(&panela4);
     panela4.SetHeight(128);
     panela4.SetCaption("pnl");
+    panela4.SetVirtualSize(500,500);
+    panela4.SetPos(10,10);
+    panela4.AddObject(panela6);
+
+    panela6->SetBGColor(1,0,0,1);
+    panela6->SetPos(4,4);
 
     panela5->SetOnClick(onpanel5click);
     panela5->SetWidth(64);

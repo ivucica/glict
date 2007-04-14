@@ -96,7 +96,7 @@ class glictContainer  {
 
 		void ReportDebug(); ///< Reports debug information to stdout.
 
-		void RecursiveBoundaryFix(); ///< Fixes boundaries recursively up to the root of the tree (desktop, probably). Should be used only internally. FIXME: Make private/protected
+		virtual void RecursiveBoundaryFix(); ///< Fixes boundaries recursively up to the root of the tree (desktop, probably). Also used to make scrollbars appear in case of virtual size, where appropriate. Should be used only internally. FIXME: Make private/protected
 		virtual void FixContainerOffsets(); ///< Fixes container offsets. Should be used only internally.
 
 		int height, width; ///< Current height and width of the widget. FIXME: Make private.
