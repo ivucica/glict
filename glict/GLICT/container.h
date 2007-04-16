@@ -99,6 +99,9 @@ class glictContainer  {
 		virtual void RecursiveBoundaryFix(); ///< Fixes boundaries recursively up to the root of the tree (desktop, probably). Also used to make scrollbars appear in case of virtual size, where appropriate. Should be used only internally. FIXME: Make private/protected
 		virtual void FixContainerOffsets(); ///< Fixes container offsets. Should be used only internally.
 
+        virtual void SetCustomData(void *param); ///< Allows the application programmer to store custom data assigned to this object.
+        virtual void*GetCustomData(); ///< Allows the application programmer to retrieve previously stored custom data assigned to this object.
+
 		int height, width; ///< Current height and width of the widget. FIXME: Make private.
 		int x, y; ///< Current position of the widget. FIXME: Make private
 		int left, right, top, bottom; ///< Current boundaries of the widget, calculated from height, width, x and y. FIXME: Make private.
@@ -134,6 +137,7 @@ class glictContainer  {
 		bool focusable;
 		vector <glictContainer*> delayedremove;
 
+        void* customdata;
 
     /// \todo Remove this friend!
 
