@@ -160,3 +160,8 @@ how many people use it, so that we know if we can do critical API changes.
 * Panel.*: Added virtual area and scrollbar support
 * Container.*: Some descriptions fixed
 * Main.cpp: Added check for virtual area panels
+
+15.4.2007:
+
+* Panel.*: Additional fixes for virtual area
+* Container.*: Added custom application data support

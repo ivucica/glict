@@ -37,6 +37,11 @@ glictPanel::glictPanel() {
 
 	this->bgactive = true;
 
+    virtualsize.x = 0;
+    virtualsize.y = 0;
+
+    this->AddObject(&sbVertical);
+
 	sbVertical.SetVisible(false);
 	//sbHorizontal.SetVisible(false);// FIXME horizontal scrollbar widget must be done in order to be implemented here
 }
@@ -60,7 +65,6 @@ void glictPanel::Paint() {
     }*/
     if (virtualsize.h > height) {
 
-        this->AddObject(&sbVertical);
 
         sbVertical.SetWidth(10);
         sbVertical.SetHeight(height - (virtualsize.w > width ? 10 : 0));
@@ -70,7 +74,6 @@ void glictPanel::Paint() {
         sbVertical.SetMin(0);
         sbVertical.SetMax(virtualsize.h);
 
-        this->RemoveObject(&sbVertical);
     }
 
 
@@ -102,7 +105,6 @@ void glictPanel::Paint() {
 		glictFontRender(this->caption.c_str(), "system", 0, -10);
 		glColor4f(1., 1., 1., 1.);
 
-
 		glRotatef(180.0, -1.0, 0.0, 0.0);
 		glTranslatef(-this->x, -this->y,0);
 
@@ -126,15 +128,37 @@ void glictPanel::Paint() {
 		}
 	glPopMatrix();
 
+    if (sbVertical.GetValue()) {
+        std::vector<glictContainer*>::iterator it;
+        for (it=objects.begin(); it!=objects.end(); it++) if ((*it) != &sbVertical)  {
+            glictContainer *o = (*it);
+            glictPos p;
 
-    glTranslatef(-sbHorizontal.GetValue(), -sbVertical.GetValue(), 0);
+            o->GetPos(&p);
+            o->SetPos(p.x, p.y - sbVertical.GetValue());
+        }
+    }
+    //sbVertical.Focus(NULL);
+
+
+    //glTranslatef(-sbHorizontal.GetValue(), -sbVertical.GetValue(), 0);
+    glPushMatrix();
     this->CPaint();
-    glTranslatef(sbHorizontal.GetValue(), sbVertical.GetValue(), 0);
+    glPopMatrix();
+    //glTranslatef(sbHorizontal.GetValue(), sbVertical.GetValue(), 0);
 
-    glTranslatef(x,y,0);
-    sbVertical.SetScissor();
-    sbVertical.Paint();
-    glTranslatef(-x,-y,0);
+    if (sbVertical.GetValue()) {
+        std::vector<glictContainer*>::iterator it;
+        for (it=objects.begin(); it!=objects.end(); it++) if ((*it) != &sbVertical) {
+            glictContainer *o = (*it);
+            glictPos p;
+
+            o->GetPos(&p);
+            o->SetPos(p.x, p.y + sbVertical.GetValue());
+        }
+
+    }
+
 
 }
 void glictPanel::SetBGColor(float r, float g, float b, float a) {

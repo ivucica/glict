@@ -231,6 +231,7 @@ void glinit() {
 
     panela5->SetBGColor(1,0,0,1);
     panela5->SetPos(0,90);
+    //panela5->SetCustomData((void*)"Hello");
     panela->AddObject(panela5);
 
     panela2.SetBGColor(0.2,1.0,0.2,1.0);
@@ -289,6 +290,7 @@ void glinit() {
 	login.SetHeight(180);
 	login.SetCaption("Log in");
 	login.AddObject(&pnlLogin);
+	login.SetPos(200, 100);
 	pnlLogin.SetCaption("Please enter the username, password and \n"
 	                    "server address of the server to connect to.\n"
 	                    "\n"

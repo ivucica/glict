@@ -27,7 +27,9 @@
 
 
 #include <stdlib.h>
-#include <windows.h>
+#ifdef WIN32
+    #include <windows.h>
+#endif
 #include <GL/gl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -311,12 +313,16 @@ void glictContainer::SetRect(int left, int top, int right, int bottom) {
 	//printf("%s s parentom %s postaje %d %d %d %d\n", this->objtype, (parent ? parent->objtype : "NULL"), left, right, top, bottom);
 	this->left = left;
 	this->right = right;
-	this->top = top ;
-	this->bottom = bottom ;
+	this->top = top;
+	this->bottom = bottom;
 
 
     //printf("Sada, %s s parentom %s sebe postavlja na clip %d %d %d %d\n", this->objtype, (parent ? parent->objtype : "NULL"), left, right, top, bottom);
-    this->SetClip(left,top,right,bottom );
+    this->SetClip(
+        max(left, (parent ? parent->clipleft : 0)),
+        max(top, (parent ? parent->cliptop:0)),
+        min(right, (parent ? parent->clipright: right)),
+        min(bottom, (parent ? parent->clipbottom:bottom)) );
 
 }
 
@@ -680,8 +686,12 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 						return true;
 					}
 					// if it happened within our boundaries, let it be as if we proc'ed it!
+					// of course, only if we're not a container
 
-					return true;
+					if (strcmp(objtype, "Container")) {// FIXME this is ugly lowperformance check, we should make it a bool or sth
+                        printf("Announcing click in %s\n", objtype);
+					    return true;
+					}
 				}
 				// it didnt? then lets ignore it
 
@@ -1130,3 +1140,18 @@ void glictContainer::FixContainerOffsets() {
 
 }
 
+
+
+/**
+  * \todo Document this function
+  */
+void glictContainer::SetCustomData(void *param) {
+    this->customdata = param;
+}
+
+/**
+  * \todo Document this function
+  */
+void* glictContainer::GetCustomData() {
+    return customdata;
+}

@@ -19,7 +19,9 @@
 
 #ifndef __GLICT_SKINNER_H
 #define __GLICT_SKINNER_H
-#include <windows.h>
+#ifdef WIN32
+    #include <windows.h>
+#endif
 #include <GL/gl.h>
 #include <GLICT/types.h>
 
