@@ -41,14 +41,12 @@ class glictPanel : public glictContainer {
         void SetBGActiveness(bool bg);
 
         void SetVirtualSize(int w, int h);
-        //void RecursiveBoundaryFix();
-
+		void VirtualScrollBottom();
     private:
         glictColor bgcolor;
         bool bgactive;
 
         glictScrollbar sbVertical, sbHorizontal;
-        glictSize virtualsize;
 
 };
 #endif

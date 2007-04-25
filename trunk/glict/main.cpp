@@ -250,11 +250,12 @@ void glinit() {
     panela4.SetHeight(128);
     panela4.SetCaption("pnl");
     panela4.SetVirtualSize(500,500);
-    panela4.SetPos(10,10);
+    panela4.SetPos(10,20);
     panela4.AddObject(panela6);
 
     panela6->SetBGColor(1,0,0,1);
     panela6->SetPos(4,4);
+    panela6->SetPos(0,115);
 
     panela5->SetOnClick(onpanel5click);
     panela5->SetWidth(64);

@@ -165,3 +165,25 @@ how many people use it, so that we know if we can do critical API changes.
 
 * Panel.*: Additional fixes for virtual area
 * Container.*: Added custom application data support
+
+16.4.2007:
+
+* *.*: Fixed GNU/Linux compatibility
+
+21.4.2007:
+
+* Skinner.*: Added support for binding textures using callbacks with a parameter instead of binding with textureid
+
+22.4.2007:
+
+* Container.*: Added special function for delayed removal - DelayedRemove()
+* Panel.*: Added VirtualScrollBottom()
+
+25.4.2007:
+
+* Panel.cpp, Container.cpp: Fixed a glitch related to clicks penetrating into virtual area; it could not be selected although it was visible
+* History.txt: From now on, extensions ".*" will not be written
+* Panel, Container: Moving virtualsize property and functions from panel to container, although only panel supports it
+* Panel, Container: Added virtualpos property, which is a duplicate of scrollbars' properties
+* Panel, Container: Fixed clickability of items that are only in virtual area, at least on first level of recursion
+* Container.h: Added GetX() and GetY()

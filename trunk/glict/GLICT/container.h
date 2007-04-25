@@ -17,10 +17,6 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-
-
-
-
 /**
  * \file container.h
  * \brief Container class header
@@ -35,10 +31,9 @@
 #include <list>
 #include <string>
 #include <GLICT/types.h>
+
 using namespace std;
 
-
-//std::list
 
 /**
  * \brief Container class, base for all other widgets
@@ -63,6 +58,7 @@ class glictContainer  {
 		void CPaint(); ///< Renders all children.
 		void AddObject(glictContainer* object); ///< Adds an object as a child.
 		void RemoveObject(glictContainer* object); ///< Removes an object that's a child.
+		void DelayedRemove(); ///< Runs delayed removal of objects.
 		void SetHeight(int h); ///< Sets object's height.
 		void SetWidth(int w); ///< Sets object's width.
 		void SetPos(int x, int y); ///< Sets object's position using classical access using two integers.
@@ -80,6 +76,12 @@ class glictContainer  {
 		void TransformScreenCoords(glictPos *pos); ///< Transforms screen coordinates into plane coordinates
         unsigned int GetHeight(); ///< Returns object's height
         unsigned int GetWidth(); ///< Returns object's width
+        unsigned int GetX() {return x;}  ///< Returns object position's x coordinate
+        unsigned int GetY() {return y;}  ///< Returns object position's y coordinate
+
+        virtual void SetVirtualSize(int w, int h);
+        virtual void VirtualScrollBottom();
+
 
 		bool CastEvent(glictEvents evt, void* wparam, long lparam); ///< Casts an event omitting the returnvalue. (deprecated, I'm lazy and don't want to rewrite code so I abuse namespace)
 		bool DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event into default event processor, omitting the widget's code.
@@ -109,6 +111,7 @@ class glictContainer  {
 		int containeroffsetx, containeroffsety; ///< Offsets of container object positions.
 		char objtype[50]; ///< Short descriptive string containing name of the object. (Each class actually rewrites this one upon intialization in constructor.)
 
+        virtual glictPos *GetVirtualPos() {return &virtualpos;}
 	private:
 		// these should be called only internally
 		void SetRect(int left, int top, int right, int bottom); ///< Internal function. Sets the boundaries of the widget.
@@ -137,7 +140,13 @@ class glictContainer  {
 		bool focusable;
 		vector <glictContainer*> delayedremove;
 
+
+        glictSize virtualsize;
+        glictPos virtualpos;
+
+
         void* customdata;
+
 
     /// \todo Remove this friend!
 
