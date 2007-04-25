@@ -78,6 +78,11 @@ glictContainer::glictContainer() {
 	this->SetRect(this->x, this->y, this->x + this->width, this->y + this->height);
 	this->SetClip(this->left, this->top, this->right, this->bottom);
 
+    virtualsize.x = 0;
+    virtualsize.y = 0;
+
+    virtualpos.x = 0;
+    virtualpos.y = 0;
 
 	//printf("Container created.\n");
 
@@ -138,8 +143,34 @@ void glictContainer::RemoveObject(glictContainer* object) {
 			return;
 		}
 	}*/
+
 	delayedremove.insert(delayedremove.end(), object);
+	//printf("ADDED an object to DELAYEDREMOVE list -- new size %s is %d\n", GetCaption().c_str(), delayedremove.size() );
 }
+
+/**
+  * Executes the delayedremoval.
+  */
+void glictContainer::DelayedRemove() {
+	//printf("Delayed removal of %d objects %s\n", delayedremove.size(), GetCaption().c_str());
+	if (delayedremove.size()) {
+
+		for (vector<glictContainer*>::iterator it = delayedremove.begin(); delayedremove.size(); ) {
+			for (std::vector<glictContainer*>::iterator it2 = objects.begin(); it2 != objects.end(); ) {
+				if ((*it) == (*it2)) {
+					objects.erase(it2);
+					it2 = objects.begin();
+				}
+				else {
+					it2++;
+				}
+			}
+			delayedremove.erase(it);
+
+		}
+	}
+}
+
 /**
   * \param h Height to which the object should be set.
   *
@@ -186,10 +217,10 @@ void glictContainer::SetPos(int x, int y) {
         this->y = y;
     } else {
         this->SetRect(
-            parent->left + x + parent->containeroffsetx,
-            parent->top + y+ parent->containeroffsety ,
-            parent->left + x + width+ parent->containeroffsetx + containeroffsetx*2,
-            parent->top + y + height+ parent->containeroffsety + containeroffsety*2
+            parent->left + x + parent->containeroffsetx - parent->virtualpos.x,
+            parent->top + y + parent->containeroffsety  - parent->virtualpos.y,
+            parent->left + x + width+ parent->containeroffsetx -  parent->virtualpos.x + containeroffsetx*2,
+            parent->top + y + height+ parent->containeroffsety -  parent->virtualpos.y + containeroffsety*2 // FIXME containeroffsety*2 should be replaced by containeroffsety + bottomheight
         );
 
 
@@ -477,7 +508,7 @@ void glictContainer::Paint() {
   * Prior to rendering, however, the delayedremove vector is checked out
   * and all objects requested are removed.
   *
-  * This is used within Paint(); actually there should be no reason for this
+  * This f. is used within Paint(); actually there should be no reason for this
   * function to be used except internally when writing a widget. You may be
   * more interested in the Paint() method.
   *
@@ -487,22 +518,7 @@ void glictContainer::CPaint() {
 
 	//printf("Rendering %s (child of %s)\n", objtype, parent ? parent->objtype : "NULL");
 
-	if (delayedremove.size())
-		for (vector<glictContainer*>::iterator it = delayedremove.begin(); delayedremove.size(); ) {
-			for (std::vector<glictContainer*>::iterator it2 = objects.begin(); it2 != objects.end(); ) {
-				if ((*it) == (*it2)) {
-					objects.erase(it2);
-					it2 = objects.begin();
-				}
-				else {
-					it2++;
-				}
-			}
-			delayedremove.erase(it);
-
-		}
-
-
+	DelayedRemove();
 
 #if 0
 
@@ -544,14 +560,14 @@ void glictContainer::CPaint() {
 
 	if (objects.size()) {
 		glPushMatrix();
-			glTranslatef(this->x + containeroffsetx, this->y + containeroffsety,0.0);
+			glTranslatef(this->x + containeroffsetx - virtualpos.x, this->y + containeroffsety - virtualpos.y,0.0);
 
 			std::vector<glictContainer*>::iterator it;
 			for (it=objects.begin(); it!=objects.end(); it++) {
 				(*it)->SetScissor();
 				(*it)->Paint();
 			}
-			glTranslatef(-this->x - containeroffsetx, -this->y - containeroffsety,0.0);
+			glTranslatef(-this->x - containeroffsetx + virtualpos.x, -this->y - containeroffsety + virtualpos.y,0.0);
 		glPopMatrix();
 	}
 }
@@ -614,28 +630,29 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 			std::vector<glictContainer*>::reverse_iterator it;
 			//vector<glictContainer*>::iterator it;
 
+
 			if  (((glictPos*)wparam)->x > this->clipleft &&
                  ((glictPos*)wparam)->x < this->clipright &&
                  ((glictPos*)wparam)->y > this->cliptop &&
                  ((glictPos*)wparam)->y < this->clipbottom) {
-/*                    ((glictPos*)wparam)->x -= containeroffsetx;
-                    ((glictPos*)wparam)->y -= containeroffsety;*/
 					if (objects.size()) {
 						for (it=objects.rbegin(); it != objects.rend(); it++) {
 						//for (it=objects.begin(); it!=objects.end(); it++) {
 							if (it != objects.rend() && *it ) {
+
 								//printf("Testing %s (%s)\n", (*it)->objtype, this->objtype );
+
 
 								if ((*it)->CastEvent(evt, wparam, lparam, returnvalue)) {
 									//printf("%s (%s) returned true\n", (*it)->objtype, this->objtype );
 									return true;
 								}
+
+
 							}
 						}
 					}
 
-                    /*((glictPos*)wparam)->x += containeroffsetx;
-                    ((glictPos*)wparam)->y += containeroffsety;*/
 			}
 
 
@@ -648,7 +665,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 					if (((glictPos*)wparam)->x > this->clipleft &&
 					 ((glictPos*)wparam)->x < this->clipright &&
 					 ((glictPos*)wparam)->y > this->cliptop &&
-					 ((glictPos*)wparam)->y < this->clipbottom) {
+					 ((glictPos*)wparam)->y < this->clipbottom ) {
 						//MessageBox(0,"MouseDown",this->GetCaption().c_str(),0);
 						this->Focus(NULL);
 						return true;
@@ -676,12 +693,12 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 				if (((glictPos*)wparam)->x > this->clipleft &&
 					((glictPos*)wparam)->x < this->clipright &&
 					((glictPos*)wparam)->y > this->cliptop &&
-					((glictPos*)wparam)->y < this->clipbottom) {
+					((glictPos*)wparam)->y < this->clipbottom ) {
 					if (this->OnClick) {
 						//printf("Click on %s.\n", objtype);
 						glictPos relpos;
-						relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx;
-						relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety;
+						relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx + this->virtualpos.x;
+						relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety + this->virtualpos.y;
 						this->OnClick(&relpos, this);
 						return true;
 					}
@@ -689,7 +706,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 					// of course, only if we're not a container
 
 					if (strcmp(objtype, "Container")) {// FIXME this is ugly lowperformance check, we should make it a bool or sth
-                        printf("Announcing click in %s\n", objtype);
+                        //printf("Announcing click in %s\n", objtype);
 					    return true;
 					}
 				}
@@ -1155,3 +1172,29 @@ void glictContainer::SetCustomData(void *param) {
 void* glictContainer::GetCustomData() {
     return customdata;
 }
+
+
+/**
+  * \param w Virtual width
+  * \param h Virtual height
+  *
+  * Sets the extended, virtual width and height of the panel, the total
+  * area which can be accessed using scrollbars that become visible unless
+  * the virtual width and height are set to zero or smaller than real width
+  * and height.
+  *
+  * If virtual width and height are set to smaller than real width and height,
+  * they are simply ignored.
+  */
+void glictContainer::SetVirtualSize(int w, int h) {
+    virtualsize.w = w;
+    virtualsize.h = h;
+}
+/**
+  * Scrolls to the virtual area's bottom.
+  * Container has it EMPTY because it does not directly support virtual area.
+  */
+void glictContainer::VirtualScrollBottom() {
+
+}
+

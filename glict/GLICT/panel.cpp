@@ -63,20 +63,27 @@ void glictPanel::Paint() {
         sbHorizontal.SetMin(0);
         sbHorizontal.SetMax(virtualsize.w);
     }*/
+
+
+
     if (virtualsize.h > height) {
 
 
         sbVertical.SetWidth(10);
-        sbVertical.SetHeight(height - (virtualsize.w > width ? 10 : 0));
-        sbVertical.SetPos(width - 10, 0);
+        sbVertical.SetHeight(height );//- (virtualsize.w > width ? 10 : 0));
+        sbVertical.SetPos(width - 10, +sbVertical.GetValue());
         sbVertical.SetVisible(true);
 
         sbVertical.SetMin(0);
-        sbVertical.SetMax(virtualsize.h);
-
+        sbVertical.SetMax(virtualsize.h - height);
+		if (sbVertical.GetValue() > virtualsize.h - height) sbVertical.SetValue(virtualsize.h - height);
     }
 
+    this->virtualpos.x = 0;
+    this->virtualpos.y = sbVertical.GetValue();
 
+    if (virtualpos.y)
+        SetPos(x,y);
 
 	if (this->bgactive) {
         glColor4f(
@@ -128,17 +135,6 @@ void glictPanel::Paint() {
 		}
 	glPopMatrix();
 
-    if (sbVertical.GetValue()) {
-        std::vector<glictContainer*>::iterator it;
-        for (it=objects.begin(); it!=objects.end(); it++) if ((*it) != &sbVertical)  {
-            glictContainer *o = (*it);
-            glictPos p;
-
-            o->GetPos(&p);
-            o->SetPos(p.x, p.y - sbVertical.GetValue());
-        }
-    }
-    //sbVertical.Focus(NULL);
 
 
     //glTranslatef(-sbHorizontal.GetValue(), -sbVertical.GetValue(), 0);
@@ -147,17 +143,12 @@ void glictPanel::Paint() {
     glPopMatrix();
     //glTranslatef(sbHorizontal.GetValue(), sbVertical.GetValue(), 0);
 
-    if (sbVertical.GetValue()) {
-        std::vector<glictContainer*>::iterator it;
-        for (it=objects.begin(); it!=objects.end(); it++) if ((*it) != &sbVertical) {
-            glictContainer *o = (*it);
-            glictPos p;
 
-            o->GetPos(&p);
-            o->SetPos(p.x, p.y + sbVertical.GetValue());
-        }
 
+    if (virtualsize.h > height) {
+        sbVertical.SetPos(width - 10, 0);
     }
+
 
 
 }
@@ -172,15 +163,13 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
 	if (!GetVisible() || !GetEnabled()) return false;
 	switch (evt) {
 
-
-
 		case GLICT_MOUSEUP:
 		case GLICT_MOUSEDOWN:
 		case GLICT_MOUSECLICK: {
 
             glictPos p; // scrollbar related begin
             p.x = ((glictPos*)wparam)->x;
-            p.y = ((glictPos*)wparam)->y + sbVertical.GetValue(); // scrollbar related end
+            p.y = ((glictPos*)wparam)->y - sbVertical.GetValue(); // scrollbar related end
 
 			if (((glictPos*)wparam)->x > this->clipleft &&
 				((glictPos*)wparam)->x < this->clipright &&
@@ -188,15 +177,19 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
 				((glictPos*)wparam)->y < this->clipbottom) {
                 //printf("EVENT WITHIN PANEL %s (%s)...!\n", objtype, parent ? parent->objtype : "NULL");
 
+                sbVertical.SetPos(sbVertical.GetX(), sbVertical.GetY() + sbVertical.GetValue());
                 if (sbVertical.CastEvent(evt, wparam, lparam, returnvalue)) { // scrollbar related begin
+                    sbVertical.SetPos(sbVertical.GetX(), sbVertical.GetY() - sbVertical.GetValue());
                     printf("oi\n");
                     return true;
                 } // scrollbar related end
-
+                sbVertical.SetPos(sbVertical.GetX(), sbVertical.GetY() - sbVertical.GetValue());
 
 
 				// if a child caught click, we dont handle it otherwise
-				return DefaultCastEvent(evt, &p, lparam, returnvalue); // replace &p with wparam
+				return DefaultCastEvent(evt, wparam, lparam, returnvalue);
+
+				//return DefaultCastEvent(evt, wparam, lparam, returnvalue); // replace &p with wparam
 				// otherwise we could handle it mroe but we'll simply tell we didnt proces it
 
 			} else {
@@ -222,25 +215,28 @@ void glictPanel::SetBGActiveness(bool bg) {
     bgactive = bg;
 }
 
+
 /**
-  * \param w Virtual width
-  * \param h Virtual height
-  *
-  * Sets the extended, virtual width and height of the panel, the total
-  * area which can be accessed using scrollbars that become visible unless
-  * the virtual width and height are set to zero or smaller than real width
-  * and height.
-  *
-  * If virtual width and height are set to smaller than real width and height,
-  * they are simply ignored.
+  * Scrolls to the virtual area's bottom.
   */
+void glictPanel::VirtualScrollBottom() {
+	if (virtualsize.h > height) {
+		sbVertical.SetValue(sbVertical.GetMax());
+	} else {
+		sbVertical.SetValue(0);
+	}
+}
+
+/**
+  * Enhances glictContainer::SetVirtualSize() by setting the scrollbar
+  * properties. Needed because glictContainer does not contain scrollbars.
+  */
+
 void glictPanel::SetVirtualSize(int w, int h) {
-    virtualsize.w = w;
-    virtualsize.h = h;
+    glictContainer::SetVirtualSize(w,h);
 
     sbVertical.SetStep(10);
     sbHorizontal.SetStep(10);
     sbVertical.SetValue(0);
     sbHorizontal.SetValue(0);
-
 }
