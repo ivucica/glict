@@ -187,3 +187,7 @@ how many people use it, so that we know if we can do critical API changes.
 * Panel, Container: Added virtualpos property, which is a duplicate of scrollbars' properties
 * Panel, Container: Fixed clickability of items that are only in virtual area, at least on first level of recursion
 * Container.h: Added GetX() and GetY()
+
+26.4.2007:
+
+* GLICTMemory/main.cpp: Updated for latest GLICT API. Still does not use skinning, tho :P
