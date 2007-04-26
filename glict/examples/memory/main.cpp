@@ -24,9 +24,9 @@
   *  There's tons of inline comments, please read them to learn things.
   */
 
-// GLICTMemory 
-//  simple game made with GLICT 
-//  to compile you'll need GLUT 
+// GLICTMemory
+//  simple game made with GLICT
+//  to compile you'll need GLUT
 
 // GLUT includes
 // we use glut because it's cross platform compatible
@@ -253,7 +253,7 @@ void MainWidgets() {
 
     for (int i=0; i<16;i++) {
 
-        cards[i].SetPos((i % 4) * 96, (i / 4) * 96 + 12);
+        cards[i].SetPos((i % 4) * 96, (i / 4) * 96);
         cards[i].SetWidth(96);
         cards[i].SetHeight(96);
         cards[i].SetBGColor(0.5, 0.5, 0.5, 1.);
