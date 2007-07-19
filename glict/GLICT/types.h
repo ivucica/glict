@@ -38,10 +38,10 @@
  */
 typedef struct {
     union {
-        int x,w; ///< X coordinate of position or width
+        float x,w; ///< X coordinate of position or width
     };
     union {
-        int y,h; ///< Y coordinate of position or height
+        float y,h; ///< Y coordinate of position or height
     };
 } glictPos;
 

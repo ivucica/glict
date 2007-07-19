@@ -22,6 +22,7 @@
 
 
 typedef void (*GLICTDEBUGCALLBACKPROC )(unsigned int len, const char *string);
+typedef void (*GLICTPAINTRECTPROC)( float left, float right, float top, float bottom, glictColor &color );
 
 /// Stores some global settings.
 class glictGlobalsClass {
@@ -29,7 +30,9 @@ class glictGlobalsClass {
         glictGlobalsClass();
         ~glictGlobalsClass();
 
-        float windowTitleBgColor[4]; float windowTitleColor[4]; glictSkinner *windowTitleSkin;
+        glictColor windowTitleBgColor;
+        glictColor windowTitleColor;
+        glictSkinner *windowTitleSkin;
         glictSkinner *windowBodySkin;
         glictSkinner *buttonSkin, *buttonHighlightSkin;
         glictSkinner *textboxSkin;
@@ -42,8 +45,18 @@ class glictGlobalsClass {
         glictClippingMode clippingMode;
         glictContainer* topFocused;
 
-		GLICTDEBUGCALLBACKPROC debugCallback;
+        bool enableGlTranslate;
+        glictPos translation;
 
+		GLICTDEBUGCALLBACKPROC debugCallback;
+		GLICTPAINTRECTPROC paintrectCallback;
+
+
+		// functions
+		void Translatef(float, float, float);
+		void PaintRect(float top, float bottom, float left, float right);
+		void PaintRect(float left, float right, float top, float bottom, glictColor &col);
+		void SetColor(float r, float g, float b, float a);
 };
 extern glictGlobalsClass glictGlobals;
 

@@ -17,7 +17,14 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+// This program is NOT meant to serve as an example,
+// it is sort-of a test suite instead, a mish-mash of unrelated
+// widgets to facilitate testing. Go to examples/ folder for
+// some examples.
+
+#ifdef WIN32
 #include <windows.h>
+#endif
 //#include <wingdi.h>
 //#include <GL/gl.h>
 
@@ -29,10 +36,13 @@
 #include <GLICT/window.h>
 #include <GLICT/messagebox.h>
 #include <GLICT/textbox.h>
+#include <GLICT/list.h>
 #include <GLICT/globals.h>
 #include <GLICT/fonts.h>
 #include <GLICT/skinner.h>
 //#include <GLICT/types.h>
+
+
 
 #include "glut-helper.h"
 #include "texload.h"
@@ -40,6 +50,9 @@ glictWindow panela2;
 glictPanel panela4;
 glictMessageBox msgbox;
 glictTextbox textbox;
+glictList l;
+bool textured=true;
+
 
 unsigned int windowhandle;
 glictContainer desktop, desktop2;
@@ -106,15 +119,18 @@ void reshape(int x, int y) {
 #include <math.h>
 float kut = 0.;
 void display() {
-    //glDisable(GL_STENCIL_TEST);
-    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_STENCIL_TEST);
+    //glDisable(GL_SCISSOR_TEST);
     //printf("PAINT STARTUP\nPAINT STARTUP\nPAINT STARTUP\n-------------------\n");
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //glEnable(GL_STENCIL_TEST);
-    glEnable(GL_SCISSOR_TEST);
+    glEnable(GL_STENCIL_TEST);
+    //glEnable(GL_SCISSOR_TEST);
     glPushMatrix();
+
+
+    //glRotatef(10., 0., 0., 1.);
     desktop.RememberTransformations();
     desktop.Paint();
     glPopMatrix();
@@ -192,6 +208,22 @@ void onpanel2paint(glictRect* real, glictRect* clipped, glictContainer* callercl
     glPopAttrib();
 }
 
+void omd(glictPos *a, glictContainer* callclass) {
+    printf("OMD\n");
+}
+void omu(glictPos *a, glictContainer* callclass) {
+    printf("OMU\n");
+}
+void onnbclick(glictPos *a, glictContainer *callclass) {
+    l.RemoveObject(callclass);
+    l.DelayedRemove();
+    delete callclass;
+}
+void onlb2click(glictPos *a, glictContainer* callclass) {
+    glictButton* nb = new glictButton;
+    nb->SetOnClick(onnbclick);
+    l.AddObject(nb);
+}
 void onpanel5click(glictPos *a, glictContainer* callclass) {
     buttonstate = !buttonstate;
 
@@ -206,7 +238,32 @@ void onpanel5click(glictPos *a, glictContainer* callclass) {
 }
 
 
+void paintrectcallback(float left, float right, float top, float bottom, glictColor &col) {
+	if (col.a >= 0) glColor4f(col.r-0.5, col.g, col.b*0, col.a);
+	/*glBegin(GL_LINES);
 
+		glVertex2f(left, top-1);
+		glVertex2f(left, bottom);
+
+		glVertex2f(left, bottom);
+		glVertex2f(right-1, bottom);
+
+		glVertex2f(right-1, top-1);
+		glVertex2f(right-1, bottom);
+
+
+		glVertex2f(right-1, top-2);
+		glVertex2f(left, top-2);
+	glEnd();*/
+
+
+	glBegin(GL_QUADS);
+	glVertex2f(left, top);
+	glVertex2f(left, bottom);
+	glVertex2f(right, bottom);
+	glVertex2f(right, top);
+	glEnd();
+}
 
 		glictWindow login;
 		glictPanel pnlLogin;
@@ -229,10 +286,12 @@ void glinit() {
     panela->SetWidth(600);
     panela->SetHeight(512);
 
+
     panela5->SetBGColor(1,0,0,1);
     panela5->SetPos(0,90);
     //panela5->SetCustomData((void*)"Hello");
     panela->AddObject(panela5);
+
 
     panela2.SetBGColor(0.2,1.0,0.2,1.0);
     panela2.SetPos(0,0);
@@ -284,6 +343,16 @@ void glinit() {
 
 
 
+    glictButton* lb1 = new glictButton, *lb2 = new glictButton;
+    panela->AddObject(&l);
+    l.AddObject(lb1);
+    l.AddObject(lb2);
+    l.SetPos(100,0);
+	l.SetWidth(100);
+    l.SetHeight(70);
+    lb1->SetCaption("oi");
+    lb2->SetCaption("me");
+    lb2->SetOnClick(onlb2click);
 
 
 	panela->AddObject(&login);
@@ -303,7 +372,7 @@ void glinit() {
 	pnlLogin.SetHeight(92);
 	pnlLogin.SetBGActiveness(false);
 
-    char tmp[256];
+    char tmp[256] = {0};
 
 	login.AddObject(&pnlLoginProtocol);
 	pnlLoginProtocol.SetCaption("Protocol:");
@@ -373,21 +442,19 @@ void glinit() {
 
 
 
+    if (txtLoginPassword.GetCaption() != "") {
+        printf("%s !!!!!!!!!!!\n", txtLoginPassword.GetCaption().c_str());
+    }
 
 
 
 
+    glictGlobals.clippingMode = GLICT_STENCILTEST;
+    //glictGlobals.clippingMode = GLICT_SCISSORTEST;
 
 
-    glictGlobals.clippingMode = GLICT_SCISSORTEST;
 
-    glictFont* sysfont = glictCreateFont("system");
-
-    sysfont->SetFontParam(GLUT_STROKE_MONO_ROMAN);
-    sysfont->SetRenderFunc(glutxStrokeString);
-    sysfont->SetSizeFunc(glutxStrokeSize);
-
-    {
+    if (textured) {
         glictSize elementsize = {20, 20};
         skinner.SetTL(BitmapLoad("topleft.bmp"), &elementsize);
         skinner.SetTR(BitmapLoad("topright.bmp"), &elementsize);
@@ -404,7 +471,7 @@ void glinit() {
 
     }
 
-    if (true) {
+    if (textured) {
         glictSkinner *skn = new glictSkinner, *skn2 = new glictSkinner;
         glictSize elementsize = {8, 8};
         skn->SetTL(BitmapLoad("topleft.bmp"), &elementsize);
@@ -419,6 +486,9 @@ void glinit() {
 
         skn->SetCenter(BitmapLoad("center.bmp"), &elementsize);
 
+
+        panela4.SetOnMouseDown(omd);
+        panela4.SetOnMouseUp(omu);
 
 
 
@@ -444,10 +514,10 @@ void glinit() {
         glictGlobals.buttonTextColor.b = 0;
         glictGlobals.buttonTextColor.a = 1;
 
-        glictGlobals.windowTitleColor[0] = 0;
-        glictGlobals.windowTitleColor[1] = 0;
-        glictGlobals.windowTitleColor[2] = 0;
-        glictGlobals.windowTitleColor[3] = 1;
+        glictGlobals.windowTitleColor.r = 0;
+        glictGlobals.windowTitleColor.g = 0;
+        glictGlobals.windowTitleColor.b = 0;
+        glictGlobals.windowTitleColor.a = 1;
 
         glictGlobals.panelTextColor.r = 0;
         glictGlobals.panelTextColor.g = 0;
@@ -456,6 +526,17 @@ void glinit() {
 
 
     }
+
+    //glictGlobals.enableGlTranslate = false;
+    //glictGlobals.paintrectCallback = paintrectcallback;
+
+
+    glictFont* sysfont = glictCreateFont("system");
+
+    sysfont->SetFontParam(GLUT_STROKE_MONO_ROMAN);
+    sysfont->SetRenderFunc(glutxStrokeString);
+    sysfont->SetSizeFunc(glutxStrokeSize);
+
 
 /*
 		sysfont->SetFontParam(WinFontCreate("Arial", WINFONT_BOLD, 7));

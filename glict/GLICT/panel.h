@@ -23,10 +23,10 @@
 #include <GLICT/container.h>
 #include <GLICT/scrollbar.h>
 #include <GLICT/types.h>
+#include <GLICT/skinner.h>
 
-class glictScrollbar;
 
-/// Simple rectangular widget that can contain children and has changeable background color
+/// Simple rectangular widget that can contain children, has changeable background color, can have a skin, and has a virtual area
 class glictPanel : public glictContainer {
     public:
         glictPanel();
@@ -40,10 +40,12 @@ class glictPanel : public glictContainer {
 
         void SetBGActiveness(bool bg);
 
-        void SetVirtualSize(int w, int h);
+        void SetVirtualSize(float w, float h);
 		void VirtualScrollBottom();
+		void SetSkin(glictSkinner *skin);
     private:
         glictColor bgcolor;
+        glictSkinner *skin;
         bool bgactive;
 
         glictScrollbar sbVertical, sbHorizontal;

@@ -77,30 +77,23 @@ void glictWindow::Paint() {
 	//printf("window\n");
 
     if (!glictGlobals.windowBodySkin) { // if not skinned
-        glColor4f(
-            (float)this->bgcolor.r,
-            (float)this->bgcolor.g,
-            (float)this->bgcolor.b,
-            (float)this->bgcolor.a
-        );
-        glBegin(GL_QUADS);
-        glVertex2f(this->x,this->y+12);
-        glVertex2f(this->x,this->y+this->height+12);
-        glVertex2f(this->x+this->width,this->y+this->height+12);
-        glVertex2f(this->x+this->width,this->y+12);
-        glEnd();
+
+        glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+							   this->y+12+glictGlobals.translation.y, this->y+12+this->height+glictGlobals.translation.y,
+							   bgcolor);
+
     } else if (!glictGlobals.windowTitleSkin) { // if there's no title skin, but there's body skin
         glictSize s = {this->width + glictGlobals.windowBodySkin->GetLeftSize()->w + glictGlobals.windowBodySkin->GetRightSize()->w, this->height + glictGlobals.windowBodySkin->GetTopSize()->h + glictGlobals.windowBodySkin->GetBottomSize()->h};
 
-        glTranslatef(this->x, this->y, 0);
+        glictGlobals.Translatef(this->x, this->y, 0);
         glictGlobals.windowBodySkin->Paint(&s);
-        glTranslatef(-this->x, -this->y, 0);
+        glictGlobals.Translatef(-this->x, -this->y, 0);
     } else { // if skinned both title and body
         glictSize s = {this->width, this->height};
 
-        glTranslatef(this->x + this->containeroffsetx , this->y + this->containeroffsety, 0);
+        glictGlobals.Translatef(this->x + this->containeroffsetx , this->y + this->containeroffsety, 0);
         glictGlobals.windowBodySkin->Paint(&s);
-        glTranslatef(-(this->x + this->containeroffsetx), -(this->y + this->containeroffsety), 0);
+        glictGlobals.Translatef(-(this->x + this->containeroffsetx), -(this->y + this->containeroffsety), 0);
     }
 
 
@@ -130,16 +123,15 @@ void glictWindow::Paint() {
 	this->SetScissor();
 
     if (!glictGlobals.windowBodySkin && !glictGlobals.windowTitleSkin) {
-        glColor4fv(glictGlobals.windowTitleBgColor);
-        glBegin(GL_QUADS);
-        glVertex2f(this->x,this->y);
-        glVertex2f(this->x, this->y+12);
-        glVertex2f(this->x + this->width, this->y+12);
-        glVertex2f(this->x + this->width, this->y);
-        glEnd();
+		glictColor c;
+
+        glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+							   this->y+glictGlobals.translation.y, this->y+12+glictGlobals.translation.y,
+							   glictGlobals.windowTitleBgColor);
+
     }
 
-	glColor4fv(glictGlobals.windowTitleColor);
+	glictGlobals.SetColor(glictGlobals.windowTitleColor.r, glictGlobals.windowTitleColor.g, glictGlobals.windowTitleColor.b, glictGlobals.windowTitleColor.a);
 
 /*
     {
@@ -148,9 +140,9 @@ void glictWindow::Paint() {
     }
 */
 
-	glRotatef(180.0, 1.0, 0.0, 0.0);
-	glictFontRender(this->caption.c_str(),"system", this->x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize()->w : 0) , this->y*-1. - 10. - (glictGlobals.windowBodySkin ? (glictGlobals.windowBodySkin->GetTopSize()->h/2 - 10./2.) : 0));
-	glRotatef(180.0, -1.0, 0.0, 0.0);
+
+	glictFontRender(this->caption.c_str(),"system", this->x + glictGlobals.translation.x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize()->w : 0) , this->y*+1. + (glictGlobals.windowBodySkin ? (glictGlobals.windowBodySkin->GetTopSize()->h/2 - 10./2.) : 0) + glictGlobals.translation.y );
+
 
 
     /*{
@@ -185,7 +177,7 @@ void glictWindow::SetBGColor(float r, float g, float b, float a) {
 bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 	//printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
 	if (!GetVisible()) return false;
-	int oldx = this->x, oldy = this->y;
+	float oldx = this->x, oldy = this->y;
 
 	if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP) {
 		if (((glictPos*)wparam)->x > this->clipleft &&

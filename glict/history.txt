@@ -191,3 +191,42 @@ how many people use it, so that we know if we can do critical API changes.
 26.4.2007:
 
 * GLICTMemory/main.cpp: Updated for latest GLICT API. Still does not use skinning, tho :P
+
+28.4.2007:
+
+* Skinner: Messed up a bit with bind callbacks -- turns out the implementation was pretty messy after all ...
+
+29.4.2007:
+
+* Panel.cpp: Fixed a bug that caused panel not to call OnMouseDown()
+
+23.5.2007:
+
+* Button.cpp: Changed amount of highlight push distance for text from 1.5 to 2.0
+
+7. 7. 2007:
+
+* Container.h: AddObject(), RemoveObject(), SetWidth() and SetHeight() became virtuals
+* List: Added listbox widget
+* Skinner.cpp: Fixed a bug in constructor (missed adding a "f" when initializing topf, topleftf, etc. callbacks)
+
+11. 7. 2007:
+
+* Globals: added paintrectCallback, enableGlTranslate, Translatef(), translation to enable support for other rendering APIs in addition to OpenGL
+* Others: implemented use of Globals::Translatef()
+
+12. 7. 2007:
+
+* Globals: Added PaintRect, corrected some warnings regarding int<=>float conversion
+* Others: implemented use of PaintRect
+* Types.h: glictPos now uses float and not int
+* All: changed many ints into floats...
+* Globals: changed window{*}Color into a glictColor instead of float[4]
+* Sdldemo: Added SDL demo
+* Examples/memory: Updated some comments just a bit
+* Examples/memory_sdl: Added
+
+19. 7. 2007:
+
+* Moved repository to Subversion!
+

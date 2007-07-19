@@ -48,22 +48,22 @@ class glictContainer  {
     public:
         glictContainer(); ///< Constructor for the class.
         glictContainer(long guid); ///< Constructor for the class, specifying guid. (Guid is unused at the moment)
-        ~glictContainer(); ///< Destructor for the class.
+        virtual ~glictContainer(); ///< Destructor for the class.
 
         // the following elements are replaced, not necessarily inherited in child  classes
         virtual void Paint(); ///< Renders the element. Should contain call to CPaint().
         virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event to the class, so it can process it. Example is mouseclick or mousedown.
 
 		// the following elements are always inherited from container. some MAY be overriden, in special circumstances, but it is not recommended.
+		virtual void AddObject(glictContainer* object); ///< Adds an object as a child.
+		virtual void RemoveObject(glictContainer* object); ///< Removes an object that's a child.
 		void CPaint(); ///< Renders all children.
-		void AddObject(glictContainer* object); ///< Adds an object as a child.
-		void RemoveObject(glictContainer* object); ///< Removes an object that's a child.
 		void DelayedRemove(); ///< Runs delayed removal of objects.
-		void SetHeight(int h); ///< Sets object's height.
-		void SetWidth(int w); ///< Sets object's width.
-		void SetPos(int x, int y); ///< Sets object's position using classical access using two integers.
+		virtual void SetHeight(float h); ///< Sets object's height.
+		virtual void SetWidth(float w); ///< Sets object's width.
+		void SetPos(float x, float y); ///< Sets object's position using classical access using two integers.
 		void SetPos(glictPos pos); ///< Sets object's position using predefined type. Useful when exchanging data between library's functions.
-		void GetPos(int* x, int* y); ///< Gets object's position and writes it into integers x and y.
+		void GetPos(float* x, float* y); ///< Gets object's position and writes it into integers x and y.
 		void GetPos(glictPos* pos); ///< Gets object's position and writes it into predefined type. Useful when exchanging data between library's functions.
 		void GetSize(glictSize* size); ///< Gets object's size (height and width) and writes it into predefined type.
 		void SetScissor(); ///< This one adjusts the clipping window through which something can be seen, and which is set by SetClip
@@ -74,12 +74,12 @@ class glictContainer  {
 		void RememberTransformations(); ///< When calling parent's paint, call it's 'remember transformations' too, so clicking detection is done properly. if clicking unused, or no transformations done, then not important
 		void ResetTransformations(); ///< Resets transformations to default transf matrix (identity matrix)
 		void TransformScreenCoords(glictPos *pos); ///< Transforms screen coordinates into plane coordinates
-        unsigned int GetHeight(); ///< Returns object's height
-        unsigned int GetWidth(); ///< Returns object's width
-        unsigned int GetX() {return x;}  ///< Returns object position's x coordinate
-        unsigned int GetY() {return y;}  ///< Returns object position's y coordinate
+        float GetHeight(); ///< Returns object's height
+        float GetWidth(); ///< Returns object's width
+        float GetX() {return x;}  ///< Returns object position's x coordinate
+        float GetY() {return y;}  ///< Returns object position's y coordinate
 
-        virtual void SetVirtualSize(int w, int h);
+        virtual void SetVirtualSize(float w, float h);
         virtual void VirtualScrollBottom();
 
 
@@ -88,6 +88,8 @@ class glictContainer  {
 
 		void SetOnClick(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon click. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
 		void SetOnPaint(void(*OnPaintFunction)(glictRect* real, glictRect* clipped, glictContainer* callerclass)); ///< Sets a function to execute whenever drawing. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
+		void SetOnMouseDown(void(*FunctionPtr)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon mouse pressed down over this object. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
+		void SetOnMouseUp(void(*FunctionPtr)(glictPos* relmousepos, glictContainer* callerclass)); ///< Sets a function to execute upon mouse pressed down over this object. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
 		void SetCaption(const std::string caption); ///< Sets the caption of the control, if supported.
 		std::string GetCaption(); ///< Retrieves the caption of the control, if supported.
 
@@ -104,18 +106,21 @@ class glictContainer  {
         virtual void SetCustomData(void *param); ///< Allows the application programmer to store custom data assigned to this object.
         virtual void*GetCustomData(); ///< Allows the application programmer to retrieve previously stored custom data assigned to this object.
 
-		int height, width; ///< Current height and width of the widget. FIXME: Make private.
-		int x, y; ///< Current position of the widget. FIXME: Make private
-		int left, right, top, bottom; ///< Current boundaries of the widget, calculated from height, width, x and y. FIXME: Make private.
-		int clipleft, clipright, cliptop, clipbottom; ///< Current clipping boundaries of the widget. Somewhat depends on the parent's clipping. FIXME: Make private.
-		int containeroffsetx, containeroffsety; ///< Offsets of container object positions.
+        virtual void SetFocusable(bool b) {focusable = b;} ///< Allows to set whether or not a widget can be focused
+        virtual bool GetFocusable() {return focusable;} ///< Allows to retrieve whether or not a widget can be focused.
+
+		float height, width; ///< Current height and width of the widget. FIXME: Make private/protected.
+		float x, y; ///< Current position of the widget. FIXME: Make private/protected.
+		float left, right, top, bottom; ///< Current boundaries of the widget, calculated from height, width, x and y. FIXME: Make private.
+		float clipleft, clipright, cliptop, clipbottom; ///< Current clipping boundaries of the widget. Somewhat depends on the parent's clipping. FIXME: Make private.
+		float containeroffsetx, containeroffsety; ///< Offsets of container object positions.
 		char objtype[50]; ///< Short descriptive string containing name of the object. (Each class actually rewrites this one upon intialization in constructor.)
 
         virtual glictPos *GetVirtualPos() {return &virtualpos;}
 	private:
 		// these should be called only internally
-		void SetRect(int left, int top, int right, int bottom); ///< Internal function. Sets the boundaries of the widget.
-		void SetClip(int left, int top, int right, int bottom); ///< Internal function. Sets the clipping boundaries of the widget.
+		void SetRect(float left, float top, float right, float bottom); ///< Internal function. Sets the boundaries of the widget.
+		void SetClip(float left, float top, float right, float bottom); ///< Internal function. Sets the clipping boundaries of the widget.
 
 		bool visible;
 		bool enabled;
@@ -133,6 +138,8 @@ class glictContainer  {
 		float ModelviewMatrix[16]; ///< Modelview matrix, as remembered last time RememberTransformations() was called.
 
 		void(*OnClick)(glictPos* relmousepos, glictContainer* callerclass); ///< Pointer to function specified as OnClick function.
+		void(*OnMouseDown)(glictPos* relmousepos, glictContainer* callerclass); ///< Pointer to function specified as OnMouseDown function.
+		void(*OnMouseUp)(glictPos* relmousepos, glictContainer* callerclass); ///< Pointer to function specified as OnMouseUp function.
         void(*OnPaint)(glictRect* real, glictRect* clipped, glictContainer* callerclass); ///< Pointer to function specified as OnPaint function.
 
 		std::string caption; ///< Caption written on the control, if control supports it.
@@ -153,4 +160,5 @@ class glictContainer  {
     friend void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller);
 
 };
+
 #endif
