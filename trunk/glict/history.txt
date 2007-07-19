@@ -229,4 +229,4 @@ how many people use it, so that we know if we can do critical API changes.
 19. 7. 2007:
 
 * Moved repository to Subversion!
-
+* Makefile: Updated to include "list"
