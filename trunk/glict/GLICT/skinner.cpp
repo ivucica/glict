@@ -3,9 +3,7 @@
 #endif
 #include <GL/gl.h>
 #include "skinner.h"
-
-/// \todo   Check if structs can be assigned directly (not the specific elements
-///         one by one...)
+#include "globals.h"
 
 #ifndef min
     #define min(a, b) ((a) < (b) ? (a) : (b))
@@ -30,224 +28,169 @@ glictSkinner::glictSkinner() {
     bottomrightf = NULL;
 
     topf = NULL;
-    left = NULL;
-    right = NULL;
-    bottom = NULL;
+    leftf = NULL;
+    rightf = NULL;
+    bottomf = NULL;
 
-    center = NULL;
+    centerf = NULL;
 }
 
 glictSkinner::~glictSkinner() {
 }
 
 void glictSkinner::Paint(glictSize *size) {
-    int x1, y1, x2, y2;
+    static int x1, y1, x2, y2;
 
+#ifndef NO_GL
     glEnable(GL_TEXTURE_2D);
     glColor4f(1., 1., 1., 1.);
+#endif
+	static glictColor col = {1, 1, 1, 1};
     // first the corners...
 
-    if (topleft) {
+    if (topleft || topleftf) {
         x1 = y1 = 0;
         x2 = toplefts.w+1; y2 = toplefts.h+1;
         if (topleftf)
-		topleftf(topleftp);
-	else
-		glBindTexture(GL_TEXTURE_2D, topleft);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0, 0);
-        glVertex2f(x1, y1);
-        glTexCoord2f(0, 1);
-        glVertex2f(x1, y2);
-        glTexCoord2f(1, 1);
-        glVertex2f(x2, y2);
-        glTexCoord2f(1, 0);
-        glVertex2f(x2, y1);
-        glEnd();
+            topleftf(this, topleftp);
+		#ifndef NO_GL
+        else
+            glBindTexture(GL_TEXTURE_2D, topleft);
+		#endif
+		glictGlobals.PaintRect(x1, x2, y1, y2, col);
     }
 
-    if (topright) {
+    if (topright || toprightf) {
         x1 = size->w - toprights.w -1; y1 = 0;
         x2 = size->w; y2 = toprights.h + 1;
         if (toprightf)
-		toprightf(toprightp);
-	else
-		glBindTexture(GL_TEXTURE_2D, topright);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0, 0);
-        glVertex2f(x1, y1);
-        glTexCoord2f(0, 1);
-        glVertex2f(x1, y2);
-        glTexCoord2f(1, 1);
-        glVertex2f(x2, y2);
-        glTexCoord2f(1, 0);
-        glVertex2f(x2, y1);
-        glEnd();
+            toprightf(this, toprightp);
+		#ifndef NO_GL
+		else
+            glBindTexture(GL_TEXTURE_2D, topright);
+		#endif
+		glictGlobals.PaintRect(x1, x2, y1, y2, col);
     }
 
-    if (bottomleft) {
+    if (bottomleft || bottomleftf) {
         x1 = 0; y1 = size->h - bottomlefts.h - 1;
         x2 = bottomlefts.w + 1; y2 = size->h;
         if (bottomleftf)
-		bottomleftf(bottomleftp);
-	else
-		glBindTexture(GL_TEXTURE_2D, bottomleft);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0, 0);
-        glVertex2f(x1, y1);
-        glTexCoord2f(0, 1);
-        glVertex2f(x1, y2);
-        glTexCoord2f(1, 1);
-        glVertex2f(x2, y2);
-        glTexCoord2f(1, 0);
-        glVertex2f(x2, y1);
-        glEnd();
+            bottomleftf(this, bottomleftp);
+		#ifndef NO_GL
+        else
+            glBindTexture(GL_TEXTURE_2D, bottomleft);
+		#endif
+		glictGlobals.PaintRect(x1, x2, y1, y2, col);
     }
 
-    if (bottomright) {
+    if (bottomright || bottomrightf) {
         x1 = size->w - bottomrights.w - 1; y1 = size->h - bottomrights.h - 1;
         x2 = size->w; y2 = size->h;
         if (bottomrightf)
-		bottomrightf(bottomrightp);
-	else
-		glBindTexture(GL_TEXTURE_2D, bottomright);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0, 0);
-        glVertex2f(x1, y1);
-        glTexCoord2f(0, 1);
-        glVertex2f(x1, y2);
-        glTexCoord2f(1, 1);
-        glVertex2f(x2, y2);
-        glTexCoord2f(1, 0);
-        glVertex2f(x2, y1);
-        glEnd();
+            bottomrightf(this, bottomrightp);
+		#ifndef NO_GL
+        else
+            glBindTexture(GL_TEXTURE_2D, bottomright);
+		#endif
+		glictGlobals.PaintRect(x1, x2, y1, y2, col);
     }
 
 
 
-    if (top) {
-        for (int pos = topleft ? toplefts.w : 0; pos < size->w - (topright ? toprights.w : 0); pos+=tops.w) {
+    if (top || topf) {
+        if (topf)
+            topf(this, topp);
+		#ifndef NO_GL
+        else
+            glBindTexture(GL_TEXTURE_2D, top);
+		#endif
+
+        for (int pos = (topleft || topleftf) ? toplefts.w : 0; pos < size->w - ((topright || toprightf) ? toprights.w : 0); pos+=tops.w) {
             x1 = pos; y1 = 0;
-            x2 = min(size->w - (topright ? toprights.w : 0) , pos + tops.w) + 1; y2 = tops.h + 1;
-            if (topf)
-                topf(topp);
-            else
-                glBindTexture(GL_TEXTURE_2D, top);
-            glBegin(GL_QUADS);
-            glTexCoord2f(0, 0);
-            glVertex2f(x1, y1);
-            glTexCoord2f(0, 1);
-            glVertex2f(x1, y2);
-            glTexCoord2f(1, 1);
-            glVertex2f(x2, y2);
-            glTexCoord2f(1, 0);
-            glVertex2f(x2, y1);
-            glEnd();
+            x2 = min(size->w - ((topright || toprightf) ? toprights.w : 0) , pos + tops.w) + 1; y2 = tops.h + 1;
+            glictGlobals.PaintRect(x1, x2, y1, y2, col);
         }
     }
 
-    if (bottom) {
-        for (int pos = bottomleft ? bottomlefts.w : 0; pos < size->w - (bottomright ? bottomrights.w : 0); pos+=bottoms.w) {
+    if (bottom || bottomf) {
+        if (bottomf)
+            bottomf(this, bottomp);
+		#ifndef NO_GL
+        else
+            glBindTexture(GL_TEXTURE_2D, bottom);
+		#endif
+
+        for (int pos = (bottomleft || bottomleftf) ? bottomlefts.w : 0; pos < size->w - ((bottomright || bottomrightf) ? bottomrights.w : 0); pos+=bottoms.w) {
             x1 = pos; y1 = size->h - bottoms.h - 1;
-            x2 = min(size->w - (bottomleft ? bottomlefts.w : 0), pos + bottoms.w) + 1; y2 = size->h;
-            if (bottomf)
-                bottomf(bottomp);
-            else
-                glBindTexture(GL_TEXTURE_2D, bottom);
-            glBegin(GL_QUADS);
-            glTexCoord2f(0, 0);
-            glVertex2f(x1, y1);
-            glTexCoord2f(0, 1);
-            glVertex2f(x1, y2);
-            glTexCoord2f(1, 1);
-            glVertex2f(x2, y2);
-            glTexCoord2f(1, 0);
-            glVertex2f(x2, y1);
-            glEnd();
+            x2 = min(size->w - ((bottomleft || bottomleftf) ? bottomlefts.w : 0), pos + bottoms.w) + 1; y2 = size->h;
+            glictGlobals.PaintRect(x1, x2, y1, y2, col);
         }
     }
 
 
 
-    if (left) {
-        for (int pos = topleft ? toplefts.h : 0; pos < size->h - (bottomleft ? bottomlefts.w : 0); pos+=lefts.h) {
+    if (left || leftf) {
+        if (leftf)
+            leftf(this, leftp);
+		#ifndef NO_GL
+        else
+            glBindTexture(GL_TEXTURE_2D, left);
+		#endif
+        for (int pos = (topleft || topleftf) ? toplefts.h : 0; pos < size->h - ((bottomleft || bottomleftf) ? bottomlefts.w : 0); pos+=lefts.h) {
             x1 = 0; y1 = pos;
-            x2 = lefts.w; y2 = min(size->h - (bottomleft ? bottomlefts.h : 0), pos + lefts.h);
-            if (leftf)
-                leftf(leftp);
-            else
-                glBindTexture(GL_TEXTURE_2D, left);
-            glBegin(GL_QUADS);
-            glTexCoord2f(0, 0);
-            glVertex2f(x1, y1);
-            glTexCoord2f(0, 1);
-            glVertex2f(x1, y2);
-            glTexCoord2f(1, 1);
-            glVertex2f(x2, y2);
-            glTexCoord2f(1, 0);
-            glVertex2f(x2, y1);
-            glEnd();
+            x2 = lefts.w; y2 = min(size->h - ((bottomleft || bottomleftf) ? bottomlefts.h : 0), pos + lefts.h);
+            glictGlobals.PaintRect(x1, x2, y1, y2, col);
         }
     }
 
 
-    if (right) {
-        for (int pos = topright ? toprights.h : 0; pos < size->h - (bottomright ? bottomrights.w : 0); pos+=rights.h) {
+    if (right || rightf) {
+        if (rightf)
+            rightf(this, rightp);
+		#ifndef NO_GL
+        else
+            glBindTexture(GL_TEXTURE_2D, right);
+		#endif
+        for (int pos = (topright || toprightf) ? toprights.h : 0; pos < size->h - ((bottomright || bottomrightf) ? bottomrights.w : 0); pos+=rights.h) {
             x1 = size->w - rights.w; y1 = pos;
-            x2 = size->w; y2 = min(size->h - (bottomright ? bottomrights.w : 0), pos + rights.h);
-            if (rightf)
-                rightf(rightp);
-            else
-                glBindTexture(GL_TEXTURE_2D, right);
-            glBegin(GL_QUADS);
-            glTexCoord2f(0, 0);
-            glVertex2f(x1, y1);
-            glTexCoord2f(0, 1);
-            glVertex2f(x1, y2);
-            glTexCoord2f(1, 1);
-            glVertex2f(x2, y2);
-            glTexCoord2f(1, 0);
-            glVertex2f(x2, y1);
-            glEnd();
+            x2 = size->w; y2 = min(size->h - ((bottomright || bottomrightf) ? bottomrights.w : 0), pos + rights.h);
+            glictGlobals.PaintRect(x1, x2, y1, y2, col);
         }
     }
 
 
-    if (center) {
-        for (int pos = topleft ? toplefts.w : 0; pos < size->w - (topright ? toprights.w : 0); pos+=tops.w) {
-            for (int pos2 = topleft ? toplefts.h : 0; pos2 < size->h - (bottomleft ? bottomlefts.w : 0); pos2+=lefts.h) {
+    if (center || centerf) {
+        if (centerf)
+            centerf(this, centerp);
+		#ifndef NO_GL
+        else
+            glBindTexture(GL_TEXTURE_2D, center);
+		#endif
+        for (int pos = (left || leftf) ? lefts.w : 0; pos < size->w - ((right || rightf) ? rights.w : 0); pos+=centers.w) {
+            for (int pos2 = (top || topf) ? tops.h : 0; pos2 < size->h - ((bottom || bottomf) ? bottoms.h : 0); pos2+=centers.h) {
+
+
                 y1 = pos2;
-                y2 = min(size->h - (bottomright ? bottomrights.w : 0), pos2 + centers.h);
+                y2 = min(size->h - ((bottom || bottomf) ? bottoms.h : 0), pos2 + centers.h);
 
                 x1 = pos;
-                x2 = min(size->w - (topright ? toprights.w : 0), pos + centers.w);
+                x2 = min(size->w - ((right || rightf) ? rights.w : 0), pos + centers.w);
 
-
-                if (centerf)
-                    centerf(centerp);
-                else
-                    glBindTexture(GL_TEXTURE_2D, center);
-                glBegin(GL_QUADS);
-                glTexCoord2f(0, 0);
-                glVertex2f(x1, y1);
-                glTexCoord2f(0, 1);
-                glVertex2f(x1, y2);
-                glTexCoord2f(1, 1);
-                glVertex2f(x2, y2);
-                glTexCoord2f(1, 0);
-                glVertex2f(x2, y1);
-                glEnd();
+                glictGlobals.PaintRect(x1, x2, y1, y2, col);
             }
         }
     }
 
 
-
+#ifndef NO_GL
     glDisable(GL_TEXTURE_2D);
+#endif
 
 }
 
 void glictSkinner::SetTL(GLuint textureid, glictSize *size ) {
+    this->topleftf = NULL;
     this->topleft = textureid;
     if (size) this->toplefts = *size;
 }
@@ -257,6 +200,7 @@ void glictSkinner::SetTL(glictBindCallback bindf, void* param, glictSize *size) 
     if (size) this->toplefts = *size;
 }
 void glictSkinner::SetTR(GLuint textureid, glictSize *size ) {
+    this->toprightf = NULL;
     this->topright = textureid;
     if (size) this->toprights = *size;
 }
@@ -266,6 +210,7 @@ void glictSkinner::SetTR(glictBindCallback bindf, void* param, glictSize *size) 
     if (size) this->toprights = *size;
 }
 void glictSkinner::SetBL(GLuint textureid, glictSize *size ) {
+    this->bottomleftf = NULL;
     this->bottomleft = textureid;
     if (size) this->bottomlefts = *size;
 }
@@ -275,6 +220,7 @@ void glictSkinner::SetBL(glictBindCallback bindf, void* param, glictSize *size) 
     if (size) this->bottomlefts = *size;
 }
 void glictSkinner::SetBR(GLuint textureid, glictSize *size ) {
+    this->bottomrightf = NULL;
     this->bottomright = textureid;
     if (size) this->bottomrights = *size;
 }
@@ -284,6 +230,7 @@ void glictSkinner::SetBR(glictBindCallback bindf, void* param, glictSize *size) 
     if (size) this->bottomrights = *size;
 }
 void glictSkinner::SetTop(GLuint textureid, glictSize *size ) {
+    this->topf = NULL;
     this->top = textureid;
     if (size) this->tops = *size;
 }
@@ -293,6 +240,7 @@ void glictSkinner::SetTop(glictBindCallback bindf, void* param, glictSize *size)
     if (size) this->tops = *size;
 }
 void glictSkinner::SetBottom(GLuint textureid, glictSize *size ) {
+    this->bottomf = NULL;
     this->bottom = textureid;
     if (size) this->bottoms = *size;
 }
@@ -302,6 +250,7 @@ void glictSkinner::SetBottom(glictBindCallback bindf, void* param, glictSize *si
     if (size) this->bottoms = *size;
 }
 void glictSkinner::SetLeft(GLuint textureid, glictSize *size ) {
+    this->leftf = NULL;
     this->left = textureid;
     if (size) this->lefts = *size;
 }
@@ -311,6 +260,7 @@ void glictSkinner::SetLeft(glictBindCallback bindf, void* param, glictSize *size
     if (size) this->lefts = *size;
 }
 void glictSkinner::SetRight(GLuint textureid, glictSize *size ) {
+    this->rightf = NULL;
     this->right = textureid;
     if (size) this->rights = *size;
 }
@@ -321,6 +271,7 @@ void glictSkinner::SetRight(glictBindCallback bindf, void* param, glictSize *siz
 }
 
 void glictSkinner::SetCenter(GLuint textureid, glictSize *size ) {
+    this->centerf = NULL;
     this->center = textureid;
     if (size) this->centers = *size;
 }

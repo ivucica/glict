@@ -44,6 +44,8 @@ glictPanel::glictPanel() {
 
 	sbVertical.SetVisible(false);
 	//sbHorizontal.SetVisible(false);// FIXME horizontal scrollbar widget must be done in order to be implemented here
+
+	skin = NULL;
 }
 glictPanel::~glictPanel() {
 
@@ -67,82 +69,64 @@ void glictPanel::Paint() {
 
 
     if (virtualsize.h > height) {
-
-
         sbVertical.SetWidth(10);
         sbVertical.SetHeight(height );//- (virtualsize.w > width ? 10 : 0));
         sbVertical.SetPos(width - 10, +sbVertical.GetValue());
         sbVertical.SetVisible(true);
 
         sbVertical.SetMin(0);
-        sbVertical.SetMax(virtualsize.h - height);
-		if (sbVertical.GetValue() > virtualsize.h - height) sbVertical.SetValue(virtualsize.h - height);
+        sbVertical.SetMax((int)(virtualsize.h - height));
+		if (sbVertical.GetValue() > virtualsize.h - height) sbVertical.SetValue((int)(virtualsize.h - height));
     }
 
     this->virtualpos.x = 0;
     this->virtualpos.y = sbVertical.GetValue();
 
-    if (virtualpos.y)
+    if ( this->virtualsize.h != this->height )
         SetPos(x,y);
 
 	if (this->bgactive) {
-        glColor4f(
-            (float)this->bgcolor.r,
-            (float)this->bgcolor.g,
-            (float)this->bgcolor.b,
-            (float)this->bgcolor.a
-        );
-        glBegin(GL_QUADS);
-        glVertex2f(this->x,this->y);
-        glVertex2f(this->x,this->y+this->height);
-        glVertex2f(this->x+this->width,this->y+this->height);
-        glVertex2f(this->x+this->width,this->y);
-        glEnd();
+	    if (!skin) {
+            glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+								this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y, bgcolor);
+
+	    } else {
+	        glictSize s;
+	        s.h = height, s.w = width;
+            glictGlobals.Translatef(x,y,0);
+	        skin->Paint(&s);
+	        glictGlobals.Translatef(-x,-y,0);
+
+	    }
 	}
 
-	glColor4f(1., 1., 1., 1.);
-
-    glPushMatrix(); // must remain here because of glictFontRender
-
-
-		glTranslatef(this->x, this->y,0);
-		glRotatef(180.0, 1.0, 0.0, 0.0);
-
-		glColor4f(glictGlobals.panelTextColor.r , glictGlobals.panelTextColor.g, glictGlobals.panelTextColor.b, glictGlobals.panelTextColor.a);
-		glictFontRender(this->caption.c_str(), "system", 0, -10);
-		glColor4f(1., 1., 1., 1.);
-
-		glRotatef(180.0, -1.0, 0.0, 0.0);
-		glTranslatef(-this->x, -this->y,0);
-
-
-	glPopMatrix();
-
-	glPushMatrix();
-		if (this->OnPaint) {
-			glictRect r, c;
-
-			r.top = this->top+containeroffsety;
-			r.bottom = this->bottom;
-			r.left = this->left+containeroffsetx;
-			r.right = this->right;
-
-			c.top = max(this->cliptop, this->top+containeroffsety);
-			c.bottom = this->clipbottom;
-			c.left = max(this->clipleft, this->left+containeroffsetx);
-			c.right = this->clipright;
-			this->OnPaint(&r, &c, this);
-		}
-	glPopMatrix();
 
 
 
-    //glTranslatef(-sbHorizontal.GetValue(), -sbVertical.GetValue(), 0);
-    glPushMatrix();
+	glictGlobals.SetColor(glictGlobals.panelTextColor.r , glictGlobals.panelTextColor.g, glictGlobals.panelTextColor.b, glictGlobals.panelTextColor.a);
+	glictFontRender(this->caption.c_str(), "system", x+glictGlobals.translation.x , y + glictGlobals.translation.y);
+	glictGlobals.SetColor(1., 1., 1., 1.);
+
+
+	if (this->OnPaint) {
+		glictRect r, c;
+
+		r.top = this->top+containeroffsety;
+		r.bottom = this->bottom;
+		r.left = this->left+containeroffsetx;
+		r.right = this->right;
+
+		c.top = max(this->cliptop, this->top+containeroffsety);
+		c.bottom = this->clipbottom;
+		c.left = max(this->clipleft, this->left+containeroffsetx);
+		c.right = this->clipright;
+		this->OnPaint(&r, &c, this);
+	}
+
+
+
+
     this->CPaint();
-    glPopMatrix();
-    //glTranslatef(sbHorizontal.GetValue(), sbVertical.GetValue(), 0);
-
 
 
     if (virtualsize.h > height) {
@@ -177,10 +161,20 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
 				((glictPos*)wparam)->y < this->clipbottom) {
                 //printf("EVENT WITHIN PANEL %s (%s)...!\n", objtype, parent ? parent->objtype : "NULL");
 
+                if (evt == GLICT_MOUSEDOWN && this->OnMouseDown) {
+                        if (this->OnMouseDown) {
+
+                            glictPos relpos;
+                            relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx + this->virtualpos.x;
+                            relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety + this->virtualpos.y;
+                            this->OnMouseDown(&relpos, this);
+                        }
+
+                }
                 sbVertical.SetPos(sbVertical.GetX(), sbVertical.GetY() + sbVertical.GetValue());
                 if (sbVertical.CastEvent(evt, wparam, lparam, returnvalue)) { // scrollbar related begin
                     sbVertical.SetPos(sbVertical.GetX(), sbVertical.GetY() - sbVertical.GetValue());
-                    printf("oi\n");
+
                     return true;
                 } // scrollbar related end
                 sbVertical.SetPos(sbVertical.GetX(), sbVertical.GetY() - sbVertical.GetValue());
@@ -194,6 +188,7 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
 
 			} else {
 			    //printf("PANEL DID NOT FIND THIS THING. X, Y: %d %d Clip: %d %d %d %d\n", ((glictPos*)wparam)->x, ((glictPos*)wparam)->y, clipleft, clipright, cliptop, clipbottom);
+			    return DefaultCastEvent(evt, wparam, lparam, returnvalue);
 			}
 			//printf("It occured outside the panel, ignored.\n");
 			break;
@@ -232,11 +227,30 @@ void glictPanel::VirtualScrollBottom() {
   * properties. Needed because glictContainer does not contain scrollbars.
   */
 
-void glictPanel::SetVirtualSize(int w, int h) {
+void glictPanel::SetVirtualSize(float w, float h) {
+
+    bool newheightbigger = h <= height;
+
     glictContainer::SetVirtualSize(w,h);
+
 
     sbVertical.SetStep(10);
     sbHorizontal.SetStep(10);
-    sbVertical.SetValue(0);
-    sbHorizontal.SetValue(0);
+
+    if (newheightbigger) {
+        VirtualScrollBottom();
+    }
+
+}
+
+
+/**
+  * \param skin Pointer to a glictSkinner object containing he skin rectangle
+  *
+  * Sets this panel's skin.
+  */
+  #include <stdlib.h>
+void glictPanel::SetSkin(glictSkinner* skin) {
+
+    this->skin = skin;
 }

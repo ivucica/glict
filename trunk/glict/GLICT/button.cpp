@@ -149,54 +149,41 @@ void glictButton::Paint() {
 	this->SetScissor();
 
 	if (!((glictGlobals.buttonSkin && !highlighted) || (glictGlobals.buttonHighlightSkin && highlighted))) {
+		glictColor col;
         if (!highlighted) {
-            glColor4f(
-                (float)this->bgcolor.r,
-                (float)this->bgcolor.g,
-                (float)this->bgcolor.b,
-                (float)this->bgcolor.a
-            );
+            col = bgcolor;
+        } else {
+            col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
+			col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5;
+			col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5;
+			col.a = this->bgcolor.a;
         }
+        glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+								this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y,
+								col);
 
-        else {
-            glColor4f(
-                this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
-                this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
-                this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
-                this->bgcolor.a
-
-                //0.95, 0.95, 0.95, 1.
-        );
-        }
-        glBegin(GL_QUADS);
-        glVertex2f(this->x,this->y);
-        glVertex2f(this->x,this->y+this->height);
-        glVertex2f(this->x+this->width,this->y+this->height);
-        glVertex2f(this->x+this->width,this->y);
-        glEnd();
 	} else {
         glictSize s = {this->width, this->height};
-//        glPushMatrix();
-        glTranslatef(this->x, this->y, 0);
+
+        glictGlobals.Translatef(this->x, this->y, 0);
         if (!highlighted)
             glictGlobals.buttonSkin->Paint(&s);
         else
             glictGlobals.buttonHighlightSkin->Paint(&s);
-        glTranslatef(-this->x, -this->y, 0);
-//        glPopMatrix();
+        glictGlobals.Translatef(-this->x, -this->y, 0);
 	}
 
 
 
     if (!highlighted) {
-        glColor4f(
+    	glictGlobals.SetColor(
             glictGlobals.buttonTextColor.r,
             glictGlobals.buttonTextColor.g,
             glictGlobals.buttonTextColor.b,
             glictGlobals.buttonTextColor.a
         );
     } else {
-        glColor4f(
+        glictGlobals.SetColor(
             glictGlobals.buttonHighlightTextColor.r,
             glictGlobals.buttonHighlightTextColor.g,
             glictGlobals.buttonHighlightTextColor.b,
@@ -208,19 +195,21 @@ void glictButton::Paint() {
 
 
 
-	glPushMatrix();
-	glRotatef(180.0, 1.0, 0.0, 0.0);
-	if (highlighted) glTranslatef(1.5,-1.5,0.);
+	//glPushMatrix();
+	if (highlighted) glictGlobals.Translatef(2.,2.,0.);
+
+
 
 	glictFontRender(
 		this->caption.c_str(),
 		"system",
-		this->x + this->width / 2. - glictFontSize(this->caption.c_str(), "system") / 2.,
-		(this->y + this->height / 2. + 5. - 5.*((float)glictFontNumberOfLines(this->caption.c_str())-1.))*-1.
+		this->x + this->width / 2. - glictFontSize(this->caption.c_str(), "system") / 2. +glictGlobals.translation.x,
+		(this->y + this->height / 2. - 5. + 5.*((float)glictFontNumberOfLines(this->caption.c_str())-1.))*+1. +glictGlobals.translation.y
 		);
-	if (highlighted) glTranslatef(-1.5,1.5,0.);
-    glRotatef(180.0, -1.0, 0.0, 0.0);
-	glPopMatrix();
+
+
+    if (highlighted) glictGlobals.Translatef(-2.,-2.,0.);
+	//glPopMatrix();
 
 	this->CPaint();
 }

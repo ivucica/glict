@@ -142,11 +142,18 @@ bool glictFontRender(const char* text, const char* fontname, float x, float y) {
   * There is an overloaded variant of this function that renders using default
   * font size.
   *
-  * \todo This function is not done.
+  *
   */
 
+#ifdef NO_GL
+#define glMatrixMode(x)
+#define glScalef(x,y,z)
+
+#endif
 bool glictFontRender(const char* text, const char* fontname, float fontsize, float x, float y) {
+
     glMatrixMode(GL_MODELVIEW);
+
 	glictFont* fnt = glictFindFont(fontname);
 	if (!fnt) printf(">>>>>>>>>>>>>>>>>>>>>>>><Font %s not found\n", fontname);
 	if (strcmp(fnt->GetName().c_str(), fontname)) printf(">>>>>>>>>>>>>>>>>>>FONT NAME DIFFERENT FROM WHAT WE SEARCHED FOR\n");
@@ -157,7 +164,9 @@ bool glictFontRender(const char* text, const char* fontname, float fontsize, flo
 	}
 	if (fnt->RenderBoolNoSize) {
 		//glPushMatrix();
+
 		glScalef(fontsize, fontsize, fontsize);
+
 		bool r = fnt->RenderBoolNoSize(text, fnt->fontparam, x/fontsize, y/fontsize);
 		glScalef(1./fontsize, 1./fontsize, 1./fontsize);
 		//glPopMatrix();

@@ -28,7 +28,7 @@
 class glictWindow : public glictContainer {
     public:
         glictWindow();
-        ~glictWindow();
+        virtual ~glictWindow();
 
         void SetBGColor(float r, float g, float b, float a);
 

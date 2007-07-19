@@ -61,74 +61,50 @@ void glictScrollbar::Paint() {
 	if (!GetVisible()) return;
 
 	// upper "button" //
+	glictColor col;
 	if (!highlightup) {
-		glColor4f(
-			(float)this->bgcolor.r,
-			(float)this->bgcolor.g,
-			(float)this->bgcolor.b,
-			(float)this->bgcolor.a
-		);
+		col = bgcolor;
 	} else {
-		glColor4f(
-			this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
-			this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
-			this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
-			this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
-			);
+		col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
+		col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5;
+		col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5;
+		col.a = this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5;
 	}
-	glBegin(GL_QUADS);
-	glVertex2f(this->x,this->y);
-	glVertex2f(this->x,this->y+this->width);
-	glVertex2f(this->x+this->width,this->y+this->width);
-	glVertex2f(this->x+this->width,this->y);
-	glEnd();
-
+	glictGlobals.PaintRect(this->x+glictGlobals.translation.x,this->x+this->width+glictGlobals.translation.x,
+						   this->y+glictGlobals.translation.y, this->y+this->width+glictGlobals.translation.y,
+						   col);
 
 	// lower "button" //
 	if (!highlightdn) {
-		glColor4f(
-			(float)this->bgcolor.r,
-			(float)this->bgcolor.g,
-			(float)this->bgcolor.b,
-			(float)this->bgcolor.a
-		);
+		col = bgcolor;
 	} else {
-		glColor4f(
-			this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5,
-			this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5,
-			this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5,
-			this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5
-			);
+		col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
+		col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5;
+		col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5;
+		col.a = this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5;
 	}
-	glBegin(GL_QUADS);
-	glVertex2f(this->x,this->y+this->height);
-	glVertex2f(this->x,this->y+this->height-this->width);
-	glVertex2f(this->x+this->width,this->y+this->height-this->width);
-	glVertex2f(this->x+this->width,this->y+this->height);
-	glEnd();
+	glictGlobals.PaintRect(this->x+glictGlobals.translation.x,this->x+this->width+glictGlobals.translation.x,
+							this->y+this->height-this->width+glictGlobals.translation.y,this->y+this->height+glictGlobals.translation.y,
+							col);
 
 	// back panel
-	glColor4f(
-		(float)this->bgcolor.r*0.7,
-		(float)this->bgcolor.g*0.7,
-		(float)this->bgcolor.b*0.7,
-		(float)this->bgcolor.a
-	);
-	glBegin(GL_QUADS);
-	glVertex2f(this->x,this->y+this->width);
-	glVertex2f(this->x,this->y+this->height-this->width);
-	glVertex2f(this->x+this->width,this->y+this->height-this->width);
-	glVertex2f(this->x+this->width,this->y+this->width);
-	glEnd();
+	col.r = bgcolor.r * 0.7;
+	col.g = bgcolor.g * 0.7;
+	col.b = bgcolor.b * 0.7;
+	col.a = bgcolor.a;
+	glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+							this->y+this->width+glictGlobals.translation.y,this->y+this->height-this->width+glictGlobals.translation.y, col);
+
 
 	// scroller chip
-	glColor4f(
-		(float)this->bgcolor.r * 0.8,
-		(float)this->bgcolor.g * 0.8,
-		(float)this->bgcolor.b * 0.8,
-		(float)this->bgcolor.a
-	);
-	glBegin(GL_QUADS);
+	col.r = bgcolor.r * 0.8;
+	col.g = bgcolor.g * 0.8;
+	col.b = bgcolor.b * 0.8;
+	col.a = bgcolor.a;
+
+
+/*
+
 	glVertex2f(
 		this->x,
 		this->y + // normal beginning coord of the object
@@ -139,27 +115,46 @@ void glictScrollbar::Paint() {
 	glVertex2f(this->x + this->width, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width));
 	glVertex2f(this->x + this->width, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width) + this->width);
 	glVertex2f(this->x, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width) + this->width);
-	glEnd();
 
+*/
+
+
+	glictGlobals.PaintRect(
+		this->x+glictGlobals.translation.x,
+		this->x + this->width +glictGlobals.translation.x,
+
+		this->y +glictGlobals.translation.y + // normal beginning coord of the object
+		this->width + // increased by height of top button
+		((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+		* (float)(this->height - this->width*2 - this->width), // which should be a height, reduced by top and bottom button's height, but also by scroller's height
+
+		this->y +glictGlobals.translation.y + // normal beginning coord of the object
+		this->width + // increased by height of top button
+		((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+		* (float)(this->height - this->width*2 - this->width) // which should be a height, reduced by top and bottom button's height, but also by scroller's height
+		+ this->width // this is bottom, add some more
+
+		,col
+	);
 	this->CPaint();
 
 	// this is here so that scissoring resumes properly
 	this->SetScissor();
 
 
-	glColor4f(1., 1., 1., 1.);
+	glictGlobals.SetColor(1., 1., 1., 1.);
 
 
-	glRotatef(180.0, 1.0, 0.0, 0.0);
+
 	glictFontRender("^","system",
-		this->x + (this->width / 2 - glictFontSize("^", "system") / 2) ,
-		this->y*-1. - 9 - width / 2 + 9/2);
+		this->x + (this->width / 2 - glictFontSize("^", "system") / 2 +glictGlobals.translation.x) ,
+		this->y - 9 + width / 2 + 9/2 +glictGlobals.translation.y);
 
 	glictFontRender("V","system",
-		this->x + (this->width / 2 - glictFontSize("V", "system") / 2) ,
-		-this->y - this->height + width / 2 - 9 / 2);
+		this->x + (this->width / 2 - glictFontSize("V", "system") / 2 +glictGlobals.translation.x) ,
+		this->y + this->height - width / 2 - 9 / 2 +glictGlobals.translation.y);
 
-    glRotatef(180.0, -1.0, 0.0, 0.0);
+
 }
 
 void glictScrollbar::SetBGColor(float r, float g, float b, float a) {

@@ -28,7 +28,7 @@
 class glictScrollbar : public glictContainer {
 	public:
 		glictScrollbar();
-		~glictScrollbar();
+		virtual ~glictScrollbar();
 
 		void SetBGColor(float r, float g, float b, float a);
 		void SetValue(int val);

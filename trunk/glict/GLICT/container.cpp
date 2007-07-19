@@ -33,6 +33,7 @@
 #include <GL/gl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 //#include <time.h>
 #include "container.h"
 #include "types.h"
@@ -60,6 +61,8 @@ glictContainer::glictContainer() {
 
 	this->OnClick = NULL;
 	this->OnPaint = NULL;
+	this->OnMouseDown = NULL;
+	this->OnMouseUp = NULL;
 
 	this->guid = rand();
 
@@ -100,10 +103,14 @@ glictContainer::~glictContainer() {
   * calling RememberTransformations() and popping the GL matrix.
   */
 void glictContainer::ResetTransformations() {
+	#ifndef NO_GL
 	glPushMatrix();
 		glLoadIdentity();
 		this->RememberTransformations();
 	glPopMatrix();
+	#else
+		this->RememberTransformations();
+	#endif
 }
 /**
   * \param obj Pointer to object to add as a child.
@@ -176,9 +183,9 @@ void glictContainer::DelayedRemove() {
   *
   * This function sets up the current object's height and the object's
   * boundaries properly, to whatever values they should be set.
-  * \sa SetWidth(int w), GetSize(glictSize* size)
+  * \sa SetWidth(float w), GetSize(glictSize* size)
   */
-void glictContainer::SetHeight(int h) {
+void glictContainer::SetHeight(float h) {
 	this->height = h;
     this->RecursiveBoundaryFix();
 }
@@ -188,9 +195,9 @@ void glictContainer::SetHeight(int h) {
   *
   * This function sets up the current object's height and the object's
   * boundaries properly, to whatever values they should be set.
-  * \sa SetHeight(int h), GetSize(glictSize* size)
+  * \sa SetHeight(float h), GetSize(glictSize* size)
   */
-void glictContainer::SetWidth(int w) {
+void glictContainer::SetWidth(float w) {
 	this->width = w;
 	this->RecursiveBoundaryFix();
 }
@@ -201,9 +208,9 @@ void glictContainer::SetWidth(int w) {
   *
   * This function sets up the current object's position and the object's
   * boundaries properly, to whatever values they should be set.
-  * \sa SetPos(glictPos pos), GetPos(int *x, int *y)
+  * \sa SetPos(glictPos pos), GetPos(float *x, float *y)
   */
-void glictContainer::SetPos(int x, int y) {
+void glictContainer::SetPos(float x, float y) {
 
 	//printf("Postavka pozicije %s (%s) %s na %d %d\n", objtype, (parent ? parent->objtype : "NULL"), this->caption.c_str(), x, y);
 	//printf("This->x %d This->y %d\n", this->x, this->y);
@@ -255,7 +262,7 @@ void glictContainer::SetPos(int x, int y) {
   *
   * This function sets up the current object's position and the object's
   * boundaries properly, to whatever values they should be set.
-  * \sa SetPos(int x, int y), GetPos(glictPos *pos)
+  * \sa SetPos(float x, float y), GetPos(glictPos *pos)
   */
 void glictContainer::SetPos(glictPos pos) {
 	this->SetPos(pos.x,pos.y);
@@ -267,12 +274,12 @@ void glictContainer::SetPos(glictPos pos) {
   *
   * This function puts the current object's position (relative to
   * parent) into specified memory locations.
-  * \sa SetPos(int x, int y), GetPos(glictPos *pos)
+  * \sa SetPos(float x, float y), GetPos(glictPos *pos)
   * \bug Possible containeroffset*-based problem, manifests upon moving of a
   *      window which is a child of another window by dragging. See also,
   *      bugnote in glictWindow::CastEvent()
   */
-void glictContainer::GetPos(int* x, int* y) {
+void glictContainer::GetPos(float* x, float* y) {
 	*x = this->x;
 	*y = this->y;
 }
@@ -282,7 +289,7 @@ void glictContainer::GetPos(int* x, int* y) {
   *
   * This function puts the current object's position (relative to
   * parent) into specified memory locations.
-  * \sa SetPos(glictPos pos), GetPos(int *x, int *y)
+  * \sa SetPos(glictPos pos), GetPos(float *x, float *y)
   */
 void glictContainer::GetPos(glictPos* pos) {
 	pos->x = this->x;
@@ -295,7 +302,7 @@ void glictContainer::GetPos(glictPos* pos) {
   *
   * Retrieves width and height and puts it into a structure specified by
   * the pointer.
-  * \sa SetWidth(int w), SetHeight(int h)
+  * \sa SetWidth(float w), SetHeight(float h)
   */
 void glictContainer::GetSize(glictSize* size) {
 	size->w = this->width;
@@ -308,7 +315,7 @@ void glictContainer::GetSize(glictSize* size) {
   * Retrieves width of the object and returns it as a value.
   * \sa SetWidth(int w), GetSize(glictSize* size)
   */
-unsigned int glictContainer::GetWidth() {
+float glictContainer::GetWidth() {
     return width;
 }
 
@@ -316,9 +323,9 @@ unsigned int glictContainer::GetWidth() {
   * \return Current height of the object.
   *
   * Retrieves height of the object and returns it as a value.
-  * \sa SetHeight(int h), GetSize(glictSize* size)
+  * \sa SetHeight(float h), GetSize(glictSize* size)
   */
-unsigned int glictContainer::GetHeight() {
+float glictContainer::GetHeight() {
     return height;
 }
 
@@ -334,13 +341,13 @@ unsigned int glictContainer::GetHeight() {
   *
   * These functions can be overridden, always use SetPos(), SetWidth(),
   * SetHeight() and other related functions!
-  * \sa SetClip(int left, int top, int right, int bottom)
-  * \sa SetPos(int x, int y),
+  * \sa SetClip(float left, float top, float right, float bottom)
+  * \sa SetPos(float x, float y),
   *     SetPos(glictPos pos),
-  *     SetWidth(int w),
-  *     SetHeight(int h)
+  *     SetWidth(float w),
+  *     SetHeight(float h)
   */
-void glictContainer::SetRect(int left, int top, int right, int bottom) {
+void glictContainer::SetRect(float left, float top, float right, float bottom) {
 	//printf("%s s parentom %s postaje %d %d %d %d\n", this->objtype, (parent ? parent->objtype : "NULL"), left, right, top, bottom);
 	this->left = left;
 	this->right = right;
@@ -369,13 +376,13 @@ void glictContainer::SetRect(int left, int top, int right, int bottom) {
   *
   * These functions can be overridden, always use SetPos(), SetWidth(),
   * SetHeight() and other related functions!
-  * \sa SetRect(int left, int top, int right, int bottom)
-  * \sa SetPos(int x, int y),
+  * \sa SetRect(float left, float top, float right, float bottom)
+  * \sa SetPos(float x, float y),
   *     SetPos(glictPos pos),
-  *     SetWidth(int w),
-  *     SetHeight(int h)
+  *     SetWidth(float w),
+  *     SetHeight(float h)
   */
-void glictContainer::SetClip(int left, int top, int right, int bottom) {
+void glictContainer::SetClip(float left, float top, float right, float bottom) {
 
 	this->clipleft = left;
 	this->clipright = right ;
@@ -421,17 +428,19 @@ void glictContainer::SetClip(int left, int top, int right, int bottom) {
   */
 void glictContainer::SetScissor() {
 	//printf("SCISSOR SET\n");
-
+#ifdef NO_GL
+	return;
+#else
 	if (glictGlobals.clippingMode==GLICT_SCISSORTEST) {
 		//printf("Scissor testing %s (%s), %d %d %d %d\n", this->objtype, (this->parent ? this->parent->objtype : "NULL"), clipleft, clipright, cliptop, clipbottom);
 		//glMatrixMode(GL_MODELVIEW);
 		//glPushMatrix();
 		//glLoadIdentity();
 		glScissor(
-			this->clipleft,
-			(int)glictGlobals.h - this->clipbottom,
-			this->clipright - this->clipleft,
-			this->clipbottom - this->cliptop
+			(int)this->clipleft,
+			(int)glictGlobals.h - (int)this->clipbottom,
+			(int)this->clipright - (int)this->clipleft,
+			(int)this->clipbottom - (int)this->cliptop
 		);
 		//glPopMatrix();
 
@@ -452,12 +461,7 @@ void glictContainer::SetScissor() {
 		glPushMatrix();
 			//glLoadIdentity();
 			glLoadMatrixf(ModelviewMatrix);
-			glBegin(GL_QUADS);
-				glVertex2f(this->clipleft, this->clipbottom);
-				glVertex2f(this->clipright, this->clipbottom);
-				glVertex2f(this->clipright, this->cliptop);
-				glVertex2f(this->clipleft, this->cliptop);
-			glEnd();
+			glictGlobals.PaintRect(this->clipleft, this->clipright, this->cliptop, this->clipbottom);
 		glPopMatrix();
 
 		//glEnable(GL_STENCIL_TEST);
@@ -469,6 +473,7 @@ void glictContainer::SetScissor() {
 
 
 	}// else printf("CLIP TEST IS OFF!!\n");
+#endif
 }
 
 /**
@@ -521,7 +526,7 @@ void glictContainer::CPaint() {
 	DelayedRemove();
 
 #if 0
-
+// below is debug code ...
 	glMatrixMode(GL_MODELVIEW);
 
 	glPushMatrix();
@@ -559,16 +564,16 @@ void glictContainer::CPaint() {
 #endif
 
 	if (objects.size()) {
-		glPushMatrix();
-			glTranslatef(this->x + containeroffsetx - virtualpos.x, this->y + containeroffsety - virtualpos.y,0.0);
 
-			std::vector<glictContainer*>::iterator it;
-			for (it=objects.begin(); it!=objects.end(); it++) {
-				(*it)->SetScissor();
-				(*it)->Paint();
-			}
-			glTranslatef(-this->x - containeroffsetx + virtualpos.x, -this->y - containeroffsety + virtualpos.y,0.0);
-		glPopMatrix();
+        glictGlobals.Translatef(this->x + containeroffsetx - virtualpos.x, this->y + containeroffsety - virtualpos.y,0.0);
+
+        std::vector<glictContainer*>::iterator it;
+        for (it=objects.begin(); it!=objects.end(); it++) {
+            (*it)->SetScissor();
+            (*it)->Paint();
+        }
+        glictGlobals.Translatef(-this->x - containeroffsetx + virtualpos.x, -this->y - containeroffsety + virtualpos.y,0.0);
+
 	}
 }
 
@@ -581,7 +586,6 @@ void glictContainer::CPaint() {
   *                     If NULL, no return value shall be stored.
   * \return Boolean value specifying if the event was processed at all. True
   *         means an event was caught by the widget, or by a child.
-  *
   *
   * This function does default processing of event, so that each widget
   * does not have to reinvent the wheel. If the widget does not want to
@@ -666,15 +670,26 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 					 ((glictPos*)wparam)->x < this->clipright &&
 					 ((glictPos*)wparam)->y > this->cliptop &&
 					 ((glictPos*)wparam)->y < this->clipbottom ) {
-						//MessageBox(0,"MouseDown",this->GetCaption().c_str(),0);
+
+
+						if (this->OnMouseDown) {
+
+                            glictPos relpos;
+                            relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx + this->virtualpos.x;
+                            relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety + this->virtualpos.y;
+                            this->OnMouseDown(&relpos, this);
+                        }
+
 						this->Focus(NULL);
 						return true;
 					 }
 				}
 			} else if (evt == GLICT_MOUSEUP) {
 				//printf("Mouse up on %s\n", objtype);
-				if (abs (((glictPos*)wparam)->x - glictGlobals.lastMousePos.x) < 3 && // upon release verifies the location of mouse, and if nearby then it's a click - cast a click event
-					abs (((glictPos*)wparam)->y - glictGlobals.lastMousePos.y) < 3 ) { // if up to 2 pixels diff
+
+
+				if (fabs (((glictPos*)wparam)->x - glictGlobals.lastMousePos.x) < 3 && // upon release verifies the location of mouse, and if nearby then it's a click - cast a click event
+					fabs (((glictPos*)wparam)->y - glictGlobals.lastMousePos.y) < 3 ) { // if up to 2 pixels diff
 					//printf("Considering it a click\n");
 					//if (!parent) {
 						//printf("Casting click event.\n");
@@ -685,8 +700,24 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 					//}
 
 				} else {
-					//Considering it dragging. Ignoring!
+					//Considering it dragging. Ignoring it!
 				}
+
+                if (((glictPos*)wparam)->x > this->clipleft &&
+                 ((glictPos*)wparam)->x < this->clipright &&
+                 ((glictPos*)wparam)->y > this->cliptop &&
+                 ((glictPos*)wparam)->y < this->clipbottom ) {
+
+                    if (this->OnMouseUp) {
+                        glictPos relpos;
+                        relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx + this->virtualpos.x;
+                        relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety + this->virtualpos.y;
+                        this->OnMouseUp(&relpos, this);
+                    }
+                }
+
+
+
 			} else { // not mousedown , not mouseup? mouseclick!
 
 
@@ -796,6 +827,19 @@ void glictContainer::SetOnClick(void(*f)(glictPos* relmousepos, glictContainer* 
 }
 
 /**
+  * Sets an OnMouseDown function.
+  */
+void glictContainer::SetOnMouseDown(void(*f)(glictPos* relmousepos, glictContainer* callerclass)) {
+	this->OnMouseDown = f;
+}
+/**
+  * Sets an OnMouseUp function.
+  */
+void glictContainer::SetOnMouseUp(void(*f)(glictPos* relmousepos, glictContainer* callerclass)) {
+	this->OnMouseUp = f;
+}
+
+/**
   * Sets an OnPaint function that would a, for example, button use.
   *
   * \todo Not all widgets obey OnPaint.
@@ -818,8 +862,15 @@ void glictContainer::SetOnPaint(void(*f)(glictRect* real, glictRect* clipped, gl
 void glictContainer::RememberTransformations() {
 
 	std::vector<glictContainer*>::iterator it;
-
+#ifdef NO_GL
+	int i=0;
+	ModelviewMatrix[i++] = 1; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0;
+	ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 1; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0;
+	ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 1; ModelviewMatrix[i++] = 0;
+	ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 1;
+#else
 	glGetFloatv(GL_MODELVIEW_MATRIX, ModelviewMatrix);
+#endif
 	//printf("Remembering %s's modelview matrix (child of %s)\n", objtype, parent ? parent->objtype : "NULL");
 
 	for (it=objects.begin(); it!=objects.end(); it++) {
@@ -1186,7 +1237,7 @@ void* glictContainer::GetCustomData() {
   * If virtual width and height are set to smaller than real width and height,
   * they are simply ignored.
   */
-void glictContainer::SetVirtualSize(int w, int h) {
+void glictContainer::SetVirtualSize(float w, float h) {
     virtualsize.w = w;
     virtualsize.h = h;
 }

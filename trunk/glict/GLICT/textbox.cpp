@@ -38,6 +38,8 @@ glictTextbox::glictTextbox() {
 	this->SetWidth(100);
 
 	this->passprotectchar = 0;
+
+	caption = "";
 }
 glictTextbox::~glictTextbox() {
 
@@ -47,24 +49,22 @@ void glictTextbox::Paint() {
 
 
     if (!glictGlobals.textboxSkin) {
-        glColor4f(
-            (float)this->bgcolor.r,
-            (float)this->bgcolor.g,
-            (float)this->bgcolor.b,
-            (float)this->bgcolor.a
-        );
-        glBegin(GL_QUADS);
-        glVertex2f(this->x,this->y);
-        glVertex2f(this->x,this->y+this->height);
-        glVertex2f(this->x+this->width,this->y+this->height);
-        glVertex2f(this->x+this->width,this->y);
-        glEnd();
+		glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+					this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y, bgcolor);
+
+
+/*        glBegin(GL_QUADS);
+        glVertex2f(this->x+glictGlobals.translation.x,this->y+glictGlobals.translation.y);
+        glVertex2f(this->x+glictGlobals.translation.x,this->y+this->height+glictGlobals.translation.y);
+        glVertex2f(this->x+this->width+glictGlobals.translation.x,this->y+this->height+glictGlobals.translation.y);
+        glVertex2f(this->x+this->width+glictGlobals.translation.x,this->y+glictGlobals.translation.y);
+        glEnd();*/
     } else {
         glictSize s = {this->width, this->height};
 
-        glTranslatef(this->x, this->y, 0);
+        glictGlobals.Translatef(this->x, this->y, 0);
         glictGlobals.textboxSkin->Paint(&s);
-        glTranslatef(-this->x, -this->y, 0);
+        glictGlobals.Translatef(-this->x, -this->y, 0);
 
 
     }
@@ -89,16 +89,13 @@ void glictTextbox::Paint() {
 
 
 
-	glTranslatef(this->x, this->y+10.,0);
-	glRotatef(180.0, 1.0, 0.0, 0.0);
-	glColor4f(glictGlobals.textboxTextColor.r, glictGlobals.textboxTextColor.g, glictGlobals.textboxTextColor.b, glictGlobals.textboxTextColor.a);
+
+	glictGlobals.SetColor(glictGlobals.textboxTextColor.r, glictGlobals.textboxTextColor.g, glictGlobals.textboxTextColor.b, glictGlobals.textboxTextColor.a);
 	if (asterisked && glictGlobals.topFocused != this)
-		glictFontRender(asterisked, "system", 10, (glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) , -(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0));
+		glictFontRender(asterisked, "system", 10, x+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) +glictGlobals.translation.x , y+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0) +glictGlobals.translation.y);
 	else
-		glictFontRender(this->caption.c_str(), "system", 10, (glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) , -(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0));
-    glColor4f(1., 1., 1., 1.);
-    glRotatef(180.0, -1.0, 0.0, 0.0);
-    glTranslatef(-this->x, -(this->y+10.),0);
+		glictFontRender(this->caption.c_str(), "system", 10, x+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) +glictGlobals.translation.x, y+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0) + glictGlobals.translation.y);
+    glictGlobals.SetColor(1., 1., 1., 1.);
 
 
 	if (glictGlobals.topFocused==this) {
@@ -106,8 +103,6 @@ void glictTextbox::Paint() {
 	}
 
 	this->CPaint();
-
-
 
 }
 void glictTextbox::SetBGColor(float r, float g, float b, float a) {

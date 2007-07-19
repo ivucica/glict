@@ -18,20 +18,26 @@
 */
 
 /**
-  * \example examples/memory/main.cpp
-  * This is a simple memory game that will show you basics of use of GLICT.
+  * \example examples/memory_sdl/main.cpp
+  * This is a variant on the "memory/" example program, modified to
+  * demonstrate how to use GLICT with other rendering APIs such as SDL.
   *
-  *  There's tons of inline comments, please read them to learn things.
+  *  Being that the author of this code is a beginner SDL programmer,
+  *  he asks you to forgive him on the newbie code, and for the lack
+  *  of comments. Those who need this code will probably understand it.
+  *
+  * \bug Palette is not correctly set when in 8bit mode.
   */
 
-// GLICTMemory
+// GLICTMemory_SDL
 //  simple game made with GLICT
-//  to compile you'll need GLUT
+//  to compile you'll need SDL
 
-// GLUT includes
-// we use glut because it's cross platform compatible
-// for mac os x, use <OpenGL/glut.h> if i remember correclty
-#include <GL/glut.h>
+// SDL includes
+// we use sdl because it's cross platform compatible
+#include <SDL/SDL.h>
+
+
 
 // GLICT includes
 // following includes should, in your project, actually look a
@@ -45,7 +51,7 @@
 #include <GLICT/panel.h>
 #include <GLICT/messagebox.h>
 #include <GLICT/fonts.h>
-#include "glut-helper.h"
+#include "sdlfont.h"
 // some nice strings for the cards... ;)
 char cardtitles[16][16] = { "Gecko", "Smygflik", "mips", "the fike", "Pekay", "Yorick", "tliff", "SimOne"};
 // and some colors for the cards
@@ -67,82 +73,6 @@ glictPanel pnlSolveds;
 glictMessageBox* msgSuccess;
 int windowhandle; // glut's window identifier
 
-// displays stuff, glut's way of doing stuff
-void display() {
-
-    // make sure the stenciltest is off before clearing
-    // in this example we're sure so we dont enforce it
-    glClearColor(0.0,0.0,0.0,0.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-
-    // below's the sample of glict render
-    // you can practically copypaste for a simple program
-    // prepare for render; set up tests
-    glEnable(GL_STENCIL_TEST); // so clipping works
-    glDisable(GL_DEPTH_TEST); // depth is not important to us
-
-    // make sure we're in modelview matrix mode
-    glMatrixMode(GL_MODELVIEW);
-    // and reset the modelview matrix
-    // that step is not important and in this example just more than unnecessary
-    // so you can delete it if you want (just like the above glMatrixMode thing)
-    glLoadIdentity();
-
-    // render it up
-    desktop.Paint();
-
-    // note: glict pops every matrix it pushes
-    // and undoes every transformation it does
-    // so dont worry about that
-
-    // now disable glstenciltest at the end
-    // we dont put it up because we disabled it here
-    // well, we disable it here because we might need it disabled... blah
-    glDisable(GL_STENCIL_TEST);
-
-    // make glut render it
-    glutSwapBuffers();
-}
-
-// glut's way of telling program that window size changed
-void reshape(int x, int y) {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glViewport(0,0,x,y);
-    gluOrtho2D(0,x,0,y);
-
-    // we rotate the entire coordinate sys because we use system opposite to GL's
-    // (just flipped)
-    // we do that for projection matrix so modelview can be reset whenever we want
-    glRotatef(180., 1., 0., 0.);
-    glTranslatef(0,-y,0.0);
-
-    glMatrixMode(GL_MODELVIEW);
-
-
-    // set desktop's width and height to what we got
-    desktop.SetWidth(x);
-    desktop.SetHeight(y);
-
-    window.SetWidth(96*4);
-    window.SetHeight(96*4);
-
-    window.SetPos(x/2-96*2, y/2-96*2);
-
-
-    glutPostRedisplay();
-}
-
-// glut's way of telling us a mouse-press event happened
-void mouse(int button, int shift, int mousex, int mousey) {
-    glictPos pos;
-    pos.x = mousex; pos.y = mousey;
-
-    if (shift==GLUT_DOWN) desktop.CastEvent(GLICT_MOUSEDOWN, &pos, 0);
-    if (shift==GLUT_UP) desktop.CastEvent(GLICT_MOUSEUP, &pos, 0);
-    glutPostRedisplay();
-}
 
 
 
@@ -161,7 +91,7 @@ void CardOnClick(glictPos* relmousepos, glictContainer* callerclass) {
     //sprintf(c, "%d", cardclicked);
 
 
-    glutSetWindowTitle("GLICTMemory");
+	SDL_WM_SetCaption("GLICTMemory", "");
 
 
     if (flipd[1]!=-1 ) {
@@ -178,7 +108,7 @@ void CardOnClick(glictPos* relmousepos, glictContainer* callerclass) {
     }
 
     if (solved[cardclicked]) {
-       glutSetWindowTitle("GLICTMemory - Card's been solved already.");
+       SDL_WM_SetCaption("GLICTMemory - Card's been solved already.", "");
        return;
     }
 
@@ -195,7 +125,7 @@ void CardOnClick(glictPos* relmousepos, glictContainer* callerclass) {
 
         totalopens++;
         if (matrix[flipd[0]] == matrix[flipd[1]]) {
-            glutSetWindowTitle("GLICTMemory - Correct!");
+            SDL_WM_SetCaption("GLICTMemory - Correct!", "");
             solved[flipd[0]] = 1;
             solved[flipd[1]] = 1;
             totalsolved++;
@@ -210,7 +140,7 @@ void CardOnClick(glictPos* relmousepos, glictContainer* callerclass) {
 
             }
         } else {
-            glutSetWindowTitle("GLICTMemory - Wrong!");
+            SDL_WM_SetCaption("GLICTMemory - Wrong!", "");
         }
     }
 
@@ -218,7 +148,7 @@ void CardOnClick(glictPos* relmousepos, glictContainer* callerclass) {
     char solveds[256];
     sprintf(solveds, "Solved: %d\nOpens: %d", totalsolved, totalopens);
     pnlSolveds.SetCaption(solveds);
-    glutPostRedisplay();
+
 }
 
 
@@ -272,36 +202,129 @@ void MainWidgets() {
     pnlSolveds.SetWidth(100);
 }
 
+void reshape(int x, int y) {
+    // set desktop's width and height to what we got
+    desktop.SetWidth(x);
+    desktop.SetHeight(y);
+
+    window.SetWidth(96*4);
+    window.SetHeight(96*4);
+
+    window.SetPos(x/2-96*2, y/2-96*2);
+}
+
+SDL_Surface * screen;
+SDL_Surface * sysfontpic;
+
+void SDLRectDraw(float left, float right, float top, float bottom, glictColor &col) {
+	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
+	int color = SDL_MapRGB(vi->vfmt, (int)(col.r * 255), (int)(col.g * 255), (int)(col.b * 255));
+	SDL_Rect rect = {left, top, right-left, bottom-top};
+	SDL_FillRect(screen, &rect, color);
+}
 
 
 // the main function initializes everything
 int main(int argc, char** argv) {
 
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);
-    glutInitWindowSize (640, 480);
-    glutInitWindowPosition (0, 0);
+	int videoflags = SDL_HWSURFACE  | SDL_ANYFORMAT|  SDL_DOUBLEBUF | SDL_RESIZABLE | SDL_SRCALPHA  ;
+	int width = 640;
+	int height = 480;
+	int video_bpp = 32;
 
-    windowhandle = glutCreateWindow ("GLICTMemory");
+
+	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
+		fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
+		exit(1);
+	}
+
+
+	printf("'Best' video mode: %d\n", video_bpp = SDL_GetVideoInfo()->vfmt->BitsPerPixel);
+
+	screen = SDL_SetVideoMode(width, height, video_bpp, videoflags);
+
+	if (!screen){
+		fprintf(stderr, "Could not set %dx%d video mode: %s\n", width, height, SDL_GetError());
+		exit(1);
+	}
+
+    printf("Set 640x480 at %d bits-per-pixel mode\n",
+           screen->format->BitsPerPixel);
+
+    glictFont* sysfont = glictCreateFont("system");
+	sysfontpic = SDL_LoadBMP("font.bmp");
+
+	SDL_SetColorKey(sysfontpic, SDL_SRCCOLORKEY, SDL_MapRGB(SDL_GetVideoInfo()->vfmt, 0xFF, 0, 0xFF)); // magneta is transparent
+
+    sysfont->SetFontParam(sysfontpic);
+    sysfont->SetRenderFunc(SDLFontDraw);
+    sysfont->SetSizeFunc(SDLFontSize);
 
     MainWidgets();
 
-	glictFont* sysfont = glictCreateFont("system");
-	sysfont->SetFontParam(GLUT_STROKE_MONO_ROMAN);
-	sysfont->SetRenderFunc(glutxStrokeString);
-	sysfont->SetSizeFunc(glutxStrokeSize);
+
+	glictGlobals.w = width;
+	glictGlobals.h = height;
+	desktop.SetWidth(width);
+	desktop.SetHeight(height);
+
+	reshape(width,height);
+
+	glictGlobals.paintrectCallback = SDLRectDraw;
+	glictGlobals.enableGlTranslate = false;
+	bool running = true;
+	SDL_Event event;
+
+	// blanks the screen..
+	glictColor c = {0,0,0,1};
+	SDLRectDraw(0,640,0,480,c);
+
+	desktop.Paint();
+	SDL_Flip(screen);
 
 
+	SDL_Color colors[] = {
+		{0,0,0,0},
+		{0,0,255,0},
+		{255,0,255,0}
+	};
 
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutMouseFunc(mouse);
+	SDL_WM_SetCaption("GLICTMemory", "");
+	SDL_SetColors(screen, colors, 0, sizeof(colors) / sizeof(SDL_Color));
+	while(running){
+		while(SDL_PollEvent(&event)){
+			switch (event.type){
+				case SDL_KEYDOWN:
+
+					break;
+				case SDL_MOUSEBUTTONUP:
+				case SDL_MOUSEBUTTONDOWN:{
+					glictPos p = {event.button.x, event.button.y};
+					desktop.CastEvent(event.type == SDL_MOUSEBUTTONUP ? GLICT_MOUSEUP : GLICT_MOUSEDOWN, &p,0);
+
+					// blanks the screen..
+					glictColor c = {0,0,0,1};
+					SDLRectDraw(0,640,0,480,c);
+
+					desktop.Paint();
+					SDL_Flip(screen);
+
+					break;
+				}
+				case SDL_QUIT:
+					running = false;
+					break;
+				default:
+					break;
+			}
+		}
+	}
 
 
-    glutSetWindow(windowhandle);
-    glutShowWindow();
+	SDL_FreeSurface(screen);
+	SDL_FreeSurface(sysfontpic);
+	glictDeleteFont("system");
+	SDL_Quit();
 
-
-    glutMainLoop();
 	return 0;
 }

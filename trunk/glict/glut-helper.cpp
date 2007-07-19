@@ -21,7 +21,6 @@
 
 
 
-
 /* This file is now used only to support examples. Its functionality is now
    superseded by fonts.cpp which offers a wider variety of font support and
    extensibility. */
@@ -54,23 +53,34 @@ char* glutxStrokeStringExpert(const char* txt, const void* font) {
 #include <stdio.h>
 void glutxStrokeString(const char* txt, const void* font, float x, float y) {
 
-    char* fromwhere=(char*)txt;
+
+		glRotatef(180.0, 1.0, 0.0, 0.0);
+		//glTranslatef(0, -5,0);
+
+
+	char* fromwhere=(char*)txt;
     do {
         if (fromwhere!=txt) fromwhere++;
 
-        glTranslatef(x,y,0);
+		glTranslatef(x,-y-1,0);
         //if (font==GLUT_STROKE_ROMAN)
         //    glScalef(0.1,0.075,0.075);
         //else
         //    glScalef(0.075,0.075,0.075);
         glScalef(.0075, .0075, .0075);
+
         fromwhere = glutxStrokeStringExpert(fromwhere,font);
 
         glScalef(1./.0075, 1./.0075, 1./.0075);
-        glTranslatef(-x,-y,0);
-        y -= 1;
+		glTranslatef(-x,y+1,0);
+        y += 1;
     } while (*fromwhere);
+
     //printf("Rendered %s\n", txt);
+
+		//glTranslatef(0, 10,0);
+		glRotatef(180.0, -1.0, 0.0, 0.0);
+
 }
 
 void glutxBitmapString(char* txt, void* font,int x,int y) {
