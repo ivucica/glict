@@ -86,7 +86,7 @@ void glictTextbox::Paint() {
 		else
 			this->SetCaption(caption + "_");
 	}
-
+	
 
 
 
@@ -101,7 +101,7 @@ void glictTextbox::Paint() {
 	if (glictGlobals.topFocused==this) {
 		caption = oldcaption;
 	}
-
+	if (asterisked) free(asterisked);
 	this->CPaint();
 
 }

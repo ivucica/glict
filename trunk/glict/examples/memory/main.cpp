@@ -49,8 +49,8 @@
 // some nice strings for the cards... ;)
 char cardtitles[16][16] = { "Gecko", "Smygflik", "mips", "the fike", "Pekay", "Yorick", "tliff", "SimOne"};
 // and some colors for the cards
-float cardcolor[16][3] = { { 1., 0., 0.}, { 0., 0., 1. }, {1., 1., 0.}, {1., 0., 1.},
-                           {0., 1., 0.},  { .5, 0., 0. }, {0., 1., 1.}, {.5, 1., .5}};
+float cardcolor[16][3] = { { 1., 0., 0.}, { 0., 0., .9 }, {.8, .8, 0.}, {.7, 0., .7},
+                           {0., .85, 0.},  { .55, 0., 0. }, {0., 75., .75}, {.5, 1., .5}};
 // other game related vars
 char matrix[16]; // matrix specifies where is each card
 char taken[16]; // taken specifies if we've used a card in generation, so we dont generate same pair again
