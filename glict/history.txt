@@ -230,3 +230,8 @@ how many people use it, so that we know if we can do critical API changes.
 
 * Moved repository to Subversion!
 * Makefile: Updated to include "list"
+
+4. 8. 2007:
+
+* Examples/memory_sdl: If in 8bit color mode, then we're using grayscale palette. Also, changed colorset a bit to look just a bit better under 8bit
+* Examples/memory: Synced colorset with memory_sdl

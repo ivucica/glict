@@ -55,8 +55,8 @@
 // some nice strings for the cards... ;)
 char cardtitles[16][16] = { "Gecko", "Smygflik", "mips", "the fike", "Pekay", "Yorick", "tliff", "SimOne"};
 // and some colors for the cards
-float cardcolor[16][3] = { { 1., 0., 0.}, { 0., 0., 1. }, {1., 1., 0.}, {1., 0., 1.},
-                           {0., 1., 0.},  { .5, 0., 0. }, {0., 1., 1.}, {.5, 1., .5}};
+float cardcolor[16][3] = { { 1., 0., 0.}, { 0., 0., .9 }, {.8, .8, 0.}, {.7, 0., .7},
+                           {0., .85, 0.},  { .55, 0., 0. }, {0., 75., .75}, {.5, 1., .5}};
 // other game related vars
 char matrix[16]; // matrix specifies where is each card
 char taken[16]; // taken specifies if we've used a card in generation, so we dont generate same pair again
@@ -227,10 +227,10 @@ void SDLRectDraw(float left, float right, float top, float bottom, glictColor &c
 // the main function initializes everything
 int main(int argc, char** argv) {
 
-	int videoflags = SDL_HWSURFACE  | SDL_ANYFORMAT|  SDL_DOUBLEBUF | SDL_RESIZABLE | SDL_SRCALPHA  ;
+	int videoflags = SDL_SWSURFACE  | SDL_ANYFORMAT|  SDL_DOUBLEBUF | SDL_RESIZABLE | SDL_SRCALPHA  ;
 	int width = 640;
 	int height = 480;
-	int video_bpp = 32;
+	int video_bpp = 8;
 
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -239,7 +239,7 @@ int main(int argc, char** argv) {
 	}
 
 
-	printf("'Best' video mode: %d\n", video_bpp = SDL_GetVideoInfo()->vfmt->BitsPerPixel);
+	//printf("'Best' video mode: %d\n", video_bpp = SDL_GetVideoInfo()->vfmt->BitsPerPixel);
 
 	screen = SDL_SetVideoMode(width, height, video_bpp, videoflags);
 
@@ -251,14 +251,28 @@ int main(int argc, char** argv) {
     printf("Set 640x480 at %d bits-per-pixel mode\n",
            screen->format->BitsPerPixel);
 
+	if (screen->format->BitsPerPixel==8) {
+
+		SDL_Color colors[256];
+		for (int i = 0 ; i < 256; i++) {
+			colors[i].r = i; colors[i].g = i; colors[i].b = i;
+		}
+
+		SDL_SetColors(screen, colors, 0, sizeof(colors) / sizeof(SDL_Color));
+	}
+	SDL_WM_SetCaption("GLICTMemory", "");
+
+
     glictFont* sysfont = glictCreateFont("system");
 	sysfontpic = SDL_LoadBMP("font.bmp");
-
-	SDL_SetColorKey(sysfontpic, SDL_SRCCOLORKEY, SDL_MapRGB(SDL_GetVideoInfo()->vfmt, 0xFF, 0, 0xFF)); // magneta is transparent
+	SDL_SetColorKey(sysfontpic, SDL_SRCCOLORKEY | SDL_RLEACCEL, SDL_MapRGB(SDL_GetVideoInfo()->vfmt, 0xFF, 0, 0xFF)); // magneta is transparent
 
     sysfont->SetFontParam(sysfontpic);
     sysfont->SetRenderFunc(SDLFontDraw);
     sysfont->SetSizeFunc(SDLFontSize);
+
+
+	//SDL_SetColors(sysfontpic, colors, 0, sizeof(colors) / sizeof(SDL_Color));
 
     MainWidgets();
 
@@ -282,15 +296,6 @@ int main(int argc, char** argv) {
 	desktop.Paint();
 	SDL_Flip(screen);
 
-
-	SDL_Color colors[] = {
-		{0,0,0,0},
-		{0,0,255,0},
-		{255,0,255,0}
-	};
-
-	SDL_WM_SetCaption("GLICTMemory", "");
-	SDL_SetColors(screen, colors, 0, sizeof(colors) / sizeof(SDL_Color));
 	while(running){
 		while(SDL_PollEvent(&event)){
 			switch (event.type){
