@@ -152,12 +152,16 @@ bool glictFontRender(const char* text, const char* fontname, float x, float y) {
 #endif
 bool glictFontRender(const char* text, const char* fontname, float fontsize, float x, float y) {
 
+	glictFont* fnt;
     glMatrixMode(GL_MODELVIEW);
 
-	glictFont* fnt = glictFindFont(fontname);
-	if (!fnt) printf(">>>>>>>>>>>>>>>>>>>>>>>><Font %s not found\n", fontname);
-	if (strcmp(fnt->GetName().c_str(), fontname)) printf(">>>>>>>>>>>>>>>>>>>FONT NAME DIFFERENT FROM WHAT WE SEARCHED FOR\n");
-	if (!fnt) return false;
+	fnt = glictFindFont(fontname);
+	if (!fnt) {
+		printf("*** glictFontRender: Font %s not loaded\n", fontname);
+		return false;
+	}
+	if (strcmp(fnt->GetName().c_str(), fontname)) printf("*** glictFontRender: Font name different from what we searched for\n");
+
 
 	if (fnt->RenderBoolSize) {
 		return fnt->RenderBoolSize(text, fnt->fontparam, fontsize, x, y); //
@@ -185,7 +189,7 @@ bool glictFontRender(const char* text, const char* fontname, float fontsize, flo
 		return true;
 	}
 
-	printf(">>>>>>>>>>>>>>>>>>>>>>>><Font %s not renderable\n", fontname);
+	printf("*** glictFontRender: Font %s not renderable\n", fontname);
 	return false;
 }
 
@@ -197,7 +201,7 @@ float glictFontSize(const char* text, const char* font) {
 float glictFontSize(const char* text, const char* font, float size) {
 
 	glictFont* fnt = glictFindFont(font);
-	if (!fnt) printf(">>>>>>>>>>>>>>>>>>>>>>>>IN GETSIZE Font %s not found\n", font);
+	if (!fnt) printf("*** glictFontSize: Font %s not found\n", font);
 	if (!fnt) return false;
 	if (fnt->SizeSize) {
 		return fnt->SizeSize(text, fnt->fontparam, size); //
