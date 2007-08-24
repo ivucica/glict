@@ -145,7 +145,7 @@ class glictContainer  {
 		std::string caption; ///< Caption written on the control, if control supports it.
 
 		bool focusable;
-		vector <glictContainer*> delayedremove;
+		std::vector <glictContainer*> delayedremove;
 
 
         glictSize virtualsize;
