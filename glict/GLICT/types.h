@@ -55,10 +55,12 @@ typedef glictPos glictSize;
 /**
  * \brief Used to store all color elements supported by OpenGL - red, green, blue and alpha channel. Stored as float. Values 0.f-1.f
  */
-typedef struct {
+struct glictColor {
+	glictColor() {}
+	glictColor (float red,float green, float blue, float alpha) { r=red; g = green; b = blue; a = alpha; }
     /// Red, green, blue and alpha element.
     float r, g, b, a;
-} glictColor;
+} ;
 
 /**
  * \brief Stores a rectangular portion of the screen

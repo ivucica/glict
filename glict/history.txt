@@ -247,3 +247,9 @@ how many people use it, so that we know if we can do critical API changes.
 8. 9. 2007:
 
 * Progressbar: Added
+
+11. 9. 2007:
+
+* Fonts.h: Added #ifdef __GLICT_FONTS_H which was missing
+* Progressbar: Repaired compiling problems
+

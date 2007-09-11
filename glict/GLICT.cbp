@@ -103,6 +103,9 @@
 		<VirtualTargets>
 			<Add alias="All" targets="demowin32;library;" />
 		</VirtualTargets>
+		<Compiler>
+			<Add directory="/home/ivucica/Development/glict/" />
+		</Compiler>
 		<Unit filename="GLICT/button.cpp" />
 		<Unit filename="GLICT/button.h">
 			<Option target="demowin32" />
