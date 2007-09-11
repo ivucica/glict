@@ -49,7 +49,7 @@ class glictScrollbar : public glictContainer {
 		bool highlightup;
 		bool highlightdn;
 
-		int min, max, value;
+		int min, max, value; ///< \todo TODO (Khaos#2#) These should be floats.
 		unsigned int step;
 		friend class glictContainer;
 };
