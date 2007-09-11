@@ -15,6 +15,6 @@ class glictProgressBar : public glictContainer {
 
 	private:
 		float percent;
-}
+};
 
 #endif

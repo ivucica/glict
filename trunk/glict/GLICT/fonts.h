@@ -24,6 +24,8 @@
  * Declares stuff used in fonts.cpp
  * \sa fonts.cpp
  */
+#ifndef __GLICT_FONTS_H
+#define __GLICT_FONTS_H
 
 #include <string>
 #include <vector>
@@ -101,3 +103,5 @@ int glictFontNumberOfLines(const char* text);
 
 bool glictFontRender(const char* text, const char* fontname, float x, float y);
 bool glictFontRender(const char* text, const char* fontname, float fontsize, float x, float y);
+
+#endif

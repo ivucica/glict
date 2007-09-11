@@ -70,7 +70,7 @@ void glictGlobalsClass::Translatef(float x, float y, float z) {
     }
 }
 void glictGlobalsClass::PaintRect(float left, float right, float top, float bottom ) {
-	glictColor tmp = {-1,-1,-1,-1};
+	glictColor tmp (-1,-1,-1,-1);
 	PaintRect(left, right, top, bottom, tmp);
 }
 void glictGlobalsClass::PaintRect(float left, float right, float top, float bottom, glictColor &col) {
