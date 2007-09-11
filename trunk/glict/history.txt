@@ -239,3 +239,11 @@ how many people use it, so that we know if we can do critical API changes.
 24. 8. 2007:
 
 * Fonts.cpp: Eliminated crash when the font was not loaded. Although senseless, might be useful at some stages of development.
+
+6. 9. 2007:
+
+* Container.cpp: Destructor now checks if item being deleted is currently focused; if so, topFocused is set to NULL.
+
+8. 9. 2007:
+
+* Progressbar: Added

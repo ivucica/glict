@@ -172,6 +172,8 @@
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
+		<Unit filename="GLICT/progressbar.cpp" />
+		<Unit filename="GLICT/progressbar.h" />
 		<Unit filename="GLICT/scrollbar.cpp" />
 		<Unit filename="GLICT/scrollbar.h">
 			<Option target="demowin32" />

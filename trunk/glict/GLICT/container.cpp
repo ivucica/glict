@@ -92,10 +92,13 @@ glictContainer::glictContainer() {
 }
 
 /**
-  * Currently does nothing.
+  * Only used to determine if this is the currently focused item; if so, then
+  * it sets currently focused item to NULL.
   */
 glictContainer::~glictContainer() {
-
+	if (this == glictGlobals.topFocused) {
+		glictGlobals.topFocused = NULL;
+	}
 }
 
 /**
