@@ -55,6 +55,8 @@ class glictFont {
         std::string GetName();
         void SetFontParam(void* font);
 
+        void* GetFontParam () {return fontparam;}
+
         void SetRenderFunc(_glictFontRenderFuncBoolNoSize funcpointer);
         void SetRenderFunc(_glictFontRenderFuncBoolSize funcpointer);
         void SetRenderFunc(_glictFontRenderFuncVoidNoSize funcpointer);

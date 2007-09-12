@@ -253,3 +253,7 @@ how many people use it, so that we know if we can do critical API changes.
 * Fonts.h: Added #ifdef __GLICT_FONTS_H which was missing
 * Progressbar: Repaired compiling problems
 
+12. 9. 2007:
+
+* Fonts.h: Added GetFontParam()
+
