@@ -216,6 +216,7 @@ void glictPanel::SetBGActiveness(bool bg) {
   */
 void glictPanel::VirtualScrollBottom() {
 	if (virtualsize.h > height) {
+		sbVertical.SetMax((int)(virtualsize.h - height));
 		sbVertical.SetValue(sbVertical.GetMax());
 	} else {
 		sbVertical.SetValue(0);
