@@ -257,3 +257,7 @@ how many people use it, so that we know if we can do critical API changes.
 
 * Fonts.h: Added GetFontParam()
 
+16. 9. 2007:
+
+* Panel.cpp: VirtualScrollBottom corrected
+
