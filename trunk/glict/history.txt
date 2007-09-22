@@ -261,3 +261,6 @@ how many people use it, so that we know if we can do critical API changes.
 
 * Panel.cpp: VirtualScrollBottom corrected
 
+22. 9. 2007:
+
+* Container.cpp: Fixed resetting transformation matrix when NOT using OpenGL
