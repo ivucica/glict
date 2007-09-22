@@ -102,18 +102,14 @@ glictContainer::~glictContainer() {
 }
 
 /**
-  * Sets to identity matrix by pushing GL matrix, loading an identity matrix,
-  * calling RememberTransformations() and popping the GL matrix.
+  * Sets coordinate transformations to identity matrix.
   */
 void glictContainer::ResetTransformations() {
-	#ifndef NO_GL
-	glPushMatrix();
-		glLoadIdentity();
-		this->RememberTransformations();
-	glPopMatrix();
-	#else
-		this->RememberTransformations();
-	#endif
+	int i=0;
+	ModelviewMatrix[i++] = 1; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0;
+	ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 1; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0;
+	ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 1; ModelviewMatrix[i++] = 0;
+	ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 0; ModelviewMatrix[i++] = 1;
 }
 /**
   * \param obj Pointer to object to add as a child.
