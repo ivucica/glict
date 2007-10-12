@@ -149,6 +149,7 @@ void glictButton::Paint() {
 	this->SetScissor();
 
 	if (!((glictGlobals.buttonSkin && !highlighted) || (glictGlobals.buttonHighlightSkin && highlighted))) {
+		// if skin is not set, then let's draw a plain rectangle
 		glictColor col;
         if (!highlighted) {
             col = bgcolor;
@@ -163,6 +164,7 @@ void glictButton::Paint() {
 								col);
 
 	} else {
+		// if skin is set, then draw appropriate skin
         glictSize s = {this->width, this->height};
 
         glictGlobals.Translatef(this->x, this->y, 0);
@@ -173,8 +175,7 @@ void glictButton::Paint() {
         glictGlobals.Translatef(-this->x, -this->y, 0);
 	}
 
-
-
+	// restore color
     if (!highlighted) {
     	glictGlobals.SetColor(
             glictGlobals.buttonTextColor.r,
@@ -188,12 +189,23 @@ void glictButton::Paint() {
             glictGlobals.buttonHighlightTextColor.g,
             glictGlobals.buttonHighlightTextColor.b,
             glictGlobals.buttonHighlightTextColor.a
-
-            //0.95, 0.95, 0.95, 1.
         );
     }
 
 
+	{
+		// if focused, draw the "focused" line
+		glictColor col;
+
+		col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.6 : (float)this->bgcolor.r / 1.6;
+		col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.6 : (float)this->bgcolor.g / 1.6;
+		col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.6 : (float)this->bgcolor.b / 1.6;
+		col.a = this->bgcolor.a;
+
+		glictGlobals.PaintRectLines(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+								this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y,
+								col);
+	}
 
 	//glPushMatrix();
 	if (highlighted) glictGlobals.Translatef(2.,2.,0.);
@@ -202,9 +214,10 @@ void glictButton::Paint() {
 
 	glictFontRender(
 		this->caption.c_str(),
-		"system",
-		this->x + this->width / 2. - glictFontSize(this->caption.c_str(), "system") / 2. +glictGlobals.translation.x,
-		(this->y + this->height / 2. - 5. + 5.*((float)glictFontNumberOfLines(this->caption.c_str())-1.))*+1. +glictGlobals.translation.y
+		fontname.c_str(),
+		fontsize,
+		this->x + this->width / 2. - glictFontSize(this->caption.c_str(), fontname.c_str(), fontsize) / 2. +glictGlobals.translation.x,
+		(this->y + this->height / 2. - (fontsize/2.)*((float)glictFontNumberOfLines(this->caption.c_str())))*+1. +glictGlobals.translation.y
 		);
 
 

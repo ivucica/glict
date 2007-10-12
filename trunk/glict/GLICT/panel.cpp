@@ -104,7 +104,7 @@ void glictPanel::Paint() {
 
 
 	glictGlobals.SetColor(glictGlobals.panelTextColor.r , glictGlobals.panelTextColor.g, glictGlobals.panelTextColor.b, glictGlobals.panelTextColor.a);
-	glictFontRender(this->caption.c_str(), "system", x+glictGlobals.translation.x , y + glictGlobals.translation.y);
+	glictFontRender(this->caption.c_str(), fontname.c_str(), x+glictGlobals.translation.x , y + glictGlobals.translation.y);
 	glictGlobals.SetColor(1., 1., 1., 1.);
 
 

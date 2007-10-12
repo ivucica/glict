@@ -86,15 +86,15 @@ void glictTextbox::Paint() {
 		else
 			this->SetCaption(caption + "_");
 	}
-	
+
 
 
 
 	glictGlobals.SetColor(glictGlobals.textboxTextColor.r, glictGlobals.textboxTextColor.g, glictGlobals.textboxTextColor.b, glictGlobals.textboxTextColor.a);
 	if (asterisked && glictGlobals.topFocused != this)
-		glictFontRender(asterisked, "system", 10, x+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) +glictGlobals.translation.x , y+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0) +glictGlobals.translation.y);
+		glictFontRender(asterisked, fontname.c_str(), fontsize, x+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) +glictGlobals.translation.x , y+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0) +glictGlobals.translation.y);
 	else
-		glictFontRender(this->caption.c_str(), "system", 10, x+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) +glictGlobals.translation.x, y+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0) + glictGlobals.translation.y);
+		glictFontRender(this->caption.c_str(), fontname.c_str(), fontsize, x+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetLeftSize()->w : 0) +glictGlobals.translation.x, y+(glictGlobals.textboxSkin ? glictGlobals.textboxSkin->GetTopSize()->h : 0) + glictGlobals.translation.y);
     glictGlobals.SetColor(1., 1., 1., 1.);
 
 

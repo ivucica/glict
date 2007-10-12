@@ -109,6 +109,8 @@ class glictContainer  {
         virtual void SetFocusable(bool b) {focusable = b;} ///< Allows to set whether or not a widget can be focused
         virtual bool GetFocusable() {return focusable;} ///< Allows to retrieve whether or not a widget can be focused.
 
+		void SetFont(std::string name, unsigned int size=10); ///< Sets the name of the font to be used for rendering of any caption that the widget may be attempting to paint. Also sets the size, which may be disregarded by the font engine.
+
 		float height, width; ///< Current height and width of the widget. FIXME: Make private/protected.
 		float x, y; ///< Current position of the widget. FIXME: Make private/protected.
 		float left, right, top, bottom; ///< Current boundaries of the widget, calculated from height, width, x and y. FIXME: Make private.
@@ -147,12 +149,15 @@ class glictContainer  {
 		bool focusable;
 		std::vector <glictContainer*> delayedremove;
 
-
         glictSize virtualsize;
         glictPos virtualpos;
 
 
+		std::string fontname;
+		unsigned int fontsize;
+
         void* customdata;
+
 
 
     /// \todo Remove this friend!

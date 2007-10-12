@@ -37,18 +37,18 @@ glictGlobalsClass::glictGlobalsClass() {
     panelTextColor.r = 1.; panelTextColor.g = 1.; panelTextColor.b = 1.; panelTextColor.a = 1.;
     textboxTextColor.r = 1.; textboxTextColor.g = 1.; textboxTextColor.b = 1.; textboxTextColor.a = 1.;
 
-	//renderMode = GLICT_RENDERING; defunct
+	drawPartialOut = true;
 
 	lastMousePos.x = 0; lastMousePos.y = 0;
 	srand(time(NULL));
 
 	topFocused = NULL;
 
-
 	clippingMode = GLICT_NOCLIP;
 
 	this->debugCallback = NULL;
 	this->paintrectCallback = NULL;
+	this->paintrectlinesCallback = NULL;
 	#ifndef NO_GL
 	this->enableGlTranslate = true; // if we want SDL or any other rendering engine, we gotta turn this to false
 	#else
@@ -80,6 +80,30 @@ void glictGlobalsClass::PaintRect(float left, float right, float top, float bott
 		#ifndef NO_GL
 		if (col.a >= 0) glColor4f(col.r, col.g, col.b, col.a);
 		glBegin(GL_QUADS);
+		glTexCoord2f(0, 0);
+		glVertex2f(left, top);
+		glTexCoord2f(0, 1);
+		glVertex2f(left, bottom);
+		glTexCoord2f(1, 1);
+		glVertex2f(right, bottom);
+		glTexCoord2f(1, 0);
+		glVertex2f(right, top);
+		glEnd();
+		#endif
+	}
+}
+
+void glictGlobalsClass::PaintRectLines(float left, float right, float top, float bottom ) {
+	glictColor tmp (-1,-1,-1,-1);
+	PaintRectLines(left, right, top, bottom, tmp);
+}
+void glictGlobalsClass::PaintRectLines(float left, float right, float top, float bottom, glictColor &col) {
+	if (paintrectCallback) {
+		paintrectCallback (left, right, top, bottom, col)  ;
+	} else {
+		#ifndef NO_GL
+		if (col.a >= 0) glColor4f(col.r, col.g, col.b, col.a);
+		glBegin(GL_LINE_LOOP);
 		glTexCoord2f(0, 0);
 		glVertex2f(left, top);
 		glTexCoord2f(0, 1);
