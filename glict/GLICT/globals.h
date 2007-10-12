@@ -16,6 +16,10 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
+#ifndef __GLICT_GLOBALS_H
+#define __GLICT_GLOBALS_H
+
 #include <GLICT/container.h>
 #include <GLICT/skinner.h>
 #include <GLICT/types.h>
@@ -48,17 +52,26 @@ class glictGlobalsClass {
         bool enableGlTranslate;
         glictPos translation;
 
+        bool drawPartialOut;
+
 		GLICTDEBUGCALLBACKPROC debugCallback;
 		GLICTPAINTRECTPROC paintrectCallback;
+		GLICTPAINTRECTPROC paintrectlinesCallback;
 
 
 		// functions
 		void Translatef(float, float, float);
 		void PaintRect(float top, float bottom, float left, float right);
 		void PaintRect(float left, float right, float top, float bottom, glictColor &col);
+		void PaintRectLines(float top, float bottom, float left, float right);
+		void PaintRectLines(float left, float right, float top, float bottom, glictColor &col);
 		void SetColor(float r, float g, float b, float a);
 };
 extern glictGlobalsClass glictGlobals;
 
 #define GLICT_RENDERING false
 #define GLICT_SELECTING true
+
+#define GLICT_APIREV 1
+
+#endif

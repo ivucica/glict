@@ -193,7 +193,6 @@ bool glictFontRender(const char* text, const char* fontname, float fontsize, flo
 	return false;
 }
 
-
 float glictFontSize(const char* text, const char* font) {
 	return glictFontSize(text, font, 10);
 }
@@ -205,7 +204,6 @@ float glictFontSize(const char* text, const char* font, float size) {
 	if (!fnt) return false;
 	if (fnt->SizeSize) {
 		return fnt->SizeSize(text, fnt->fontparam, size); //
-
 	}
 	if (fnt->SizeNoSize) {
 		return fnt->SizeNoSize(text, fnt->fontparam)*size;
@@ -289,3 +287,4 @@ void glictFont::SetSizeFunc(_glictFontSizeFuncNoSize funcpointer) {
 void glictFont::SetFontParam(void* fp) {
 	this->fontparam = fp;
 }
+

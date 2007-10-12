@@ -57,7 +57,7 @@ void glutxStrokeString(const char* txt, const void* font, float x, float y) {
 		glRotatef(180.0, 1.0, 0.0, 0.0);
 		//glTranslatef(0, -5,0);
 
-
+	printf("%s %g %g\n", txt, x, y);
 	char* fromwhere=(char*)txt;
     do {
         if (fromwhere!=txt) fromwhere++;

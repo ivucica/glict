@@ -264,3 +264,16 @@ how many people use it, so that we know if we can do critical API changes.
 22. 9. 2007:
 
 * Container.cpp: Fixed resetting transformation matrix when NOT using OpenGL
+
+9. 10. 2007:
+
+* Button.cpp: Began adding "focused line", marking whether or not the button is the currently focused one
+* Button.cpp: Added use of different fonts
+* Container: Began adding ability for each widget to have its own font
+* Globals: Added callback for "painting rect lines", meanining for drawing the outline of a rect
+* Textbox.cpp: Use of different fonts is permitted
+
+10. 10. 2007:
+
+* Globals: added drawPartialOut
+* Container.cpp: Added support for drawPartialOut

@@ -227,8 +227,10 @@ void onlb2click(glictPos *a, glictContainer* callclass) {
 void onpanel5click(glictPos *a, glictContainer* callclass) {
     buttonstate = !buttonstate;
 
-    (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked\n(indeed)");
+    (dynamic_cast<glictButton*>(callclass))->SetCaption(buttonstate ? "Button" : "Clicked\n(indeed)\nvery much");
     (dynamic_cast<glictButton*>(callclass))->SetWidth(100);
+    (dynamic_cast<glictButton*>(callclass))->SetFont("system", buttonstate ? 10 : 5);
+
     panela2.SetCaption(buttonstate ? "Sample Window" : textbox.GetCaption()); // window
 
     if (buttonstate)

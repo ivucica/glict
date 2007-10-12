@@ -87,6 +87,9 @@ glictContainer::glictContainer() {
     virtualpos.x = 0;
     virtualpos.y = 0;
 
+    fontname = "system";
+    fontsize = 10;
+
 	//printf("Container created.\n");
 
 }
@@ -568,6 +571,18 @@ void glictContainer::CPaint() {
 
         std::vector<glictContainer*>::iterator it;
         for (it=objects.begin(); it!=objects.end(); it++) {
+
+        	if (!glictGlobals.drawPartialOut) {
+				if ((*it)->GetX()+(*it)->GetWidth() > virtualpos.x + GetWidth())
+					continue;
+        		if ((*it)->GetY()+(*it)->GetHeight() > virtualpos.y + GetHeight())
+					continue;
+				if ((*it)->GetX() < virtualpos.x )
+					continue;
+				if ((*it)->GetY() < virtualpos.y )
+					continue;
+        	}
+
             (*it)->SetScissor();
             (*it)->Paint();
         }
@@ -1248,3 +1263,7 @@ void glictContainer::VirtualScrollBottom() {
 
 }
 
+void glictContainer::SetFont(std::string name, unsigned int size) {
+	this->fontname = name;
+	this->fontsize = size;
+}
