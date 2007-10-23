@@ -18,7 +18,6 @@
 */
 #include "messagebox.h"
 #include "globals.h"
-#include <GL/glut.h>
 
 void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller) {
 	void(*UponClick)(glictPos* relmousepos, glictContainer* callerclass);

@@ -18,7 +18,6 @@
 */
 
 #include <stdlib.h>
-#include <GL/glut.h>
 #include <stdio.h>
 #include <GLICT/window.h>
 #include <GLICT/globals.h>

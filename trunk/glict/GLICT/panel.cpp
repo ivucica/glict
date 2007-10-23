@@ -17,7 +17,6 @@
 	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <stdlib.h>
-#include <GL/glut.h>
 #include <stdio.h>
 #include "panel.h"
 #include "globals.h"
