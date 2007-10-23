@@ -25,7 +25,6 @@
 
 
 #include <stdlib.h>
-#include <GL/glut.h>
 #include <stdio.h>
 #include "button.h"
 #include "globals.h"

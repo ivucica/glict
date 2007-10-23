@@ -282,3 +282,6 @@ how many people use it, so that we know if we can do critical API changes.
 
 * Textbox: Added SetAllowedChars
 
+23. 10. 2007:
+
+* <many>: Removed GLUT #include
