@@ -38,6 +38,7 @@ glictTextbox::glictTextbox() {
 	this->SetWidth(100);
 
 	this->passprotectchar = 0;
+	this->allowedchr = "";
 
 	caption = "";
 }
@@ -141,7 +142,9 @@ bool glictTextbox::CastEvent(glictEvents evt, void* wparam, long lparam, void* r
 			//printf("Textbox got %c key.\n", *((char*)wparam));
 			switch (*((char*)wparam)) {
 				default:
-					this->SetCaption(caption + *((char*)wparam));
+					if (allowedchr.size() == 0 || (allowedchr.find(*((char*)wparam))<allowedchr.size())) { // FIXME (ivucica#1#) one of the conditions concerning if character is contained in allowedchr is redundant, its needed to see what exactly happens if char is not in there and optimize
+						this->SetCaption(caption + *((char*)wparam));
+					}
 					break;
 				case 8:
 					if (caption.size()) {
@@ -169,4 +172,17 @@ bool glictTextbox::CastEvent(glictEvents evt, void* wparam, long lparam, void* r
   */
 void glictTextbox::SetPassProtectCharacter(char asterisk) {
 	passprotectchar = asterisk;
+}
+
+/**
+  * \brief Defines all characters that are allowed to be typed in this textbox
+  * \param s String containing all permitted characters.
+  *
+  * This string is treated as an array of characters which are permitted
+  * to be used. If a character does not appear in this list, it will have
+  * no effect on the textbox when punched in. If the string is empty,
+  * then all characters are permitted.
+  */
+void glictTextbox::SetAllowedChars (std::string s) {
+	allowedchr = s;
 }

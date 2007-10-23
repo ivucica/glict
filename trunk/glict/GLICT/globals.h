@@ -72,6 +72,6 @@ extern glictGlobalsClass glictGlobals;
 #define GLICT_RENDERING false
 #define GLICT_SELECTING true
 
-#define GLICT_APIREV 1
+#define GLICT_APIREV 2
 
 #endif

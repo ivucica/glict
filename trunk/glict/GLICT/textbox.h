@@ -52,8 +52,10 @@ class glictTextbox : public glictContainer {
 
 
 		void SetPassProtectCharacter(char asterisk); ///< Used to define which character will be used to display instead of regular characters.
+		void SetAllowedChars (std::string s); ///< Used to define which characters are allowed to be typed. If '\n' is ommitted then it's not allowed either
     private:
         glictColor bgcolor;
 		char passprotectchar;
+		std::string allowedchr;
 };
 #endif
