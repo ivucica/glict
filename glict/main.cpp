@@ -333,6 +333,7 @@ void glinit() {
     textbox.SetCaption("Text");
     textbox.SetHeight(64);
     textbox.SetWidth(250);
+    textbox.SetAllowedChars("abc");
 
     desktop2.AddObject(&window2);
     desktop2.SetHeight(200);
