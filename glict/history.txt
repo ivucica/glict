@@ -291,4 +291,5 @@ how many people use it, so that we know if we can do critical API changes.
 * Globals.h: GLICTAPIREV is now marking the SVN revision from which the header is taken (manually updated though)
 * Container: Added SetNext(glictContainer*) and SetPrev(glictContainer*)
 * Button, Textbox: Making use of next and previous
+* Button: Default bgcolor alpha is now "1"
 

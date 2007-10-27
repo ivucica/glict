@@ -38,7 +38,7 @@ glictButton::glictButton() {
 	this->bgcolor.r = 0.0;
 	this->bgcolor.g = 0.0;
 	this->bgcolor.b = 0.0;
-	this->bgcolor.a = 0.0;
+	this->bgcolor.a = 1.0;
 
 	this->fgcolor.r = 1.0;
 	this->fgcolor.g = 1.0;
