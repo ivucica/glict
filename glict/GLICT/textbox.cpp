@@ -138,7 +138,6 @@ bool glictTextbox::CastEvent(glictEvents evt, void* wparam, long lparam, void* r
 			//It occured outside the textbox, ignored.
 			break;
 		case GLICT_KEYPRESS:
-			//printf("Textbox got %c key.\n", *((char*)wparam));
 			switch (*((char*)wparam)) {
 				default:
 					if (allowedchr.size() == 0 || (allowedchr.find(*((char*)wparam))<allowedchr.size())) { // FIXME (ivucica#1#) one of the conditions concerning if character is contained in allowedchr is redundant, its needed to see what exactly happens if char is not in there and optimize
@@ -154,6 +153,10 @@ bool glictTextbox::CastEvent(glictEvents evt, void* wparam, long lparam, void* r
 						free(Title);
 
 					}
+					break;
+				case 9:
+					if (next) 
+						next->Focus(NULL);
 					break;
 			}
 			break;
