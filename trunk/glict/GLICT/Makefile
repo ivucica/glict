@@ -11,6 +11,7 @@ all: libGLICT.a
 libGLICT.a: $(OBJS)
 	ar cru libGLICT.a $(OBJS)
 	ranlib libGLICT.a
+	cp libGLICT.a ..
 	
 	
 #g++ $(OBJS) -o libglict.a  -lGL 

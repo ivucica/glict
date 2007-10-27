@@ -81,14 +81,17 @@ glictContainer::glictContainer() {
 	this->SetRect(this->x, this->y, this->x + this->width, this->y + this->height);
 	this->SetClip(this->left, this->top, this->right, this->bottom);
 
-    virtualsize.x = 0;
-    virtualsize.y = 0;
+	virtualsize.x = 0;
+	virtualsize.y = 0;
 
-    virtualpos.x = 0;
-    virtualpos.y = 0;
+	virtualpos.x = 0;
+	virtualpos.y = 0;
 
-    fontname = "system";
-    fontsize = 10;
+	fontname = "system";
+	fontsize = 10;
+
+	previous = NULL;
+	next = NULL;
 
 	//printf("Container created.\n");
 
@@ -154,16 +157,13 @@ void glictContainer::RemoveObject(glictContainer* object) {
 	}*/
 
 	delayedremove.insert(delayedremove.end(), object);
-	//printf("ADDED an object to DELAYEDREMOVE list -- new size %s is %d\n", GetCaption().c_str(), delayedremove.size() );
 }
 
 /**
   * Executes the delayedremoval.
   */
 void glictContainer::DelayedRemove() {
-	//printf("Delayed removal of %d objects %s\n", delayedremove.size(), GetCaption().c_str());
 	if (delayedremove.size()) {
-
 		for (vector<glictContainer*>::iterator it = delayedremove.begin(); delayedremove.size(); ) {
 			for (std::vector<glictContainer*>::iterator it2 = objects.begin(); it2 != objects.end(); ) {
 				if ((*it) == (*it2)) {
@@ -244,17 +244,13 @@ void glictContainer::SetPos(float x, float y) {
 
 		(*it)->GetPos(&x, &y);
 #if 1
-        (*it)->SetPos(x,y);
+		(*it)->SetPos(x,y);
 #else
 // FIXME: this way, we have less ops but it's not recursive properly and does not fix the boundaries as it ought to.
 //  check if we can still keep this way of doing things instead of sicko "setpos" recursively
 		(*it)->GetSize(&size);
 
-
-
 		(*it)->SetRect(this->left + x, this->top, this->left + x + size.w, this->top + y + size.h );
-
-
 #endif
 	}
 }
@@ -278,7 +274,7 @@ void glictContainer::SetPos(glictPos pos) {
   * parent) into specified memory locations.
   * \sa SetPos(float x, float y), GetPos(glictPos *pos)
   * \bug Possible containeroffset*-based problem, manifests upon moving of a
-  *      window which is a child of another window by dragging. See also,
+  *      window which is a child of another window by dragging. See also
   *      bugnote in glictWindow::CastEvent()
   */
 void glictContainer::GetPos(float* x, float* y) {
@@ -822,7 +818,8 @@ bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam) {
   * \sa DefaultCastEvent()
   */
 bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
-	if (!GetVisible() || !GetEnabled()) return false;
+	if (!GetVisible() || !GetEnabled()) 
+		return false;
 	//printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
 	switch (evt) {
 		default:
@@ -1263,7 +1260,31 @@ void glictContainer::VirtualScrollBottom() {
 
 }
 
+/**
+  * \param name Font name
+  * \param size Font size
+  *
+  * Sets using which font should this widget be rendered.
+  */
 void glictContainer::SetFont(std::string name, unsigned int size) {
 	this->fontname = name;
 	this->fontsize = size;
+}
+
+/**
+  * \param p 'previous' widget
+  *
+  * When Tab is pressed, focus should switch to p widget.
+  */
+void glictContainer::SetPrevious(glictContainer* p) {
+	previous = p;
+}
+
+/**
+  * \param n 'next' widget
+  *
+  * When Shift+Tab is pressed, focus should switch to n widget.
+  */
+void glictContainer::SetNext(glictContainer *n) {
+	next = n;
 }

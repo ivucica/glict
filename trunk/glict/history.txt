@@ -285,3 +285,10 @@ how many people use it, so that we know if we can do critical API changes.
 23. 10. 2007:
 
 * <many>: Removed GLUT #include
+
+27. 10. 2007:
+
+* Globals.h: GLICTAPIREV is now marking the SVN revision from which the header is taken (manually updated though)
+* Container: Added SetNext(glictContainer*) and SetPrev(glictContainer*)
+* Button, Textbox: Making use of next and previous
+

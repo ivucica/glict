@@ -84,6 +84,14 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 
 	//printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
 	switch (evt) {
+		case GLICT_KEYPRESS:
+			switch (*((char*)wparam)) {
+				case 9:
+					if (next)
+						next->Focus(NULL);
+						break;
+			}
+			break;
 		case GLICT_MOUSEUP:
 		case GLICT_MOUSEDOWN:
 		case GLICT_MOUSECLICK:

@@ -45,14 +45,14 @@ using namespace std;
  * children rendering, proper clipping, mouse coordinate transformation, et al.
  */
 class glictContainer  {
-    public:
-        glictContainer(); ///< Constructor for the class.
-        glictContainer(long guid); ///< Constructor for the class, specifying guid. (Guid is unused at the moment)
-        virtual ~glictContainer(); ///< Destructor for the class.
+	public:
+		glictContainer(); ///< Constructor for the class.
+		glictContainer(long guid); ///< Constructor for the class, specifying guid. (Guid is unused at the moment)
+		virtual ~glictContainer(); ///< Destructor for the class.
 
-        // the following elements are replaced, not necessarily inherited in child  classes
-        virtual void Paint(); ///< Renders the element. Should contain call to CPaint().
-        virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event to the class, so it can process it. Example is mouseclick or mousedown.
+		// the following elements are replaced, not necessarily inherited in child  classes
+		virtual void Paint(); ///< Renders the element. Should contain call to CPaint().
+		virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event to the class, so it can process it. Example is mouseclick or mousedown.
 
 		// the following elements are always inherited from container. some MAY be overriden, in special circumstances, but it is not recommended.
 		virtual void AddObject(glictContainer* object); ///< Adds an object as a child.
@@ -74,14 +74,16 @@ class glictContainer  {
 		void RememberTransformations(); ///< When calling parent's paint, call it's 'remember transformations' too, so clicking detection is done properly. if clicking unused, or no transformations done, then not important
 		void ResetTransformations(); ///< Resets transformations to default transf matrix (identity matrix)
 		void TransformScreenCoords(glictPos *pos); ///< Transforms screen coordinates into plane coordinates
-        float GetHeight(); ///< Returns object's height
-        float GetWidth(); ///< Returns object's width
-        float GetX() {return x;}  ///< Returns object position's x coordinate
-        float GetY() {return y;}  ///< Returns object position's y coordinate
+		float GetHeight(); ///< Returns object's height
+		float GetWidth(); ///< Returns object's width
+		float GetX() {return x;}  ///< Returns object position's x coordinate
+		float GetY() {return y;}  ///< Returns object position's y coordinate
 
-        virtual void SetVirtualSize(float w, float h);
-        virtual void VirtualScrollBottom();
+		virtual void SetVirtualSize(float w, float h);
+		virtual void VirtualScrollBottom();
 
+		void SetPrevious(glictContainer*);
+		void SetNext(glictContainer*);
 
 		bool CastEvent(glictEvents evt, void* wparam, long lparam); ///< Casts an event omitting the returnvalue. (deprecated, I'm lazy and don't want to rewrite code so I abuse namespace)
 		bool DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event into default event processor, omitting the widget's code.
@@ -103,11 +105,11 @@ class glictContainer  {
 		virtual void RecursiveBoundaryFix(); ///< Fixes boundaries recursively up to the root of the tree (desktop, probably). Also used to make scrollbars appear in case of virtual size, where appropriate. Should be used only internally. FIXME: Make private/protected
 		virtual void FixContainerOffsets(); ///< Fixes container offsets. Should be used only internally.
 
-        virtual void SetCustomData(void *param); ///< Allows the application programmer to store custom data assigned to this object.
-        virtual void*GetCustomData(); ///< Allows the application programmer to retrieve previously stored custom data assigned to this object.
+		virtual void SetCustomData(void *param); ///< Allows the application programmer to store custom data assigned to this object.
+		virtual void*GetCustomData(); ///< Allows the application programmer to retrieve previously stored custom data assigned to this object.
 
-        virtual void SetFocusable(bool b) {focusable = b;} ///< Allows to set whether or not a widget can be focused
-        virtual bool GetFocusable() {return focusable;} ///< Allows to retrieve whether or not a widget can be focused.
+		virtual void SetFocusable(bool b) {focusable = b;} ///< Allows to set whether or not a widget can be focused
+		virtual bool GetFocusable() {return focusable;} ///< Allows to retrieve whether or not a widget can be focused.
 
 		void SetFont(std::string name, unsigned int size=10); ///< Sets the name of the font to be used for rendering of any caption that the widget may be attempting to paint. Also sets the size, which may be disregarded by the font engine.
 
@@ -118,7 +120,7 @@ class glictContainer  {
 		float containeroffsetx, containeroffsety; ///< Offsets of container object positions.
 		char objtype[50]; ///< Short descriptive string containing name of the object. (Each class actually rewrites this one upon intialization in constructor.)
 
-        virtual glictPos *GetVirtualPos() {return &virtualpos;}
+		virtual glictPos *GetVirtualPos() {return &virtualpos;}
 	private:
 		// these should be called only internally
 		void SetRect(float left, float top, float right, float bottom); ///< Internal function. Sets the boundaries of the widget.
@@ -149,14 +151,17 @@ class glictContainer  {
 		bool focusable;
 		std::vector <glictContainer*> delayedremove;
 
-        glictSize virtualsize;
-        glictPos virtualpos;
+		glictSize virtualsize;
+		glictPos virtualpos;
+
+		glictContainer* next;
+		glictContainer* previous;
 
 
 		std::string fontname;
 		unsigned int fontsize;
 
-        void* customdata;
+		void* customdata;
 
 
 
