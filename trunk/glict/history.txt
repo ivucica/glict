@@ -293,3 +293,8 @@ how many people use it, so that we know if we can do critical API changes.
 * Button, Textbox: Making use of next and previous
 * Button: Default bgcolor alpha is now "1"
 
+29. 10. 2007:
+
+* Image.h: Added
+* Skinner.h: Fixed "text alignment" ;)
+* Skinner.h: Stubbed glictImage*-based stuff

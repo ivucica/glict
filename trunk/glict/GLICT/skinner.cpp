@@ -33,6 +33,21 @@ glictSkinner::glictSkinner() {
     bottomf = NULL;
 
     centerf = NULL;
+
+
+
+    topleftimg = NULL;
+    toprightimg = NULL;
+    bottomleftimg = NULL;
+    bottomrightimg = NULL;
+
+    topimg = NULL;
+    leftimg = NULL;
+    rightimg = NULL;
+    bottomimg = NULL;
+
+    centerimg = NULL;
+
 }
 
 glictSkinner::~glictSkinner() {
@@ -189,6 +204,9 @@ void glictSkinner::Paint(glictSize *size) {
 
 }
 
+void glictSkinner::SetTL(glictImage* img ) {
+    // stub
+}
 void glictSkinner::SetTL(GLuint textureid, glictSize *size ) {
     this->topleftf = NULL;
     this->topleft = textureid;
@@ -198,6 +216,9 @@ void glictSkinner::SetTL(glictBindCallback bindf, void* param, glictSize *size) 
     this->topleftf = bindf;
     this->topleftp = param;
     if (size) this->toplefts = *size;
+}
+void glictSkinner::SetTR(glictImage* img ) {
+    // stub
 }
 void glictSkinner::SetTR(GLuint textureid, glictSize *size ) {
     this->toprightf = NULL;
@@ -209,6 +230,9 @@ void glictSkinner::SetTR(glictBindCallback bindf, void* param, glictSize *size) 
     this->toprightp = param;
     if (size) this->toprights = *size;
 }
+void glictSkinner::SetBL(glictImage* img ) {
+    // stub
+}
 void glictSkinner::SetBL(GLuint textureid, glictSize *size ) {
     this->bottomleftf = NULL;
     this->bottomleft = textureid;
@@ -218,6 +242,9 @@ void glictSkinner::SetBL(glictBindCallback bindf, void* param, glictSize *size) 
     this->bottomleftf = bindf;
     this->bottomleftp = param;
     if (size) this->bottomlefts = *size;
+}
+void glictSkinner::SetBR(glictImage* img ) {
+    // stub
 }
 void glictSkinner::SetBR(GLuint textureid, glictSize *size ) {
     this->bottomrightf = NULL;
@@ -229,6 +256,9 @@ void glictSkinner::SetBR(glictBindCallback bindf, void* param, glictSize *size) 
     this->bottomrightp = param;
     if (size) this->bottomrights = *size;
 }
+void glictSkinner::SetTop(glictImage* img ) {
+    // stub
+}
 void glictSkinner::SetTop(GLuint textureid, glictSize *size ) {
     this->topf = NULL;
     this->top = textureid;
@@ -238,6 +268,9 @@ void glictSkinner::SetTop(glictBindCallback bindf, void* param, glictSize *size)
     this->topf = bindf;
     this->topp = param;
     if (size) this->tops = *size;
+}
+void glictSkinner::SetBottom(glictImage* img ) {
+    // stub
 }
 void glictSkinner::SetBottom(GLuint textureid, glictSize *size ) {
     this->bottomf = NULL;
@@ -249,6 +282,9 @@ void glictSkinner::SetBottom(glictBindCallback bindf, void* param, glictSize *si
     this->bottomp = param;
     if (size) this->bottoms = *size;
 }
+void glictSkinner::SetLeft(glictImage* img ) {
+    // stub
+}
 void glictSkinner::SetLeft(GLuint textureid, glictSize *size ) {
     this->leftf = NULL;
     this->left = textureid;
@@ -258,6 +294,9 @@ void glictSkinner::SetLeft(glictBindCallback bindf, void* param, glictSize *size
     this->leftf = bindf;
     this->leftp = param;
     if (size) this->lefts = *size;
+}
+void glictSkinner::SetRight(glictImage* img ) {
+    // stub
 }
 void glictSkinner::SetRight(GLuint textureid, glictSize *size ) {
     this->rightf = NULL;
@@ -269,7 +308,9 @@ void glictSkinner::SetRight(glictBindCallback bindf, void* param, glictSize *siz
     this->rightp = param;
     if (size) this->rights = *size;
 }
-
+void glictSkinner::SetCenter(glictImage* img ) {
+    // stub
+}
 void glictSkinner::SetCenter(GLuint textureid, glictSize *size ) {
     this->centerf = NULL;
     this->center = textureid;

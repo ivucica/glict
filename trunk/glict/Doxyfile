@@ -4,8 +4,8 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = GLICT
-PROJECT_NUMBER         = dec30_2006
-OUTPUT_DIRECTORY       = "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/doc"
+PROJECT_NUMBER         = oct29_2007
+OUTPUT_DIRECTORY       = "./doc"
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = YES
@@ -25,7 +25,7 @@ ABBREVIATE_BRIEF       = "The $name class" \
 ALWAYS_DETAILED_SEC    = NO
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT"
+STRIP_FROM_PATH        = "."
 STRIP_FROM_INC_PATH    = 
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
@@ -40,7 +40,7 @@ OPTIMIZE_OUTPUT_JAVA   = NO
 BUILTIN_STL_SUPPORT    = YES
 DISTRIBUTE_GROUP_DOC   = NO
 SUBGROUPING            = YES
-TITLE                  = "RTF Naslov"
+TITLE                  = "GLICT Documentation"
 #---------------------------------------------------------------------------
 # Build related configuration options
 #---------------------------------------------------------------------------
@@ -83,7 +83,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT"
+INPUT                  = "."
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
@@ -113,14 +113,15 @@ FILE_PATTERNS          = *.c \
                          *.py \
                          readme.txt
 RECURSIVE              = YES
-EXCLUDE                = "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/doc" \
-                         "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/docimgs" \
-                         "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/CVS" \
-                         "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/.objs" \
-                         "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/exchndl2.cxx"
+EXCLUDE                = "./doc" \
+                         "./docimgs" \
+                         "./CVS" \
+                         "./.objs" \
+                         "./exchndl2.cxx" \
+			 "./.svn"
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
-EXAMPLE_PATH           = "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/examples"
+EXAMPLE_PATH           = "./examples"
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = YES
 IMAGE_PATH             = docimgs/
@@ -151,7 +152,7 @@ GENERATE_HTML          = YES
 HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            = 
-HTML_FOOTER            = "C:/Documents and Settings/ivucica/My Documents/Development/[CPP] GLICT/docimgs/footer.html"
+HTML_FOOTER            = "./docimgs/footer.html"
 HTML_STYLESHEET        = 
 HTML_ALIGN_MEMBERS     = YES
 GENERATE_HTMLHELP      = NO

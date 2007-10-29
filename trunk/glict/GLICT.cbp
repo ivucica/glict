@@ -32,7 +32,7 @@
 				</Linker>
 			</Target>
 			<Target title="library">
-				<Option output="libGLICT.a" prefix_auto="1" extension_auto="1" />
+				<Option output="libGLICT" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
 				<Option type="2" />
 				<Option compiler="gcc" />
@@ -149,6 +149,7 @@
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
+		<Unit filename="GLICT/image.h" />
 		<Unit filename="GLICT/list.cpp">
 			<Option target="demowin32" />
 			<Option target="library" />
@@ -284,6 +285,8 @@
 		</Unit>
 		<Extensions>
 			<code_completion />
+			<envvars />
+			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
