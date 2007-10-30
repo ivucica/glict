@@ -199,7 +199,8 @@ void glictButton::Paint() {
         );
     }
 
-
+/*
+// FIXME (Khaos#1#) never tested properly
 	{
 		// if focused, draw the "focused" line
 		glictColor col;
@@ -213,7 +214,7 @@ void glictButton::Paint() {
 								this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y,
 								col);
 	}
-
+*/
 	//glPushMatrix();
 	if (highlighted) glictGlobals.Translatef(2.,2.,0.);
 
