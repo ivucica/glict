@@ -19,6 +19,7 @@ class glictImage {
 		virtual void Paint(float destx, float desty, float w, float h) = 0;
 		virtual float GetW() = 0;
 		virtual float GetH() = 0;
+		glictSize GetSize() {glictSize s; s.w = GetW(); s.h = GetH(); return s;}
 };
 
 #endif

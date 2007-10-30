@@ -89,9 +89,9 @@ void glictMessageBox::SetHeight(int h) {
 
 	btnOk.SetPos(width/2 - 32, height - 21);
 	if (this->GetEnabled())
-		pnlMessage.SetHeight(h-10 - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize()->h : 0));
+		pnlMessage.SetHeight(h-10 - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize().h : 0));
 	else
-		pnlMessage.SetHeight(h - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize()->h : 0));
+		pnlMessage.SetHeight(h - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize().h : 0));
 	pnlMessage.SetPos(0,0);//containeroffsety);
 
 }

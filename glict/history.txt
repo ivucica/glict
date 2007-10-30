@@ -298,3 +298,15 @@ how many people use it, so that we know if we can do critical API changes.
 * Image.h: Added
 * Skinner.h: Fixed "text alignment" ;)
 * Skinner.h: Stubbed glictImage*-based stuff
+
+30. 10. 2007:
+
+* Globals.h: Updated to rev 49
+* Image.h: Added GetSize() which uses virtual functions GetW() and GetH()
+* Skinner: API BREAK! GetLeftSize() and friends are not returning pointers, they are directly returning struct
+* Skinner.cpp: Implemented glictImage*-based stuff
+* Skinner.cpp: Reordered the order the images are drawn
+* <many>: Updated to reflect skinner api break
+* Button.cpp: Temporarily disabled the quirky "focused" code
+
+

@@ -82,7 +82,7 @@ void glictWindow::Paint() {
 							   bgcolor);
 
     } else if (!glictGlobals.windowTitleSkin) { // if there's no title skin, but there's body skin
-        glictSize s = {this->width + glictGlobals.windowBodySkin->GetLeftSize()->w + glictGlobals.windowBodySkin->GetRightSize()->w, this->height + glictGlobals.windowBodySkin->GetTopSize()->h + glictGlobals.windowBodySkin->GetBottomSize()->h};
+        glictSize s = {this->width + glictGlobals.windowBodySkin->GetLeftSize().w + glictGlobals.windowBodySkin->GetRightSize().w, this->height + glictGlobals.windowBodySkin->GetTopSize().h + glictGlobals.windowBodySkin->GetBottomSize().h};
 
         glictGlobals.Translatef(this->x, this->y, 0);
         glictGlobals.windowBodySkin->Paint(&s);
@@ -140,7 +140,7 @@ void glictWindow::Paint() {
 */
 
 
-	glictFontRender(this->caption.c_str(),"system", this->x + glictGlobals.translation.x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize()->w : 0) , this->y*+1. + (glictGlobals.windowBodySkin ? (glictGlobals.windowBodySkin->GetTopSize()->h/2 - 10./2.) : 0) + glictGlobals.translation.y );
+	glictFontRender(this->caption.c_str(),"system", this->x + glictGlobals.translation.x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize().w : 0) , this->y*+1. + (glictGlobals.windowBodySkin ? (glictGlobals.windowBodySkin->GetTopSize().h/2 - 10./2.) : 0) + glictGlobals.translation.y );
 
 
 
@@ -248,13 +248,11 @@ void glictWindow::FixContainerOffsets() {
         this->containeroffsety = 12;
     } else {
         if (!glictGlobals.windowTitleSkin) { // all is placed inside body
-            this->containeroffsetx = glictGlobals.windowBodySkin->GetLeftSize()->w;
-            this->containeroffsety = glictGlobals.windowBodySkin->GetTopSize()->h;
-
-
+            this->containeroffsetx = glictGlobals.windowBodySkin->GetLeftSize().w;
+            this->containeroffsety = glictGlobals.windowBodySkin->GetTopSize().h;
         } else { // there are separate body and titlebar skin
-            this->containeroffsetx = glictGlobals.windowBodySkin->GetLeftSize()->w; // FIXME should not work this way
-            this->containeroffsety = glictGlobals.windowBodySkin->GetTopSize()->h;
+            this->containeroffsetx = glictGlobals.windowBodySkin->GetLeftSize().w; // FIXME should not work this way
+            this->containeroffsety = glictGlobals.windowBodySkin->GetTopSize().h;
         }
     }
     //printf("%s container offsets %d %d\n", objtype,  containeroffsetx, containeroffsety);
