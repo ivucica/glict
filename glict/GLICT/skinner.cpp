@@ -102,7 +102,7 @@ void glictSkinner::Paint(glictSize *size) {
 
         for (int pos = (topleft || topleftf) ? toplefts.w : 0; pos < size->w - ((topright || toprightf) ? toprights.w : 0); pos+=tops.w) {
             x1 = pos; y1 = 0;
-            x2 = min(size->w - ((topright || toprightf) ? toprights.w : 0) , pos + tops.w) + 1; y2 = tops.h + 1;
+            x2 = min(size->w - ((topright || toprightf) ? toprights.w : 0) , pos + tops.w); y2 = tops.h;
             if (topimg)
 				topimg->Paint(x1, y1, x2-x1, y2-y1);
 			else
@@ -119,7 +119,7 @@ void glictSkinner::Paint(glictSize *size) {
 		#endif
         for (int pos = (bottomleft || bottomleftf) ? bottomlefts.w : 0; pos < size->w - ((bottomright || bottomrightf) ? bottomrights.w : 0); pos+=bottoms.w) {
             x1 = pos; y1 = size->h - bottoms.h - 1;
-            x2 = min(size->w - ((bottomleft || bottomleftf) ? bottomlefts.w : 0), pos + bottoms.w) + 1; y2 = size->h;
+            x2 = min(size->w - ((bottomleft || bottomleftf) ? bottomlefts.w : 0), pos + bottoms.w); y2 = size->h;
             if (bottomimg)
 				bottomimg->Paint(x1, y1, x2-x1, y2-y1);
 			else
@@ -185,7 +185,7 @@ void glictSkinner::Paint(glictSize *size) {
     }
 
     if (toprightimg || topright || toprightf) {
-        x1 = size->w - toprights.w -1; y1 = 0;
+        x1 = size->w - toprights.w+1; y1 = 0;
         x2 = size->w; y2 = toprights.h + 1;
         if (toprightimg)
 			toprightimg->Paint(x1, y1, x2-x1, y2-y1);
@@ -217,7 +217,7 @@ void glictSkinner::Paint(glictSize *size) {
     }
 
     if (bottomrightimg || bottomright || bottomrightf) {
-        x1 = size->w - bottomrights.w - 1; y1 = size->h - bottomrights.h - 1;
+        x1 = size->w - bottomrights.w+1; y1 = size->h - bottomrights.h - 1;
         x2 = size->w; y2 = size->h;
         if (bottomrightimg)
 			bottomrightimg->Paint(x1, y1, x2-x1, y2-y1);
