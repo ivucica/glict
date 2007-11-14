@@ -175,7 +175,7 @@ void onpanel2paint(glictRect* real, glictRect* clipped, glictContainer* callercl
 
     glPushAttrib(GL_VIEWPORT);
     glViewport(clipped->left, glictGlobals.h - clipped->bottom, clipped->right - clipped->left, clipped->bottom - clipped->top);
-    printf("%g %g %g %g\n", clipped->left, glictGlobals.h - clipped->bottom, clipped->right - clipped->left, clipped->bottom - clipped->top);
+    //printf("%g %g %g %g\n", clipped->left, glictGlobals.h - clipped->bottom, clipped->right - clipped->left, clipped->bottom - clipped->top);
     //glClear(GL_COLOR_BUFFER_BIT);
 
     glMatrixMode(GL_PROJECTION);
@@ -209,10 +209,10 @@ void onpanel2paint(glictRect* real, glictRect* clipped, glictContainer* callercl
 }
 
 void omd(glictPos *a, glictContainer* callclass) {
-    printf("OMD\n");
+    //printf("OMD\n");
 }
 void omu(glictPos *a, glictContainer* callclass) {
-    printf("OMU\n");
+    //printf("OMU\n");
 }
 void onnbclick(glictPos *a, glictContainer *callclass) {
     l.RemoveObject(callclass);
@@ -266,6 +266,20 @@ void paintrectcallback(float left, float right, float top, float bottom, glictCo
 	glVertex2f(right, top);
 	glEnd();
 }
+
+
+void prlc(float left, float right, float top, float bottom, glictColor &col) {
+
+	glColor4f(col.r, col.g, col.b, col.a);
+
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(left, top);
+	glVertex2f(left, bottom);
+	glVertex2f(right, bottom);
+	glVertex2f(right, top);
+	glEnd();
+}
+
 
 		glictWindow login;
 		glictPanel pnlLogin;
@@ -387,6 +401,7 @@ void glinit() {
 	txtLoginProtocol.SetPos(100, 5*15);
 	txtLoginProtocol.SetHeight(14);
 	txtLoginProtocol.SetWidth(150);
+	txtLoginProtocol.SetNext(&txtLoginServer);
 
     txtLoginProtocol.SetCaption(tmp);
 
@@ -400,6 +415,7 @@ void glinit() {
 	txtLoginServer.SetPos(100, 6*15);
 	txtLoginServer.SetHeight(14);
 	txtLoginServer.SetWidth(150);
+	txtLoginServer.SetNext(&txtLoginUsername);
 
 	txtLoginServer.SetCaption( tmp );
 
@@ -413,6 +429,7 @@ void glinit() {
 	txtLoginUsername.SetPos(100, 7*15);
 	txtLoginUsername.SetHeight(14);
 	txtLoginUsername.SetWidth(150);
+	txtLoginUsername.SetNext(&txtLoginPassword);
 
 	txtLoginUsername.SetCaption(tmp);
 
@@ -427,6 +444,7 @@ void glinit() {
 	txtLoginPassword.SetHeight(14);
 	txtLoginPassword.SetWidth(150);
 	txtLoginPassword.SetPassProtectCharacter('*');
+	txtLoginPassword.SetNext(&btnLoginLogin);
 
 	txtLoginPassword.SetCaption(tmp);
 
@@ -435,18 +453,20 @@ void glinit() {
 	btnLoginLogin.SetWidth(130);
 	btnLoginLogin.SetCaption("Log in");
 	btnLoginLogin.SetBGColor(.6,.6,.6,1.);
+	btnLoginLogin.SetNext(&btnLoginCancel);
 
 	login.AddObject(&btnLoginCancel);
 	btnLoginCancel.SetPos(0, 14 + 9*15);
 	btnLoginCancel.SetWidth(130);
 	btnLoginCancel.SetCaption("Cancel");
 	btnLoginCancel.SetBGColor(.6,.6,.6,1.);
+	btnLoginCancel.SetNext(&txtLoginProtocol);
 
 
 
 
     if (txtLoginPassword.GetCaption() != "") {
-        printf("%s !!!!!!!!!!!\n", txtLoginPassword.GetCaption().c_str());
+        //printf("%s !!!!!!!!!!!\n", txtLoginPassword.GetCaption().c_str());
     }
 
 
@@ -455,7 +475,8 @@ void glinit() {
     glictGlobals.clippingMode = GLICT_STENCILTEST;
     //glictGlobals.clippingMode = GLICT_SCISSORTEST;
 
-
+	glictGlobals.drawFocus = true;
+	glictGlobals.paintrectlinesCallback = prlc;
 
     if (textured) {
         glictSize elementsize = {20, 20};

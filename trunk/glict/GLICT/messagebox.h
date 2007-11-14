@@ -38,6 +38,7 @@ class glictMessageBox : public glictWindow {
 		void SetWidth(int width);
 		void SetEnabled(bool enabled);
 		void SetBGColor(float r, float g, float b, float a);
+		void Focus(glictContainer* c);
 	private:
 		glictButton btnOk;
 		glictPanel pnlMessage;

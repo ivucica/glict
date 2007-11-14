@@ -73,6 +73,29 @@ void SDLRectDraw(float left, float right, float top, float bottom, glictColor &c
 	SDL_FillRect(screen, &rect, color);
 }
 
+void SDLRectLinesDraw(float left, float right, float top, float bottom, glictColor &col) {
+	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
+	int color = SDL_MapRGB(vi->vfmt, (int)(col.r * 255), (int)(col.g * 255), (int)(col.b * 255));
+	//SDL_Rect rect = {left, top, right-left, bottom-top};
+	{
+		SDL_Rect rect = {left, top, 1, bottom-top};
+		SDL_FillRect(screen, &rect, color);
+	}
+	{
+		SDL_Rect rect = {right-1, top, 1, bottom-top};
+		SDL_FillRect(screen, &rect, color);
+	}
+	{
+		SDL_Rect rect = {left, top, right-left, 1};
+		SDL_FillRect(screen, &rect, color);
+	}
+	{
+		SDL_Rect rect = {left, bottom-1,right-left, 1};
+		SDL_FillRect(screen, &rect, color);
+	}
+}
+
+
 int main () {
 	int videoflags = SDL_HWSURFACE  | SDL_ANYFORMAT| SDL_DOUBLEBUF | SDL_RESIZABLE;
 	int width = 640;
@@ -119,6 +142,7 @@ int main () {
 	desktop.SetHeight(height);
 
 	glictGlobals.paintrectCallback = SDLRectDraw;
+	glictGlobals.paintrectlinesCallback = SDLRectLinesDraw;
 	glictGlobals.enableGlTranslate = false;
 
 	SDL_WM_SetCaption("GLICT/SDL Demo", "");
@@ -148,7 +172,7 @@ int main () {
 		}
 
 		// blanks the screen..
-		glictColor c = {0,0,0,1};
+		glictColor c(0,0,0,1);
 		SDLRectDraw(0,640,0,480,c);
 
 		desktop.Paint();
