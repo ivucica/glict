@@ -144,6 +144,12 @@ bool glictTextbox::CastEvent(glictEvents evt, void* wparam, long lparam, void* r
 						this->SetCaption(caption + *((char*)wparam));
 					}
 					break;
+				case 9:
+					if (next)
+						next->Focus(NULL);
+					else if (parent && parent->GetNext())
+						parent->GetNext()->Focus(NULL);
+					break;
 				case 8:
 					if (caption.size()) {
 						char* Title = (char*)malloc(caption.size()+1);
@@ -154,10 +160,7 @@ bool glictTextbox::CastEvent(glictEvents evt, void* wparam, long lparam, void* r
 
 					}
 					break;
-				case 9:
-					if (next)
-						next->Focus(NULL);
-					break;
+
 			}
 			break;
 	}

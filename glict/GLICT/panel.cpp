@@ -145,7 +145,28 @@ void glictPanel::SetBGColor(float r, float g, float b, float a) {
 bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 	if (!GetVisible() || !GetEnabled()) return false;
 	switch (evt) {
+		case GLICT_KEYPRESS:
+			switch (*((char*)wparam)) {
+				case 9:
+					if (next)
+						next->Focus(NULL);
+					else if (parent && parent->GetNext())
+						parent->GetNext()->Focus(NULL);
+					break;
+				case 13:
+				case 32:
+				{
+					glictPos p = {this->clipleft, this->cliptop};
+					if (OnClick) {
+						OnClick(&p, this);
+						return true;
+					}
+				}
+				default:
+					printf("Button getting %d\n", *((char*)wparam));
 
+			}
+			break;
 		case GLICT_MOUSEUP:
 		case GLICT_MOUSEDOWN:
 		case GLICT_MOUSECLICK: {

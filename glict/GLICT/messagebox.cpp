@@ -111,3 +111,9 @@ void glictMessageBox::SetBGColor(float r, float g, float b, float a) {
 	glictWindow::SetBGColor(r,g,b,a);
 	pnlMessage.SetBGColor(r,g,b,a);
 }
+void glictMessageBox::Focus(glictContainer* c) {
+	if (!c)
+		btnOk.Focus(NULL);
+	else
+		glictContainer::Focus(c);
+}

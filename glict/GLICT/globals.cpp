@@ -38,6 +38,7 @@ glictGlobalsClass::glictGlobalsClass() {
     textboxTextColor.r = 1.; textboxTextColor.g = 1.; textboxTextColor.b = 1.; textboxTextColor.a = 1.;
 
 	drawPartialOut = true;
+	drawFocus = false;
 
 	lastMousePos.x = 0; lastMousePos.y = 0;
 	srand(time(NULL));
@@ -98,22 +99,8 @@ void glictGlobalsClass::PaintRectLines(float left, float right, float top, float
 	PaintRectLines(left, right, top, bottom, tmp);
 }
 void glictGlobalsClass::PaintRectLines(float left, float right, float top, float bottom, glictColor &col) {
-	if (paintrectCallback) {
-		paintrectCallback (left, right, top, bottom, col)  ;
-	} else {
-		#ifndef NO_GL
-		if (col.a >= 0) glColor4f(col.r, col.g, col.b, col.a);
-		glBegin(GL_LINE_LOOP);
-		glTexCoord2f(0, 0);
-		glVertex2f(left, top);
-		glTexCoord2f(0, 1);
-		glVertex2f(left, bottom);
-		glTexCoord2f(1, 1);
-		glVertex2f(right, bottom);
-		glTexCoord2f(1, 0);
-		glVertex2f(right, top);
-		glEnd();
-		#endif
+	if (paintrectlinesCallback) {
+		paintrectlinesCallback (left, right, top, bottom, col)  ;
 	}
 }
 

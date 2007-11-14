@@ -84,6 +84,8 @@ class glictContainer  {
 
 		void SetPrevious(glictContainer*);
 		void SetNext(glictContainer*);
+		glictContainer* GetPrevious() {return previous;}
+		glictContainer* GetNext() {return next;}
 
 		bool CastEvent(glictEvents evt, void* wparam, long lparam); ///< Casts an event omitting the returnvalue. (deprecated, I'm lazy and don't want to rewrite code so I abuse namespace)
 		bool DefaultCastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Casts an event into default event processor, omitting the widget's code.
@@ -96,7 +98,7 @@ class glictContainer  {
 		std::string GetCaption(); ///< Retrieves the caption of the control, if supported.
 
 		const char *EvtTypeDescriptor(glictEvents evt); ///< Returns string with generated event.
-		void Focus(glictContainer* callerchild); ///< Sets the focus to the current object.
+		virtual void Focus(glictContainer* callerchild); ///< Sets the focus to the current object.
 
 		glictContainer* GetParent();
 
@@ -162,7 +164,6 @@ class glictContainer  {
 		unsigned int fontsize;
 
 		void* customdata;
-
 
 
     /// \todo Remove this friend!

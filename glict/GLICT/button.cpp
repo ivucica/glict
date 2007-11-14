@@ -87,10 +87,27 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 		case GLICT_KEYPRESS:
 			switch (*((char*)wparam)) {
 				case 9:
-					if (next)
+					if (next) {
 						next->Focus(NULL);
-						break;
+						return true;
+					}
+					else if (parent && parent->GetNext()) {
+						parent->GetNext()->Focus(NULL);
+						return true;
+					}
+					break;
+				case 13:
+				case 32:
+				{
+					glictPos p = {this->clipleft, this->cliptop};
+					if (OnClick) {
+						OnClick(&p, this);
+						return true;
+					}
+				}
+
 			}
+			return false;
 			break;
 		case GLICT_MOUSEUP:
 		case GLICT_MOUSEDOWN:
@@ -199,22 +216,22 @@ void glictButton::Paint() {
         );
     }
 
-/*
-// FIXME (Khaos#1#) never tested properly
-	{
-		// if focused, draw the "focused" line
-		glictColor col;
+	if (glictGlobals.drawFocus)
+		if (this == glictGlobals.topFocused) {
+			// if focused, draw the "focused" line
+			glictColor col;
 
-		col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.6 : (float)this->bgcolor.r / 1.6;
-		col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.6 : (float)this->bgcolor.g / 1.6;
-		col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.6 : (float)this->bgcolor.b / 1.6;
-		col.a = this->bgcolor.a;
+			col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.6 : (float)this->bgcolor.r / 1.6;
+			col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.6 : (float)this->bgcolor.g / 1.6;
+			col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.6 : (float)this->bgcolor.b / 1.6;
+			col.a = this->bgcolor.a;
 
-		glictGlobals.PaintRectLines(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
-								this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y,
-								col);
-	}
-*/
+			glictGlobals.PaintRectLines(this->x+glictGlobals.translation.x + 3, this->x+this->width+glictGlobals.translation.x - 3,
+									this->y+glictGlobals.translation.y + 3, this->y+this->height+glictGlobals.translation.y - 3,
+									col);
+
+		}
+
 	//glPushMatrix();
 	if (highlighted) glictGlobals.Translatef(2.,2.,0.);
 

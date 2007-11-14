@@ -118,7 +118,7 @@ void glictSkinner::Paint(glictSize *size) {
             glBindTexture(GL_TEXTURE_2D, bottom);
 		#endif
         for (int pos = (bottomleft || bottomleftf) ? bottomlefts.w : 0; pos < size->w - ((bottomright || bottomrightf) ? bottomrights.w : 0); pos+=bottoms.w) {
-            x1 = pos; y1 = size->h - bottoms.h - 1;
+            x1 = pos; y1 = size->h - bottoms.h;
             x2 = min(size->w - ((bottomleft || bottomleftf) ? bottomlefts.w : 0), pos + bottoms.w); y2 = size->h;
             if (bottomimg)
 				bottomimg->Paint(x1, y1, x2-x1, y2-y1);
@@ -170,7 +170,7 @@ void glictSkinner::Paint(glictSize *size) {
 
     if (topleftimg || topleft || topleftf) {
         x1 = y1 = 0;
-        x2 = toplefts.w+1; y2 = toplefts.h+1;
+        x2 = toplefts.w+1; y2 = toplefts.h;
         if (topleftimg)
 			topleftimg->Paint(x1, y1, x2-x1, y2-y1);
 		else {
@@ -185,8 +185,8 @@ void glictSkinner::Paint(glictSize *size) {
     }
 
     if (toprightimg || topright || toprightf) {
-        x1 = size->w - toprights.w+1; y1 = 0;
-        x2 = size->w; y2 = toprights.h + 1;
+        x1 = size->w - toprights.w; y1 = 0;
+        x2 = size->w; y2 = toprights.h;
         if (toprightimg)
 			toprightimg->Paint(x1, y1, x2-x1, y2-y1);
 		else {
@@ -201,8 +201,8 @@ void glictSkinner::Paint(glictSize *size) {
     }
 
     if (bottomleftimg || bottomleft || bottomleftf) {
-        x1 = 0; y1 = size->h - bottomlefts.h - 1;
-        x2 = bottomlefts.w + 1; y2 = size->h;
+        x1 = 0; y1 = size->h - bottomlefts.h;
+        x2 = bottomlefts.w ; y2 = size->h;
         if (bottomleftimg)
 			bottomleftimg->Paint(x1, y1, x2-x1, y2-y1);
 		else {
@@ -217,8 +217,8 @@ void glictSkinner::Paint(glictSize *size) {
     }
 
     if (bottomrightimg || bottomright || bottomrightf) {
-        x1 = size->w - bottomrights.w+1; y1 = size->h - bottomrights.h - 1;
-        x2 = size->w; y2 = size->h;
+        x1 = size->w - bottomrights.w; y1 = size->h - bottomrights.h;
+        x2 = size->w - 1; y2 = size->h;
         if (bottomrightimg)
 			bottomrightimg->Paint(x1, y1, x2-x1, y2-y1);
 		else {

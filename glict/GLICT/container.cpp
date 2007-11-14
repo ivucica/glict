@@ -620,16 +620,19 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 	//printf("Default event of type %s passing through %s (%s) with %d children\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL", this->objects.size());
 	switch (evt) {
 		case GLICT_KEYPRESS:
+
+
+
 			// as default behaviour is that widget doesnt know what to do with
 			// a key, it'll pass exec to the top focused item, whatever it
 			// might be
 			if (glictGlobals.topFocused)
-				if (this!=glictGlobals.topFocused)
+				if (this != glictGlobals.topFocused)
 					return glictGlobals.topFocused->CastEvent(evt, wparam, lparam, returnvalue);
 			// if it cant find top focused item, or that it is actually the
-			// focused item, then it will report that it
-			// doesnt know how to proc the event
+			// focused item, report that it doesnt know how to proc the event
 			return false;
+
 		case GLICT_KEYDOWN:
 
 			return false;
@@ -818,7 +821,7 @@ bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam) {
   * \sa DefaultCastEvent()
   */
 bool glictContainer::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
-	if (!GetVisible() || !GetEnabled()) 
+	if (!GetVisible() || !GetEnabled())
 		return false;
 	//printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
 	switch (evt) {
