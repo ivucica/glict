@@ -49,6 +49,7 @@ glictButton::glictButton() {
 	strcpy(this->objtype, "Button");
 
 	this->highlighted = false;
+	this->hold = false;
 	this->parent = NULL;
 
 	this->focusable = true;
@@ -172,10 +173,10 @@ void glictButton::Paint() {
 
 	this->SetScissor();
 
-	if (!((glictGlobals.buttonSkin && !highlighted) || (glictGlobals.buttonHighlightSkin && highlighted))) {
+	if (!((glictGlobals.buttonSkin && (!highlighted && !hold)) || (glictGlobals.buttonHighlightSkin && (highlighted || hold)))) {
 		// if skin is not set, then let's draw a plain rectangle
 		glictColor col;
-        if (!highlighted) {
+        if (!highlighted || !hold) {
             col = bgcolor;
         } else {
             col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
@@ -192,7 +193,7 @@ void glictButton::Paint() {
         glictSize s = {this->width, this->height};
 
         glictGlobals.Translatef(this->x, this->y, 0);
-        if (!highlighted)
+        if (!highlighted && !hold)
             glictGlobals.buttonSkin->Paint(&s);
         else
             glictGlobals.buttonHighlightSkin->Paint(&s);
@@ -281,4 +282,15 @@ void glictButton::SetFGColor(float r, float g, float b, float a) {
 	this->fgcolor.g = g;
 	this->fgcolor.b = b;
 	this->fgcolor.a = a;
+}
+
+/**
+  * \param holdvalue Should it be rendered as highlighed no matter what
+  *
+  * If holdvalue is set to true, then we'll be rendering the button as
+  * if the mouse is being held on it, no matter what.
+  */
+
+void glictButton::SetHold (bool holdvalue) {
+	this->hold = holdvalue;
 }

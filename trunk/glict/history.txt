@@ -309,4 +309,7 @@ how many people use it, so that we know if we can do critical API changes.
 * <many>: Updated to reflect skinner api break
 * Button.cpp: Temporarily disabled the quirky "focused" code
 
+18. 12. 2007:
+
+* Button: Added "button holding" concept
 

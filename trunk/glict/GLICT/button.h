@@ -46,13 +46,18 @@ class glictButton : public glictContainer {
         void SetBGColor(float r, float g, float b, float a); ///< Sets the background color of the button.
         void SetFGColor(float r, float g, float b, float a); ///< Sets the foreground color of the button.
 
+		void SetHold (bool holdvalue);
+
         // redefined functions
         void Paint(); ///< Paints the button.
         bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Event processing for button widget.
+
+
     private:
         glictColor bgcolor; ///< Stores the background color.
         glictColor fgcolor; ///< Stores the foreground color.
         bool highlighted; ///< Is mouse pressed or not
+        bool hold; ///< Should we render as if mouse is pressed no matter what
 };
 #endif
 
