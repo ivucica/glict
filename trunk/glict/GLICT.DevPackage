@@ -1,0 +1,35 @@
+[Setup]
+Version=2
+AppName=GLICT - GL User Interface Creation Toolkit
+AppVerName=GLICT svn#
+AppVersion=svn#
+MenuName=
+Description=GLICT, the GL User Interface Toolkit, is a user interface library primarily to be used with OpenGL, but also compatible with other rendering libraries, for example SDL.
+Url=http://glict.sf.net/
+Readme=readme.txt
+License=LICENSE.txt
+Picture=logo.bmp
+Dependencies=
+Reboot=0
+[Files]
+GLICT\button.h=<app>\include\GLICT\
+GLICT\container.h=<app>\include\GLICT\
+GLICT\fonts.h=<app>\include\GLICT\
+GLICT\globals.h=<app>\include\GLICT\
+GLICT\image.h=<app>\include\GLICT\
+GLICT\list.h=<app>\include\GLICT\
+GLICT\messagebox.h=<app>\include\GLICT\
+GLICT\panel.h=<app>\include\GLICT\
+GLICT\progressbar.h=<app>\include\GLICT\
+GLICT\scrollbar.h=<app>\include\GLICT\
+GLICT\skinner.h=<app>\include\GLICT\
+GLICT\textbox.h=<app>\include\GLICT\
+GLICT\types.h=<app>\include\GLICT\
+GLICT\window.h=<app>\include\GLICT\
+docs.txt=<app>\doc\GLICT\
+history.txt=<app>\doc\GLICT\
+LICENSE.txt=<app>\doc\GLICT\
+readme.txt=<app>\doc\GLICT\
+snippets.txt=<app>\doc\GLICT\
+examples=<app>\doc\GLICT\examples\
+libGLICT.a=<app>\lib\

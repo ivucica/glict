@@ -290,7 +290,7 @@ int main(int argc, char** argv) {
 	SDL_Event event;
 
 	// blanks the screen..
-	glictColor c = {0,0,0,1};
+	glictColor c(0,0,0,1);
 	SDLRectDraw(0,640,0,480,c);
 
 	desktop.Paint();
@@ -308,7 +308,7 @@ int main(int argc, char** argv) {
 					desktop.CastEvent(event.type == SDL_MOUSEBUTTONUP ? GLICT_MOUSEUP : GLICT_MOUSEDOWN, &p,0);
 
 					// blanks the screen..
-					glictColor c = {0,0,0,1};
+					glictColor c(0,0,0,1);
 					SDLRectDraw(0,640,0,480,c);
 
 					desktop.Paint();

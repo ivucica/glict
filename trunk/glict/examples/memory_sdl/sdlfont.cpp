@@ -1,5 +1,5 @@
 #include <SDL/SDL.h>
-
+#include <string.h>
 extern SDL_Surface* screen;
 void SDLFontDrawChar(char t, SDL_Surface* img, int x1, int y1) {
 	t -= 32;
