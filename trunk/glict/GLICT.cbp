@@ -103,37 +103,37 @@
 			<Add alias="All" targets="demowin32;library;" />
 		</VirtualTargets>
 		<Compiler>
-			<Add directory="/home/ivucica/Development/glict/" />
+			<Add directory="." />
 		</Compiler>
-		<Unit filename="GLICT/button.cpp" />
-		<Unit filename="GLICT/button.h">
+		<Unit filename="GLICT\button.cpp" />
+		<Unit filename="GLICT\button.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/container.cpp" />
-		<Unit filename="GLICT/container.h">
+		<Unit filename="GLICT\container.cpp" />
+		<Unit filename="GLICT\container.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/fonts.cpp" />
-		<Unit filename="GLICT/fonts.h">
+		<Unit filename="GLICT\fonts.cpp" />
+		<Unit filename="GLICT\fonts.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/globals.cpp" />
-		<Unit filename="GLICT/globals.h">
+		<Unit filename="GLICT\globals.cpp" />
+		<Unit filename="GLICT\globals.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/glut-helper.cpp">
+		<Unit filename="GLICT\glut-helper.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 			<Option target="demowin32" />
@@ -142,70 +142,70 @@
 			<Option target="examples-memory" />
 			<Option target="examples-memory_sdl" />
 		</Unit>
-		<Unit filename="GLICT/glut-helper.h">
+		<Unit filename="GLICT\glut-helper.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/image.h" />
-		<Unit filename="GLICT/list.cpp">
+		<Unit filename="GLICT\image.h" />
+		<Unit filename="GLICT\list.cpp">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/list.h">
+		<Unit filename="GLICT\list.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/messagebox.cpp" />
-		<Unit filename="GLICT/messagebox.h">
+		<Unit filename="GLICT\messagebox.cpp" />
+		<Unit filename="GLICT\messagebox.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/panel.cpp" />
-		<Unit filename="GLICT/panel.h">
+		<Unit filename="GLICT\panel.cpp" />
+		<Unit filename="GLICT\panel.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/progressbar.cpp" />
-		<Unit filename="GLICT/progressbar.h" />
-		<Unit filename="GLICT/scrollbar.cpp" />
-		<Unit filename="GLICT/scrollbar.h">
+		<Unit filename="GLICT\progressbar.cpp" />
+		<Unit filename="GLICT\progressbar.h" />
+		<Unit filename="GLICT\scrollbar.cpp" />
+		<Unit filename="GLICT\scrollbar.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/skinner.cpp" />
-		<Unit filename="GLICT/skinner.h">
+		<Unit filename="GLICT\skinner.cpp" />
+		<Unit filename="GLICT\skinner.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/textbox.cpp" />
-		<Unit filename="GLICT/textbox.h">
+		<Unit filename="GLICT\textbox.cpp" />
+		<Unit filename="GLICT\textbox.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/types.h">
+		<Unit filename="GLICT\types.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="GLICT/window.cpp" />
-		<Unit filename="GLICT/window.h">
+		<Unit filename="GLICT\window.cpp" />
+		<Unit filename="GLICT\window.h">
 			<Option target="demowin32" />
 			<Option target="library" />
 			<Option target="demounix" />
@@ -221,23 +221,23 @@
 			<Option target="demounix" />
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="examples/memory/glut-helper.cpp">
+		<Unit filename="examples\memory\glut-helper.cpp">
 			<Option target="examples-memory" />
 		</Unit>
-		<Unit filename="examples/memory/glut-helper.h">
+		<Unit filename="examples\memory\glut-helper.h">
 			<Option target="demounix" />
 			<Option target="examples-memory" />
 		</Unit>
-		<Unit filename="examples/memory/main.cpp">
+		<Unit filename="examples\memory\main.cpp">
 			<Option target="examples-memory" />
 		</Unit>
-		<Unit filename="examples/memory_sdl/main.cpp">
+		<Unit filename="examples\memory_sdl\main.cpp">
 			<Option target="examples-memory_sdl" />
 		</Unit>
-		<Unit filename="examples/memory_sdl/sdlfont.cpp">
+		<Unit filename="examples\memory_sdl\sdlfont.cpp">
 			<Option target="examples-memory_sdl" />
 		</Unit>
-		<Unit filename="examples/memory_sdl/sdlfont.h">
+		<Unit filename="examples\memory_sdl\sdlfont.h">
 			<Option target="examples-memory_sdl" />
 		</Unit>
 		<Unit filename="exchndl2.cxx">
@@ -286,6 +286,7 @@
 			<code_completion />
 			<envvars />
 			<debugger />
+			<lib_finder />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
