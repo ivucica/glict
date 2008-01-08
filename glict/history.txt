@@ -313,3 +313,6 @@ how many people use it, so that we know if we can do critical API changes.
 
 * Button: Added "button holding" concept
 
+8. 1. 2007:
+
+* various "paperwork" (creating devpaks, etc)
