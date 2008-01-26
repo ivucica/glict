@@ -18,19 +18,19 @@
 */
 
 /**
- * \file container.cpp
- * \brief Container class code
- * \sa glictContainer
+ * \file eventhandler.cpp
+ * \brief Event handler class code
+ * \sa glictEventHandler
  */
 
-#include <GLICT/container.h>
+#include <GLICT/eventhandler.h>
 
-glictContainer::glictContainer() 
+glictEventHandler::glictEventHandler() 
 {
 	//
 }
 
-glictContainer::~glictContainer() 
+glictEventHandler::~glictEventHandler() 
 {
 	//
 }

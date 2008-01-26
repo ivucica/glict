@@ -18,19 +18,19 @@
 */
 
 /**
- * \file container.cpp
- * \brief Container class code
- * \sa glictContainer
+ * \file font.cpp
+ * \brief Font class code
+ * \sa glictFont
  */
 
-#include <GLICT/container.h>
+#include <GLICT/font.h>
 
-glictContainer::glictContainer() 
+glictFont::glictFont() 
 {
 	//
 }
 
-glictContainer::~glictContainer() 
+glictFont::~glictFont() 
 {
 	//
 }
