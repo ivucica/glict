@@ -29,7 +29,8 @@
 
 #include <GLICT/eventhandler.h>
 
-class glictContainer : public glictEventHandler {
+class glictContainer : public glictEventHandler 
+{
     public:
         glictContainer();
         ~glictContainer();

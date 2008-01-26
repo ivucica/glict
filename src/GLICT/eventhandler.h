@@ -26,7 +26,8 @@
 #ifndef __GLICT2_EVENTHANDLER_H
 #define __GLICT2_EVENTHANDLER_H
 
-class glictEventHandler {
+class glictEventHandler 
+{
     public:
         glictEventHandler() {}
 };
