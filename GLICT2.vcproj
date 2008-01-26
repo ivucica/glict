@@ -132,6 +132,14 @@
 				RelativePath=".\src\GLICT\container.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\src\GLICT\eventhandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\GLICT\font.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -144,6 +152,10 @@
 			</File>
 			<File
 				RelativePath=".\src\GLICT\eventhandler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\GLICT\font.h"
 				>
 			</File>
 		</Filter>
