@@ -1,6 +1,6 @@
 /*
 	GLICT2 - Graphics Library Interface Creation Toolkit 2
-	Copyright © 2008 Ivan Vucica & Robbert de Vries
+	Copyright (c) 2008 Ivan Vucica & Robbert de Vries
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
