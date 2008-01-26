@@ -1,7 +1,9 @@
-#ifdef WIN32
-#include <windows.h>
+#ifndef NO_GL
+	#ifdef WIN32
+		#include <windows.h>
+	#endif
+	#include <GL/gl.h>
 #endif
-#include <GL/gl.h>
 #include "skinner.h"
 #include "globals.h"
 

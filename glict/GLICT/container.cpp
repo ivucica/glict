@@ -27,10 +27,12 @@
 
 
 #include <stdlib.h>
-#ifdef WIN32
-    #include <windows.h>
+#ifndef NO_GL
+	#ifdef WIN32
+		#include <windows.h>
+	#endif
+	#include <GL/gl.h>
 #endif
-#include <GL/gl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

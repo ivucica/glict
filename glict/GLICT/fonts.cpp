@@ -32,14 +32,13 @@
  * resize it.
  */
 
-
-#ifdef WIN32
-	// GL.h doesnt like it that we dont include windows.h in MSVC
-	#include <windows.h>
-#endif
-
 #include <vector>
-#include <GL/gl.h>
+#ifndef NO_GL
+	#ifdef WIN32
+		#include <windows.h>
+	#endif
+	#include <GL/gl.h>
+#endif
 #include "fonts.h"
 
 _GLICTFONTVECTOR glictFonts;
