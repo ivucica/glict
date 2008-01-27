@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\ivucica\My Documents\Development\[CPP] GLICT&quot;"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE"
 				DebugInformationFormat="3"
 			/>
