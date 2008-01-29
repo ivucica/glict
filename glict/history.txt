@@ -316,3 +316,7 @@ how many people use it, so that we know if we can do critical API changes.
 8. 1. 2007:
 
 * various "paperwork" (creating devpaks, etc)
+
+29. 1. 2008.
+* fixed up progressbar so it finally works now ;)
+
