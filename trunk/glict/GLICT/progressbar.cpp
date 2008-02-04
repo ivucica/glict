@@ -15,8 +15,9 @@ void glictProgressBar::Paint() {
 	glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
 		this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y, white);
 
-	glictGlobals.PaintRect(this->x+glictGlobals.translation.x +1, this->x+(this->width* percent/100.)+glictGlobals.translation.x  -1,
-		this->y+glictGlobals.translation.y +1,  this->y+this->height+glictGlobals.translation.y -1, green);
+	if (percent>0)
+		glictGlobals.PaintRect(this->x+glictGlobals.translation.x +1, this->x+((this->width-1)* percent/100.)+glictGlobals.translation.x,
+			this->y+glictGlobals.translation.y +1,  this->y+this->height+glictGlobals.translation.y -1, green);
 
 
 	this->CPaint();

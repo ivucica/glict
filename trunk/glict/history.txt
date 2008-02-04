@@ -318,5 +318,8 @@ how many people use it, so that we know if we can do critical API changes.
 * various "paperwork" (creating devpaks, etc)
 
 29. 1. 2008.
-* fixed up progressbar so it finally works now ;)
+* Progressbar: fixed up progressbar so it finally works now ;)
+
+2. 2. 2008.
+* Progressbar.cpp: small fix for progressbar
 
