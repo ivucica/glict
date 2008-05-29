@@ -29,6 +29,8 @@ void glictProgressBar::Paint() {
 
 void glictProgressBar::SetValue(float newpcnt) {
 	percent = newpcnt;
+	if (percent>100)
+		printf("glictProgressBar::SetValue(): warning: percent > 100, set to %g\n", newpcnt);
 }
 
 void glictProgressBar::AddValue(float newpcnt) {
