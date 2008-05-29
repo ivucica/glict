@@ -428,6 +428,12 @@ void glictContainer::SetClip(float left, float top, float right, float bottom) {
   */
 void glictContainer::SetScissor() {
 	//printf("SCISSOR SET\n");
+
+	if (glictGlobals.clipperCallback) {
+	    glictGlobals.clipperCallback(clipleft, clipright, cliptop, clipbottom);
+	    return;
+	}
+
 #ifdef NO_GL
 	return;
 #else

@@ -50,6 +50,7 @@ glictGlobalsClass::glictGlobalsClass() {
 	this->debugCallback = NULL;
 	this->paintrectCallback = NULL;
 	this->paintrectlinesCallback = NULL;
+	this->clipperCallback = NULL;
 	#ifndef NO_GL
 	this->enableGlTranslate = true; // if we want SDL or any other rendering engine, we gotta turn this to false
 	#else

@@ -27,6 +27,7 @@
 
 typedef void (*GLICTDEBUGCALLBACKPROC )(unsigned int len, const char *string);
 typedef void (*GLICTPAINTRECTPROC)( float left, float right, float top, float bottom, glictColor &color );
+typedef void (*GLICTCLIPPERPROC)( float left, float right, float top, float bottom );
 
 /// Stores some global settings.
 class glictGlobalsClass {
@@ -58,7 +59,7 @@ class glictGlobalsClass {
 		GLICTDEBUGCALLBACKPROC debugCallback;
 		GLICTPAINTRECTPROC paintrectCallback;
 		GLICTPAINTRECTPROC paintrectlinesCallback;
-
+        GLICTCLIPPERPROC clipperCallback;
 
 		// functions
 		void Translatef(float, float, float);
@@ -73,6 +74,6 @@ extern glictGlobalsClass glictGlobals;
 #define GLICT_RENDERING false
 #define GLICT_SELECTING true
 
-#define GLICT_APIREV 63 // from which subversion repository revision does this install come (manually changed upon relevant API changes)
+#define GLICT_APIREV 65 // from which subversion repository revision does this install come (manually changed upon relevant API changes)
 
 #endif
