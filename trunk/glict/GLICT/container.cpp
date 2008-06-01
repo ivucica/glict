@@ -31,7 +31,11 @@
 	#ifdef WIN32
 		#include <windows.h>
 	#endif
-	#include <GL/gl.h>
+	#ifdef __APPLE__
+		#include <OpenGL/gl.h>
+	#else
+		#include <GL/gl.h>
+	#endif
 #endif
 #include <stdio.h>
 #include <stdlib.h>
@@ -586,6 +590,9 @@ void glictContainer::CPaint() {
 				if ((*it)->GetY() < virtualpos.y )
 					continue;
         	}
+
+        	if ((*it)->clipbottom <= (*it)->cliptop || (*it)->clipright <= (*it)->clipleft)
+                continue;
 
             (*it)->SetScissor();
             (*it)->Paint();

@@ -10,6 +10,7 @@ glictProgressBar::~glictProgressBar () {
 }
 
 void glictProgressBar::Paint() {
+
 	static glictColor white(.75,.75,.75,.75);
 	static glictColor green(0,1,0,1);
 	glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,

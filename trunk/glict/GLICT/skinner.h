@@ -23,7 +23,11 @@
     #include <windows.h>
 #endif
 #ifndef NO_GL
-	#include <GL/gl.h>
+	#ifdef __APPLE__
+		#include <OpenGL/gl.h>
+	#else
+		#include <GL/gl.h>
+	#endif
 #else
 	typedef unsigned int GLuint;
 #endif
