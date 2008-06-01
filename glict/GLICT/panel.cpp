@@ -52,7 +52,6 @@ glictPanel::~glictPanel() {
 void glictPanel::Paint() {
 	if (!GetVisible()) return;
 
-
 /*
     if (virtualsize.w > width) {
         sbHorizontal.SetHeight(10);
