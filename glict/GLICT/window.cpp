@@ -178,7 +178,7 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 	if (!GetVisible()) return false;
 	float oldx = this->x, oldy = this->y;
 
-	if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP) {
+	if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP || evt == GLICT_MOUSEMOVE) {
 		if (((glictPos*)wparam)->x > this->clipleft &&
 			((glictPos*)wparam)->x < this->clipright &&
 			((glictPos*)wparam)->y > this->cliptop &&
@@ -209,6 +209,14 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 
 				return true;
 			}
+
+            if (evt == GLICT_MOUSEMOVE && this->mousedown) {
+                this->SetPos(
+					((glictPos*)wparam)->x - this->relmouse.x,
+					((glictPos*)wparam)->y - this->relmouse.y
+				);
+				return DefaultCastEvent(evt,wparam,lparam,returnvalue);
+            }
 
 			if (evt == GLICT_MOUSEUP && this->mousedown) {
 				this->SetPos(

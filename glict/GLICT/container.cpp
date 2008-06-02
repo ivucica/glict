@@ -658,6 +658,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 		case GLICT_MOUSEUP:
 		case GLICT_MOUSEDOWN:
 		case GLICT_MOUSECLICK:
+		case GLICT_MOUSEMOVE:
 			{
 			std::vector<glictContainer*>::reverse_iterator it;
 			//vector<glictContainer*>::iterator it;
@@ -746,7 +747,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 
 
 
-			} else { // not mousedown , not mouseup? mouseclick!
+			} else if (evt == GLICT_MOUSECLICK) { // not mousedown , not mouseup? mouseclick!
 
 
 				if (((glictPos*)wparam)->x > this->clipleft &&
