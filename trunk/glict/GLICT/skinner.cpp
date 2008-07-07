@@ -434,3 +434,6 @@ glictSize glictSkinner::GetRightSize() {
 glictSize glictSkinner::GetBottomSize() {
     return this->bottoms;
 }
+glictSize glictSkinner::GetCenterSize() {
+    return this->centers;
+}

@@ -1,6 +1,6 @@
 /*
 	GLICT - Graphics Library Interface Creation Toolkit
-	Copyright (C) 2006-2007 OBJECT Networks
+	Copyright (C) 2006-2008 Ivan Vucica
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "scrollbar.h"
 #include "globals.h"
 #include "fonts.h"
@@ -58,83 +59,127 @@ glictScrollbar::~glictScrollbar() {
 }
 void glictScrollbar::Paint() {
 	if (!GetVisible()) return;
-
+    glictColor col;
+    glictSkinner* activeSkin = NULL;
 	// upper "button" //
-	glictColor col;
-	if (!highlightup) {
-		col = bgcolor;
-	} else {
-		col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
-		col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5;
-		col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5;
-		col.a = this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5;
+
+    if (!highlightup) {
+        if (!glictGlobals.scrollbarUpperSkin) {
+            col = bgcolor;
+            activeSkin = NULL;
+        } else {
+            activeSkin = glictGlobals.scrollbarUpperSkin;
+        }
+    } else {
+        if (!glictGlobals.scrollbarUpperHighlightSkin) {
+            if (!glictGlobals.buttonHighlightSkin) {
+                col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
+                col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5;
+                col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5;
+                col.a = this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5;
+                activeSkin = NULL;
+		    } else {
+		        activeSkin = glictGlobals.buttonHighlightSkin;
+		    }
+        } else {
+            activeSkin = glictGlobals.scrollbarUpperHighlightSkin;
+        }
+    }
+    if (!activeSkin) {
+        glictGlobals.PaintRect(this->x+glictGlobals.translation.x,this->x+this->width+glictGlobals.translation.x,
+                               this->y+glictGlobals.translation.y, this->y+this->width+glictGlobals.translation.y,
+                               col);
+    } else {
+        glictSize s = {this->width, this->width};
+
+        glictGlobals.Translatef(this->x, this->y, 0);
+        activeSkin->Paint(&s);
+        glictGlobals.Translatef(-this->x, -this->y, 0);
 	}
-	glictGlobals.PaintRect(this->x+glictGlobals.translation.x,this->x+this->width+glictGlobals.translation.x,
-						   this->y+glictGlobals.translation.y, this->y+this->width+glictGlobals.translation.y,
-						   col);
 
 	// lower "button" //
 	if (!highlightdn) {
-		col = bgcolor;
+		if (!glictGlobals.scrollbarLowerSkin) {
+            col = bgcolor;
+            activeSkin = NULL;
+        } else {
+            activeSkin = glictGlobals.scrollbarLowerSkin;
+        }
 	} else {
-		col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
-		col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5;
-		col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5;
-		col.a = this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5;
+		if (!glictGlobals.scrollbarLowerHighlightSkin) {
+		    if (!glictGlobals.buttonHighlightSkin) {
+                col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
+                col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5;
+                col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5;
+                col.a = this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5;
+                activeSkin = NULL;
+		    } else {
+		        activeSkin = glictGlobals.buttonHighlightSkin;
+		    }
+        } else {
+            activeSkin = glictGlobals.scrollbarLowerHighlightSkin;
+        }
 	}
-	glictGlobals.PaintRect(this->x+glictGlobals.translation.x,this->x+this->width+glictGlobals.translation.x,
-							this->y+this->height-this->width+glictGlobals.translation.y,this->y+this->height+glictGlobals.translation.y,
-							col);
+	if (!activeSkin) {
+        glictGlobals.PaintRect(this->x+glictGlobals.translation.x,this->x+this->width+glictGlobals.translation.x,
+                               this->y+this->height-this->width+glictGlobals.translation.y,this->y+this->height+glictGlobals.translation.y,
+                               col);
+	} else {
+        glictSize s = {this->width, this->width};
+
+        glictGlobals.Translatef(this->x, this->y+this->height-this->width, 0);
+        activeSkin->Paint(&s);
+        glictGlobals.Translatef(-(this->x), -(this->y+this->height-this->width), 0);
+	}
 
 	// back panel
-	col.r = bgcolor.r * 0.7;
-	col.g = bgcolor.g * 0.7;
-	col.b = bgcolor.b * 0.7;
-	col.a = bgcolor.a;
-	glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
-							this->y+this->width+glictGlobals.translation.y,this->y+this->height-this->width+glictGlobals.translation.y, col);
+	if (!glictGlobals.scrollbarPanelSkin) {
+        col.r = bgcolor.r * 0.7;
+        col.g = bgcolor.g * 0.7;
+        col.b = bgcolor.b * 0.7;
+        col.a = bgcolor.a;
+        glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+                               this->y+this->width+glictGlobals.translation.y,this->y+this->height-this->width*2+glictGlobals.translation.y, col);
+	} else {
+	    glictSize s = {this->width, this->height - this->width*2};
+
+        glictGlobals.Translatef(this->x, this->y+this->width, 0);
+        glictGlobals.scrollbarPanelSkin->Paint(&s);
+        glictGlobals.Translatef(-(this->x), -(this->y+this->width), 0);
+	}
 
 
 	// scroller chip
-	col.r = bgcolor.r * 0.8;
-	col.g = bgcolor.g * 0.8;
-	col.b = bgcolor.b * 0.8;
-	col.a = bgcolor.a;
+    if (!glictGlobals.scrollbarDragSkin) {
+        col.r = bgcolor.r * 0.8;
+        col.g = bgcolor.g * 0.8;
+        col.b = bgcolor.b * 0.8;
+        col.a = bgcolor.a;
+        glictGlobals.PaintRect(
+            this->x+glictGlobals.translation.x,
+            this->x + this->width +glictGlobals.translation.x,
 
+            this->y +glictGlobals.translation.y + // normal beginning coord of the object
+            this->width + // increased by height of top button
+            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+            * (float)(this->height - this->width*2 - this->width), // which should be a height, reduced by top and bottom button's height, but also by scroller's height
 
-/*
+            this->y +glictGlobals.translation.y + // normal beginning coord of the object
+            this->width + // increased by height of top button
+            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+            * (float)(this->height - this->width*2 - this->width) // which should be a height, reduced by top and bottom button's height, but also by scroller's height
+            + this->width // this is bottom, add some more
 
-	glVertex2f(
-		this->x,
-		this->y + // normal beginning coord of the object
-		this->width + // increased by height of top button
-		((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
-		* (float)(this->height - this->width*2 - this->width) // which should be a height, reduced by top and bottom button's height, but also by scroller's height
-	);
-	glVertex2f(this->x + this->width, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width));
-	glVertex2f(this->x + this->width, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width) + this->width);
-	glVertex2f(this->x, this->y + this->width + ((float)(this->value-this->min) / (float)(this->max - this->min)) * (float)(this->height - this->width*2 - this->width) + this->width);
+            ,col
+        );
+    } else {
+        glictSize s = {this->width, this->width};
 
-*/
+        glictGlobals.Translatef(this->x, this->y+this->width+((float)(this->value-this->min) / (float)(this->max - this->min))* (float)(this->height - this->width*2 - this->width), 0);
+        glictGlobals.scrollbarDragSkin->Paint(&s);
+        glictGlobals.Translatef(-(this->x), -(this->y+this->width+((float)(this->value-this->min) / (float)(this->max - this->min))* (float)(this->height - this->width*2 - this->width)), 0);
 
-
-	glictGlobals.PaintRect(
-		this->x+glictGlobals.translation.x,
-		this->x + this->width +glictGlobals.translation.x,
-
-		this->y +glictGlobals.translation.y + // normal beginning coord of the object
-		this->width + // increased by height of top button
-		((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
-		* (float)(this->height - this->width*2 - this->width), // which should be a height, reduced by top and bottom button's height, but also by scroller's height
-
-		this->y +glictGlobals.translation.y + // normal beginning coord of the object
-		this->width + // increased by height of top button
-		((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
-		* (float)(this->height - this->width*2 - this->width) // which should be a height, reduced by top and bottom button's height, but also by scroller's height
-		+ this->width // this is bottom, add some more
-
-		,col
-	);
+    }
 	this->CPaint();
 
 	// this is here so that scissoring resumes properly
@@ -144,14 +189,18 @@ void glictScrollbar::Paint() {
 	glictGlobals.SetColor(1., 1., 1., 1.);
 
 
-
-	glictFontRender("^","system",
-		this->x + (this->width / 2 - glictFontSize("^", "system") / 2 +glictGlobals.translation.x) ,
-		this->y - 9 + width / 2 + 9/2 +glictGlobals.translation.y);
-
-	glictFontRender("V","system",
-		this->x + (this->width / 2 - glictFontSize("V", "system") / 2 +glictGlobals.translation.x) ,
-		this->y + this->height - width / 2 - 9 / 2 +glictGlobals.translation.y);
+    if (!glictGlobals.scrollbarUpperSkin && !highlightup ||
+        !glictGlobals.scrollbarUpperHighlightSkin && highlightup) {
+        glictFontRender("^","system",
+            this->x + (this->width / 2 - glictFontSize("^", "system") / 2 +glictGlobals.translation.x) ,
+            this->y - 9 + width / 2 + 9/2 +glictGlobals.translation.y);
+    }
+    if (!glictGlobals.scrollbarLowerSkin && !highlightdn ||
+        !glictGlobals.scrollbarLowerHighlightSkin && highlightdn) {
+        glictFontRender("V","system",
+            this->x + (this->width / 2 - glictFontSize("V", "system") / 2 +glictGlobals.translation.x) ,
+            this->y + this->height - width / 2 - 9 / 2 +glictGlobals.translation.y);
+    }
 
 
 }

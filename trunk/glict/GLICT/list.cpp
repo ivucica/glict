@@ -1,6 +1,6 @@
 /*
 	GLICT - Graphics Library Interface Creation Toolkit
-	Copyright (C) 2006-2007 OBJECT Networks
+	Copyright (C) 2006-2008 Ivan Vucica
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
@@ -17,7 +17,7 @@
 	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <GLICT/list.h>
-
+#include <GLICT/globals.h>
 glictList::glictList() {
 
 }
@@ -36,17 +36,13 @@ void glictList::AddObject(glictContainer* object) {
 }
 
 void glictList::RemoveObject(glictContainer *object) {
-    printf("...\n");
 
     float currentheight = 0;
     for (std::vector<glictContainer*>::iterator it = objects.begin() ; it != objects.end() ; it++) {
-        printf("?");
         if ((*it)!=object) {
-            printf("!");
             (*it)->SetPos(0, currentheight);
             currentheight += 14;
         }
-        printf("\n");
     }
     glictContainer::RemoveObject(object);
     SetHeight(currentheight);
@@ -54,8 +50,7 @@ void glictList::RemoveObject(glictContainer *object) {
 
 void glictList::SetWidth(float width) {
     for (std::vector<glictContainer*>::iterator it = objects.begin() ; it != objects.end() ; it++) {
-        (*it)->SetWidth(width-(virtualsize.h > height ? 10 : 0));
+        (*it)->SetWidth(width-(virtualsize.h > height ? GetScrollbarWidth() : 0));
     }
     glictContainer::SetWidth(width);
 }
-

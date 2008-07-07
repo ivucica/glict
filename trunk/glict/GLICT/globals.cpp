@@ -1,6 +1,6 @@
 /*
 	GLICT - Graphics Library Interface Creation Toolkit
-	Copyright (C) 2006-2007 OBJECT Networks
+	Copyright (C) 2006-2008 Ivan Vucica
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
@@ -32,6 +32,9 @@ glictGlobalsClass::glictGlobalsClass() {
     buttonSkin = NULL;
     buttonHighlightSkin = NULL;
     textboxSkin = NULL;
+    scrollbarLowerSkin = scrollbarUpperSkin = scrollbarUpperHighlightSkin = scrollbarLowerHighlightSkin = NULL;
+    scrollbarDragSkin = NULL;
+    scrollbarPanelSkin = NULL;
     buttonTextColor.r = 1.; buttonTextColor.g = 1.; buttonTextColor.b = 1.; buttonTextColor.a = 1.;
     buttonHighlightTextColor.r = 1.; buttonHighlightTextColor.g = 1.; buttonHighlightTextColor.b = 1.; buttonHighlightTextColor.a = 1.;
     panelTextColor.r = 1.; panelTextColor.g = 1.; panelTextColor.b = 1.; panelTextColor.a = 1.;
