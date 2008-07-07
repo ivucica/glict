@@ -1,6 +1,6 @@
 /*
 	GLICT - Graphics Library Interface Creation Toolkit
-	Copyright (C) 2006-2007 OBJECT Networks
+	Copyright (C) 2006-2008 Ivan Vucica
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
@@ -18,6 +18,7 @@
 */
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "panel.h"
 #include "globals.h"
 #include "fonts.h"
@@ -38,6 +39,9 @@ glictPanel::glictPanel() {
 
     virtualsize.x = 0;
     virtualsize.y = 0;
+
+    textoffx = 0;
+    textoffy = 0;
 
     this->AddObject(&sbVertical);
 
@@ -67,9 +71,9 @@ void glictPanel::Paint() {
 
 
     if (virtualsize.h > height) {
-        sbVertical.SetWidth(10);
+        sbVertical.SetWidth(GetScrollbarWidth());
         sbVertical.SetHeight(height );//- (virtualsize.w > width ? 10 : 0));
-        sbVertical.SetPos(width - 10, +sbVertical.GetValue());
+        sbVertical.SetPos(width - GetScrollbarWidth(), +sbVertical.GetValue());
         sbVertical.SetVisible(true);
 
         sbVertical.SetMin(0);
@@ -86,7 +90,7 @@ void glictPanel::Paint() {
 	if (this->bgactive) {
 	    if (!skin) {
             glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
-								this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y, bgcolor);
+								   this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y, bgcolor);
 
 	    } else {
 	        glictSize s;
@@ -102,7 +106,7 @@ void glictPanel::Paint() {
 
 
 	glictGlobals.SetColor(glictGlobals.panelTextColor.r , glictGlobals.panelTextColor.g, glictGlobals.panelTextColor.b, glictGlobals.panelTextColor.a);
-	glictFontRender(this->caption.c_str(), fontname.c_str(), x+glictGlobals.translation.x , y + glictGlobals.translation.y);
+	glictFontRender(this->caption.c_str(), fontname.c_str(), x+glictGlobals.translation.x + textoffx , y + glictGlobals.translation.y + textoffy);
 	glictGlobals.SetColor(1., 1., 1., 1.);
 
 
@@ -128,7 +132,7 @@ void glictPanel::Paint() {
 
 
     if (virtualsize.h > height) {
-        sbVertical.SetPos(width - 10, 0);
+        sbVertical.SetPos(width - GetScrollbarWidth(), 0);
     }
 
 
@@ -273,4 +277,12 @@ void glictPanel::SetVirtualSize(float w, float h) {
 void glictPanel::SetSkin(glictSkinner* skin) {
 
     this->skin = skin;
+}
+
+
+int glictPanel::GetScrollbarWidth() {
+    if (glictGlobals.scrollbarUpperSkin) {
+        return glictGlobals.scrollbarUpperSkin->GetCenterSize().w;
+    }
+    return 10;
 }

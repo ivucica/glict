@@ -1,6 +1,6 @@
 /*
 	GLICT - Graphics Library Interface Creation Toolkit
-	Copyright (C) 2006-2007 OBJECT Networks
+	Copyright (C) 2006-2008 Ivan Vucica
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Library General Public
@@ -16,6 +16,7 @@
 	License along with this library; if not, write to the Free
 	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include <string.h>
 #include "messagebox.h"
 #include "globals.h"
 

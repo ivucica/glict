@@ -43,12 +43,16 @@ class glictPanel : public glictContainer {
         void SetVirtualSize(float w, float h);
 		void VirtualScrollBottom();
 		void SetSkin(glictSkinner *skin);
+		void SetTextOffset(int x, int y) { textoffx = x; textoffy = y; }
     private:
         glictColor bgcolor;
         glictSkinner *skin;
         bool bgactive;
 
         glictScrollbar sbVertical, sbHorizontal;
+        int textoffx, textoffy;
+    protected:
+        int GetScrollbarWidth();
 
 };
 #endif

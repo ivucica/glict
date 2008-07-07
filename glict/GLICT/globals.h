@@ -41,6 +41,10 @@ class glictGlobalsClass {
         glictSkinner *windowBodySkin;
         glictSkinner *buttonSkin, *buttonHighlightSkin;
         glictSkinner *textboxSkin;
+        glictSkinner *scrollbarUpperSkin, *scrollbarUpperHighlightSkin;
+        glictSkinner *scrollbarLowerSkin, *scrollbarLowerHighlightSkin;
+        glictSkinner *scrollbarPanelSkin;
+        glictSkinner *scrollbarDragSkin;
         glictColor buttonTextColor, buttonHighlightTextColor;
         glictColor panelTextColor;
         glictColor textboxTextColor;
@@ -74,6 +78,6 @@ extern glictGlobalsClass glictGlobals;
 #define GLICT_RENDERING false
 #define GLICT_SELECTING true
 
-#define GLICT_APIREV 67 // from which subversion repository revision does this install come (manually changed upon relevant API changes)
+#define GLICT_APIREV 68 // from which subversion repository revision does this install come (manually changed upon relevant API changes)
 
 #endif
