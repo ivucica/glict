@@ -65,9 +65,9 @@ struct glictColor {
 /**
  * \brief Stores a rectangular portion of the screen
  */
-typedef struct {
-    /// Top, bottom, left and right.
-    float top, bottom, left, right;
+typedef struct glictRect_s {
+    /// Left, right, top and bottom.
+    float left, right, top, bottom;
 } glictRect;
 
 /**

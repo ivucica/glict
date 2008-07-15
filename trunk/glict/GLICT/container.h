@@ -123,6 +123,7 @@ class glictContainer  {
 		char objtype[50]; ///< Short descriptive string containing name of the object. (Each class actually rewrites this one upon intialization in constructor.)
 
 		virtual glictPos *GetVirtualPos() {return &virtualpos;}
+		virtual float GetBottomSize() const {return containeroffsety;}
 	private:
 		// these should be called only internally
 		void SetRect(float left, float top, float right, float bottom); ///< Internal function. Sets the boundaries of the widget.

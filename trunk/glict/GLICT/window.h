@@ -23,7 +23,7 @@
 #include <GLICT/container.h>
 #include <GLICT/panel.h>
 #include <GLICT/types.h>
-
+#include <GLICT/globals.h>
 /// A draggable window that can contain subelements. Similar to many other "windowing systems" (but a lot uglier and flatter)
 class glictWindow : public glictContainer {
     public:
@@ -39,7 +39,7 @@ class glictWindow : public glictContainer {
 		//void SetHeight(int h);
 		//void SetWidth(int w);
         virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Reacts to events in a way a window should.
-
+        float GetBottomSize() const {if (glictGlobals.windowBodySkin) return glictGlobals.windowBodySkin->GetBottomSize().h; else return 0; }
         void FixContainerOffsets();
     private:
         glictColor bgcolor;

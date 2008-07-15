@@ -26,7 +26,7 @@
 
 
 typedef void (*GLICTDEBUGCALLBACKPROC )(unsigned int len, const char *string);
-typedef void (*GLICTPAINTRECTPROC)( float left, float right, float top, float bottom, glictColor &color );
+typedef void (*GLICTPAINTRECTPROC)( float left, float right, float top, float bottom, const glictColor &color );
 typedef void (*GLICTCLIPPERPROC)( float left, float right, float top, float bottom );
 
 /// Stores some global settings.
@@ -67,10 +67,11 @@ class glictGlobalsClass {
 
 		// functions
 		void Translatef(float, float, float);
-		void PaintRect(float top, float bottom, float left, float right);
-		void PaintRect(float left, float right, float top, float bottom, glictColor &col);
+		void PaintRect(float left, float right, float top, float bottom);
+		void PaintRect(float left, float right, float top, float bottom, const glictColor &col);
+		void PaintRect(const glictRect &r, const glictColor &col);
 		void PaintRectLines(float top, float bottom, float left, float right);
-		void PaintRectLines(float left, float right, float top, float bottom, glictColor &col);
+		void PaintRectLines(float left, float right, float top, float bottom, const glictColor &col);
 		void SetColor(float r, float g, float b, float a);
 };
 extern glictGlobalsClass glictGlobals;
@@ -78,6 +79,6 @@ extern glictGlobalsClass glictGlobals;
 #define GLICT_RENDERING false
 #define GLICT_SELECTING true
 
-#define GLICT_APIREV 68 // from which subversion repository revision does this install come (manually changed upon relevant API changes)
+#define GLICT_APIREV 69 // from which subversion repository revision does this install come (manually changed upon relevant API changes)
 
 #endif

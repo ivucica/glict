@@ -78,7 +78,12 @@ void glictGlobalsClass::PaintRect(float left, float right, float top, float bott
 	glictColor tmp (-1,-1,-1,-1);
 	PaintRect(left, right, top, bottom, tmp);
 }
-void glictGlobalsClass::PaintRect(float left, float right, float top, float bottom, glictColor &col) {
+
+void glictGlobalsClass::PaintRect(const glictRect &r, const glictColor &col) {
+	PaintRect(r.left, r.right, r.top, r.bottom, col);
+}
+
+void glictGlobalsClass::PaintRect(float left, float right, float top, float bottom, const glictColor &col) {
 	if (paintrectCallback) {
 		paintrectCallback (left, right, top, bottom, col)  ;
 	} else {
@@ -97,12 +102,11 @@ void glictGlobalsClass::PaintRect(float left, float right, float top, float bott
 		#endif
 	}
 }
-
 void glictGlobalsClass::PaintRectLines(float left, float right, float top, float bottom ) {
 	glictColor tmp (-1,-1,-1,-1);
 	PaintRectLines(left, right, top, bottom, tmp);
 }
-void glictGlobalsClass::PaintRectLines(float left, float right, float top, float bottom, glictColor &col) {
+void glictGlobalsClass::PaintRectLines(float left, float right, float top, float bottom, const glictColor &col) {
 	if (paintrectlinesCallback) {
 		paintrectlinesCallback (left, right, top, bottom, col)  ;
 	}
