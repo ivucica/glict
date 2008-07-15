@@ -236,7 +236,7 @@ void glictContainer::SetPos(float x, float y) {
             parent->left + x + parent->containeroffsetx - parent->virtualpos.x,
             parent->top + y + parent->containeroffsety  - parent->virtualpos.y,
             parent->left + x + width+ parent->containeroffsetx -  parent->virtualpos.x + containeroffsetx*2,
-            parent->top + y + height+ parent->containeroffsety -  parent->virtualpos.y + containeroffsety*2 // FIXME containeroffsety*2 should be replaced by containeroffsety + bottomheight
+            parent->top + y + height+ parent->containeroffsety -  parent->virtualpos.y + containeroffsety + GetBottomSize() // FIXME containeroffsety*2 should be replaced by containeroffsety + bottomheight
         );
 
 

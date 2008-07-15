@@ -24,6 +24,8 @@
 #include <GLICT/container.h>
 #include <GLICT/types.h>
 
+class glictSkinner;
+
 /// Widget with two buttons and a box that can be moved left or right using aforementioned buttons. (Buttons are not glictButtons)
 class glictScrollbar : public glictContainer {
 	public:
@@ -44,7 +46,9 @@ class glictScrollbar : public glictContainer {
 		bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
 	private:
 		glictColor bgcolor;
-
+		void HighlightColor(const glictColor *col, glictColor *destcol) const;
+        void PaintSkinned(const glictRect &r, glictSkinner* skin) const;
+        glictColor MultiplyColorRGB(const glictColor &col, float mul) const;
 		// upper and lower "button" highlighted?
 		bool highlightup;
 		bool highlightdn;

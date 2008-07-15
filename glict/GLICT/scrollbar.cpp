@@ -58,104 +58,86 @@ glictScrollbar::~glictScrollbar() {
 	//this->glictWindow::RemoveObject(&panel);
 }
 void glictScrollbar::Paint() {
-	if (!GetVisible()) return;
+	if (!GetVisible())
+        return;
     glictColor col;
     glictSkinner* activeSkin = NULL;
+
 	// upper "button" //
 
-    if (!highlightup) {
-        if (!glictGlobals.scrollbarUpperSkin) {
-            col = bgcolor;
-            activeSkin = NULL;
-        } else {
-            activeSkin = glictGlobals.scrollbarUpperSkin;
-        }
-    } else {
-        if (!glictGlobals.scrollbarUpperHighlightSkin) {
-            if (!glictGlobals.buttonHighlightSkin) {
-                col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
-                col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5;
-                col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5;
-                col.a = this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5;
-                activeSkin = NULL;
-		    } else {
-		        activeSkin = glictGlobals.buttonHighlightSkin;
-		    }
-        } else {
-            activeSkin = glictGlobals.scrollbarUpperHighlightSkin;
-        }
-    }
-    if (!activeSkin) {
-        glictGlobals.PaintRect(this->x+glictGlobals.translation.x,this->x+this->width+glictGlobals.translation.x,
-                               this->y+glictGlobals.translation.y, this->y+this->width+glictGlobals.translation.y,
-                               col);
-    } else {
-        glictSize s = {this->width, this->width};
+	glictRect upperbuttonRect = {
+	    this->x+glictGlobals.translation.x,
+	    this->x+this->width+glictGlobals.translation.x,
+        this->y+glictGlobals.translation.y,
+        this->y+this->width+glictGlobals.translation.y
+	};
 
-        glictGlobals.Translatef(this->x, this->y, 0);
-        activeSkin->Paint(&s);
-        glictGlobals.Translatef(-this->x, -this->y, 0);
-	}
+    activeSkin = NULL;
+    if (!highlightup)
+        if (!glictGlobals.scrollbarUpperSkin)
+            col = bgcolor;
+        else
+            activeSkin = glictGlobals.scrollbarUpperSkin;
+    else
+        if (!glictGlobals.scrollbarUpperHighlightSkin)
+            if (!glictGlobals.buttonHighlightSkin)
+                HighlightColor(&bgcolor, &col);
+		    else
+		        activeSkin = glictGlobals.buttonHighlightSkin;
+        else
+            activeSkin = glictGlobals.scrollbarUpperHighlightSkin;
+
+    if (!activeSkin)
+        glictGlobals.PaintRect(upperbuttonRect,col);
+    else
+        PaintSkinned(upperbuttonRect, activeSkin);
+
 
 	// lower "button" //
-	if (!highlightdn) {
-		if (!glictGlobals.scrollbarLowerSkin) {
-            col = bgcolor;
-            activeSkin = NULL;
-        } else {
-            activeSkin = glictGlobals.scrollbarLowerSkin;
-        }
-	} else {
-		if (!glictGlobals.scrollbarLowerHighlightSkin) {
-		    if (!glictGlobals.buttonHighlightSkin) {
-                col.r = this->bgcolor.r < .5 ? (float)this->bgcolor.r * 1.5 : (float)this->bgcolor.r / 1.5;
-                col.g = this->bgcolor.g < .5 ? (float)this->bgcolor.g * 1.5 : (float)this->bgcolor.g / 1.5;
-                col.b = this->bgcolor.b < .5 ? (float)this->bgcolor.b * 1.5 : (float)this->bgcolor.b / 1.5;
-                col.a = this->bgcolor.a < .5 ? (float)this->bgcolor.a * 1.5 : (float)this->bgcolor.a / 1.5;
-                activeSkin = NULL;
-		    } else {
-		        activeSkin = glictGlobals.buttonHighlightSkin;
-		    }
-        } else {
-            activeSkin = glictGlobals.scrollbarLowerHighlightSkin;
-        }
-	}
-	if (!activeSkin) {
-        glictGlobals.PaintRect(this->x+glictGlobals.translation.x,this->x+this->width+glictGlobals.translation.x,
-                               this->y+this->height-this->width+glictGlobals.translation.y,this->y+this->height+glictGlobals.translation.y,
-                               col);
-	} else {
-        glictSize s = {this->width, this->width};
 
-        glictGlobals.Translatef(this->x, this->y+this->height-this->width, 0);
-        activeSkin->Paint(&s);
-        glictGlobals.Translatef(-(this->x), -(this->y+this->height-this->width), 0);
-	}
+	glictRect lowerbuttonRect = {
+	    this->x+glictGlobals.translation.x,
+	    this->x+this->width+glictGlobals.translation.x,
+        this->y+this->height-this->width+glictGlobals.translation.y,
+        this->y+this->height+glictGlobals.translation.y
+	};
+
+    activeSkin = NULL;
+
+	if (!highlightdn)
+		if (!glictGlobals.scrollbarLowerSkin)
+            col = bgcolor;
+        else
+            activeSkin = glictGlobals.scrollbarLowerSkin;
+	else
+		if (!glictGlobals.scrollbarLowerHighlightSkin)
+		    if (!glictGlobals.buttonHighlightSkin)
+		        HighlightColor(&bgcolor, &col);
+		    else
+		        activeSkin = glictGlobals.buttonHighlightSkin;
+        else
+            activeSkin = glictGlobals.scrollbarLowerHighlightSkin;
+
+	if (!activeSkin)
+        glictGlobals.PaintRect(lowerbuttonRect , col);
+	else
+	    PaintSkinned(lowerbuttonRect, activeSkin);
+
 
 	// back panel
-	if (!glictGlobals.scrollbarPanelSkin) {
-        col.r = bgcolor.r * 0.7;
-        col.g = bgcolor.g * 0.7;
-        col.b = bgcolor.b * 0.7;
-        col.a = bgcolor.a;
-        glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
-                               this->y+this->width+glictGlobals.translation.y,this->y+this->height-this->width*2+glictGlobals.translation.y, col);
-	} else {
-	    glictSize s = {this->width, this->height - this->width*2};
-
-        glictGlobals.Translatef(this->x, this->y+this->width, 0);
-        glictGlobals.scrollbarPanelSkin->Paint(&s);
-        glictGlobals.Translatef(-(this->x), -(this->y+this->width), 0);
-	}
-
+	glictRect backpanelRect = {
+	    this->x+glictGlobals.translation.x,
+	    this->x+this->width+glictGlobals.translation.x,
+        this->y+this->width+glictGlobals.translation.y,
+        this->y+this->height-this->width+glictGlobals.translation.y
+	};
+	if (!glictGlobals.scrollbarPanelSkin)
+        glictGlobals.PaintRect(backpanelRect, MultiplyColorRGB(bgcolor, 0.7));
+	else
+	    PaintSkinned(backpanelRect, glictGlobals.scrollbarPanelSkin);
 
 	// scroller chip
-    if (!glictGlobals.scrollbarDragSkin) {
-        col.r = bgcolor.r * 0.8;
-        col.g = bgcolor.g * 0.8;
-        col.b = bgcolor.b * 0.8;
-        col.a = bgcolor.a;
-        glictGlobals.PaintRect(
+	glictRect scrollerchipRect = {
             this->x+glictGlobals.translation.x,
             this->x + this->width +glictGlobals.translation.x,
 
@@ -164,22 +146,19 @@ void glictScrollbar::Paint() {
             ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
             * (float)(this->height - this->width*2 - this->width), // which should be a height, reduced by top and bottom button's height, but also by scroller's height
 
+
             this->y +glictGlobals.translation.y + // normal beginning coord of the object
             this->width + // increased by height of top button
             ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
             * (float)(this->height - this->width*2 - this->width) // which should be a height, reduced by top and bottom button's height, but also by scroller's height
             + this->width // this is bottom, add some more
+	};
 
-            ,col
-        );
-    } else {
-        glictSize s = {this->width, this->width};
+    if (!glictGlobals.scrollbarDragSkin)
+        glictGlobals.PaintRect(scrollerchipRect,MultiplyColorRGB(bgcolor, 0.7));
+    else
+        PaintSkinned(scrollerchipRect, glictGlobals.scrollbarDragSkin);
 
-        glictGlobals.Translatef(this->x, this->y+this->width+((float)(this->value-this->min) / (float)(this->max - this->min))* (float)(this->height - this->width*2 - this->width), 0);
-        glictGlobals.scrollbarDragSkin->Paint(&s);
-        glictGlobals.Translatef(-(this->x), -(this->y+this->width+((float)(this->value-this->min) / (float)(this->max - this->min))* (float)(this->height - this->width*2 - this->width)), 0);
-
-    }
 	this->CPaint();
 
 	// this is here so that scissoring resumes properly
@@ -284,3 +263,26 @@ int glictScrollbar::GetMax() {
 
 
 
+void glictScrollbar::HighlightColor(const glictColor *col, glictColor *destcol) const {
+    destcol->r = col->r < .5 ? (float)col->r * 1.5 : (float)col->r / 1.5;
+    destcol->g = col->g < .5 ? (float)col->g * 1.5 : (float)col->g / 1.5;
+    destcol->b = col->b < .5 ? (float)col->b * 1.5 : (float)col->b / 1.5;
+    destcol->a = col->a < .5 ? (float)col->a * 1.5 : (float)col->a / 1.5;
+}
+void glictScrollbar::PaintSkinned(const glictRect &r, glictSkinner* skin) const {
+    glictSize s = {r.right - r.left, r.bottom - r.top};
+    float gtx = glictGlobals.translation.x;
+    float gty = glictGlobals.translation.y;
+
+    glictGlobals.Translatef(r.left-gtx, r.top-gty, 0);
+    skin->Paint(&s);
+    glictGlobals.Translatef(-r.left+gtx, -r.top+gty, 0);
+}
+
+glictColor glictScrollbar::MultiplyColorRGB(const glictColor &col, float mul) const {
+    glictColor c = col;
+    c.r *= mul;
+    c.g *= mul;
+    c.b *= mul;
+    return c;
+}
