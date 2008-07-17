@@ -2,18 +2,22 @@
 #include <GLICT/container.h>
 #include <GLICT/window.h>
 #include <GLICT/button.h>
+#include <GLICT/scrollbar.h>
 #include <GLICT/fonts.h>
 #include <GLICT/globals.h>
 //#include "sdlfont.h"
 glictContainer desktop;
 glictWindow win;
 glictButton btn;
+glictScrollbar scb;
 SDL_Surface* screen;
 SDL_Surface* sysfontpic;
 void onclick(glictPos *a, glictContainer* callclass) {
 	printf("...\n");
 }
-
+void onclickscb(glictPos *a, glictContainer* callclass) {
+	printf("SCB %d\n", scb.GetValue());
+}
 void SDLFontDrawChar(char t, SDL_Surface* img, int x1, int y1) {
 	t -= 32;
     int x = (int)(t % 32)*16.;
@@ -66,14 +70,14 @@ float SDLFontSize(const char* txt, const void* font) {
 	return strlen(txt);
 }
 
-void SDLRectDraw(float left, float right, float top, float bottom, glictColor &col) {
+void SDLRectDraw(float left, float right, float top, float bottom, const glictColor &col) {
 	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
 	int color = SDL_MapRGB(vi->vfmt, (int)(col.r * 255), (int)(col.g * 255), (int)(col.b * 255));
 	SDL_Rect rect = {left, top, right-left, bottom-top};
 	SDL_FillRect(screen, &rect, color);
 }
 
-void SDLRectLinesDraw(float left, float right, float top, float bottom, glictColor &col) {
+void SDLRectLinesDraw(float left, float right, float top, float bottom, const glictColor &col) {
 	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
 	int color = SDL_MapRGB(vi->vfmt, (int)(col.r * 255), (int)(col.g * 255), (int)(col.b * 255));
 	//SDL_Rect rect = {left, top, right-left, bottom-top};
@@ -135,6 +139,16 @@ int main () {
 	win.SetPos(50, 50);
 	btn.SetOnClick(onclick);
 	btn.SetBGColor(.5,.5,.5,1.);
+
+    win.AddObject(&scb);
+    scb.SetPos(0,50);
+    scb.SetWidth(100);
+    scb.SetHeight(15);
+    scb.SetMin(0);
+    scb.SetMax(100);
+    scb.SetValue(0);
+    scb.SetBGColor(.5,.5,.5,1.);
+    scb.SetOnClick(onclickscb);
 
 	glictGlobals.w = width;
 	glictGlobals.h = height;

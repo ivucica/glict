@@ -60,11 +60,20 @@ glictScrollbar::~glictScrollbar() {
 void glictScrollbar::Paint() {
 	if (!GetVisible())
         return;
+
+    if (this->GetWidth() <= this->GetHeight()) {
+        PaintVertical();
+    } else {
+        PaintHorizontal();
+    }
+
+
+}
+
+void glictScrollbar::PaintVertical() {
     glictColor col;
     glictSkinner* activeSkin = NULL;
-
 	// upper "button" //
-
 	glictRect upperbuttonRect = {
 	    this->x+glictGlobals.translation.x,
 	    this->x+this->width+glictGlobals.translation.x,
@@ -92,9 +101,7 @@ void glictScrollbar::Paint() {
     else
         PaintSkinned(upperbuttonRect, activeSkin);
 
-
 	// lower "button" //
-
 	glictRect lowerbuttonRect = {
 	    this->x+glictGlobals.translation.x,
 	    this->x+this->width+glictGlobals.translation.x,
@@ -154,8 +161,9 @@ void glictScrollbar::Paint() {
             + this->width // this is bottom, add some more
 	};
 
-    if (!glictGlobals.scrollbarDragSkin)
-        glictGlobals.PaintRect(scrollerchipRect,MultiplyColorRGB(bgcolor, 0.7));
+    if (!glictGlobals.scrollbarDragSkin) {
+        glictGlobals.PaintRect(scrollerchipRect,MultiplyColorRGB(bgcolor, 0.6));
+    }
     else
         PaintSkinned(scrollerchipRect, glictGlobals.scrollbarDragSkin);
 
@@ -181,6 +189,130 @@ void glictScrollbar::Paint() {
             this->y + this->height - width / 2 - 9 / 2 +glictGlobals.translation.y);
     }
 
+}
+
+
+
+void glictScrollbar::PaintHorizontal() {
+    glictColor col;
+    glictSkinner* activeSkin = NULL;
+	// left "button" //
+	glictRect leftbuttonRect = {
+	    this->x+glictGlobals.translation.x,
+	    this->x+this->height+glictGlobals.translation.x,
+        this->y+glictGlobals.translation.y,
+        this->y+this->height+glictGlobals.translation.y
+	};
+
+    activeSkin = NULL;
+    if (!highlightup)
+        if (!glictGlobals.scrollbarLeftSkin)
+            col = bgcolor;
+        else
+            activeSkin = glictGlobals.scrollbarLeftSkin;
+    else
+        if (!glictGlobals.scrollbarLeftHighlightSkin)
+            if (!glictGlobals.buttonHighlightSkin)
+                HighlightColor(&bgcolor, &col);
+		    else
+		        activeSkin = glictGlobals.buttonHighlightSkin;
+        else
+            activeSkin = glictGlobals.scrollbarLeftHighlightSkin;
+
+    if (!activeSkin)
+        glictGlobals.PaintRect(leftbuttonRect,col);
+    else
+        PaintSkinned(leftbuttonRect, activeSkin);
+
+	// right "button" //
+	glictRect rightbuttonRect = {
+	    this->x+this->width-this->height+glictGlobals.translation.x,
+	    this->x+this->width+glictGlobals.translation.x,
+        this->y+glictGlobals.translation.y,
+        this->y+this->height+glictGlobals.translation.y
+	};
+
+    activeSkin = NULL;
+
+	if (!highlightdn)
+		if (!glictGlobals.scrollbarRightSkin)
+            col = bgcolor;
+        else
+            activeSkin = glictGlobals.scrollbarRightSkin;
+	else
+		if (!glictGlobals.scrollbarRightHighlightSkin)
+		    if (!glictGlobals.buttonHighlightSkin)
+		        HighlightColor(&bgcolor, &col);
+		    else
+		        activeSkin = glictGlobals.buttonHighlightSkin;
+        else
+            activeSkin = glictGlobals.scrollbarRightHighlightSkin;
+
+	if (!activeSkin)
+        glictGlobals.PaintRect(rightbuttonRect , col);
+	else
+	    PaintSkinned(rightbuttonRect, activeSkin);
+
+
+	// back panel
+	glictRect backpanelRect = {
+	    this->x+this->height+glictGlobals.translation.x,
+	    this->x+this->width-this->height+glictGlobals.translation.x,
+        this->y+glictGlobals.translation.y,
+        this->y+this->height+glictGlobals.translation.y
+	};
+	if (!glictGlobals.scrollbarPanelSkin)
+        glictGlobals.PaintRect(backpanelRect, MultiplyColorRGB(bgcolor, 0.7));
+	else
+	    PaintSkinned(backpanelRect, glictGlobals.scrollbarPanelSkin);
+
+	// scroller chip
+	glictRect scrollerchipRect = {
+            this->x +glictGlobals.translation.x + // normal beginning coord of the object
+            this->height + // increased by width of top button
+            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+            * (float)(this->width - this->height*2 - this->height), // which should be a width, reduced by left and right button's width, but also by scroller's width
+
+            this->x +glictGlobals.translation.x + // normal beginning coord of the object
+            this->height + // increased by height of left button
+            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+            * (float)(this->width - this->height*2 - this->height) // which should be a width, reduced by left and right button's width, but also by scroller's width
+            + this->height, // this is right, add some more
+
+
+            this->y+glictGlobals.translation.y,
+            this->y + this->height +glictGlobals.translation.y
+
+	};
+
+    if (!glictGlobals.scrollbarDragSkin) {
+        glictGlobals.PaintRect(scrollerchipRect,MultiplyColorRGB(bgcolor, 0.6));
+    }
+    else
+        PaintSkinned(scrollerchipRect, glictGlobals.scrollbarDragSkin);
+
+	this->CPaint();
+
+	// this is here so that scissoring resumes properly
+	this->SetScissor();
+
+
+	glictGlobals.SetColor(1., 1., 1., 1.);
+
+
+    if (!glictGlobals.scrollbarLeftSkin && !highlightup ||
+        !glictGlobals.scrollbarLeftHighlightSkin && highlightup) {
+        glictFontRender("<","system",
+            this->x - 9 + height / 2 + glictFontSize("^", "system") / 2 +glictGlobals.translation.x,
+            this->y + (this->height / 2 - 9 / 2 +glictGlobals.translation.y));
+
+    }
+    if (!glictGlobals.scrollbarRightSkin && !highlightdn ||
+        !glictGlobals.scrollbarRightHighlightSkin && highlightdn) {
+        glictFontRender(">","system",
+            this->x + this->width - height / 2 - glictFontSize(">", "system") / 2 +glictGlobals.translation.x ,
+            this->y + (this->height / 2 - 9 / 2 +glictGlobals.translation.y));
+    }
 
 }
 
@@ -202,27 +334,48 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
 			((glictPos*)wparam)->y > this->cliptop &&
 			((glictPos*)wparam)->y < this->clipbottom) {
 
-
+            const float w = GetWidth();
+            const float h = GetHeight();
 
 
 			if (evt == GLICT_MOUSECLICK) {
 				this->Focus(this);
-				if (((glictPos*)wparam)->y - this->top < this->width) { // mousedown within upper button?
-					if (this->value > this->min) this->value -= this->step;
-					if (this->value < this->min) this->value = this->min;
-				}
-				if (((glictPos*)wparam)->y - this->top > this->height - this->width) { // mousedown within upper button?
-					if (this->value < this->max) this->value += this->step;
-					if (this->value > this->max) this->value = this->max;
+				if (h > w) { // vertical
+                    if (((glictPos*)wparam)->y - this->top < this->width) { // mousedown within upper button?
+                        if (this->value > this->min) this->value -= this->step;
+                        if (this->value < this->min) this->value = this->min;
+                    }
+                    if (((glictPos*)wparam)->y - this->top > this->height - this->width) { // mousedown within upper button?
+                        if (this->value < this->max) this->value += this->step;
+                        if (this->value > this->max) this->value = this->max;
+                    }
+				} else { // horizontal
+				    if (((glictPos*)wparam)->x - this->left < this->height) { // mousedown within upper button?
+                        if (this->value > this->min) this->value -= this->step;
+                        if (this->value < this->min) this->value = this->min;
+                    }
+                    if (((glictPos*)wparam)->x - this->left > this->width - this->height) { // mousedown within upper button?
+                        if (this->value < this->max) this->value += this->step;
+                        if (this->value > this->max) this->value = this->max;
+                    }
 				}
 			}
 			if (evt == GLICT_MOUSEDOWN) {
-				if (((glictPos*)wparam)->y - this->top < this->width) { // mousedown within upper button?
-					this->highlightup = true;
-				}
-				if (((glictPos*)wparam)->y - this->top > this->height - this->width) { // mousedown within upper button?
-					this->highlightdn = true;
-				}
+			    if (h > w) { // vertical
+                    if (((glictPos*)wparam)->y - this->top < this->width) { // mousedown within upper button?
+                        this->highlightup = true;
+                    }
+                    if (((glictPos*)wparam)->y - this->top > this->height - this->width) { // mousedown within upper button?
+                        this->highlightdn = true;
+                    }
+			    } else { // horizontal
+			        if (((glictPos*)wparam)->x - this->left < this->height) { // mousedown within upper button?
+                        this->highlightup = true;
+                    }
+                    if (((glictPos*)wparam)->x - this->left > this->width - this->height) { // mousedown within upper button?
+                        this->highlightdn = true;
+                    }
+			    }
 			}
 			if (evt == GLICT_MOUSEUP) {
 				this->highlightdn = false;
