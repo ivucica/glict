@@ -33,6 +33,7 @@ glictGlobalsClass::glictGlobalsClass() {
     buttonHighlightSkin = NULL;
     textboxSkin = NULL;
     scrollbarLowerSkin = scrollbarUpperSkin = scrollbarUpperHighlightSkin = scrollbarLowerHighlightSkin = NULL;
+    scrollbarLeftSkin = scrollbarRightSkin = scrollbarLeftHighlightSkin = scrollbarRightHighlightSkin = NULL;
     scrollbarDragSkin = NULL;
     scrollbarPanelSkin = NULL;
     buttonTextColor.r = 1.; buttonTextColor.g = 1.; buttonTextColor.b = 1.; buttonTextColor.a = 1.;

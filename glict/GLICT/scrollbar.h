@@ -48,6 +48,8 @@ class glictScrollbar : public glictContainer {
 		glictColor bgcolor;
 		void HighlightColor(const glictColor *col, glictColor *destcol) const;
         void PaintSkinned(const glictRect &r, glictSkinner* skin) const;
+        void PaintHorizontal();
+        void PaintVertical();
         glictColor MultiplyColorRGB(const glictColor &col, float mul) const;
 		// upper and lower "button" highlighted?
 		bool highlightup;
