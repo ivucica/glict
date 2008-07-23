@@ -219,10 +219,12 @@ void glictContainer::SetWidth(float w) {
   * boundaries properly, to whatever values they should be set.
   * \sa SetPos(glictPos pos), GetPos(float *x, float *y)
   */
+
+extern bool __LISTDEBUGGING_____;
 void glictContainer::SetPos(float x, float y) {
 
-	//printf("Postavka pozicije %s (%s) %s na %d %d\n", objtype, (parent ? parent->objtype : "NULL"), this->caption.c_str(), x, y);
-	//printf("This->x %d This->y %d\n", this->x, this->y);
+	if (__LISTDEBUGGING_____) printf("Postavka pozicije %s (%s) %s na %g %g\n", objtype, (parent ? parent->objtype : "NULL"), this->caption.c_str(), x, y);
+	if (__LISTDEBUGGING_____) printf("This->x %g This->y %g\n", this->x, this->y);
 
     this->FixContainerOffsets(); // in case the skin got just turned on, we'll have to fix the container offsets
 
@@ -245,9 +247,21 @@ void glictContainer::SetPos(float x, float y) {
     }
 
 
-
+    if (__LISTDEBUGGING_____) printf("Performing setpos\n");
 	glictSize size;
 	for (std::vector<glictContainer*>::iterator it=objects.begin(); it!=objects.end(); it++) {
+	    if (__LISTDEBUGGING_____) printf("Running for a child\n");
+
+        bool proceed = true;
+        for (std::vector<glictContainer*>::iterator it2 = delayedremove.begin(); it2 != delayedremove.end(); it2++) {
+            if ((*it2) == (*it)) {
+                printf("Hit into an already removed object while setposing\n");
+                proceed = false;
+                break;
+            }
+        }
+
+        if (!proceed) continue;
 
 		(*it)->GetPos(&x, &y);
 #if 1
@@ -259,6 +273,7 @@ void glictContainer::SetPos(float x, float y) {
 
 		(*it)->SetRect(this->left + x, this->top, this->left + x + size.w, this->top + y + size.h );
 #endif
+        if (__LISTDEBUGGING_____) printf("Ended\n");
 	}
 }
 

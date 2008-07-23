@@ -34,18 +34,36 @@ void glictList::AddObject(glictContainer* object) {
     SetWidth(width);
 
 }
-
+bool __LISTDEBUGGING_____ = false;
 void glictList::RemoveObject(glictContainer *object) {
 
     float currentheight = 0;
+    printf("RemoveObject\n");
     for (std::vector<glictContainer*>::iterator it = objects.begin() ; it != objects.end() ; it++) {
         if ((*it)!=object) {
+            bool proceed = true;
+            for (std::vector<glictContainer*>::iterator it2 = delayedremove.begin(); it2 != delayedremove.end(); it2++) {
+                if ((*it2) == (*it)) {
+                    printf("Hit into an already removed object\n");
+                    proceed = false;
+                    break;
+                }
+            }
+            if (!proceed) continue;
+
             (*it)->SetPos(0, currentheight);
             currentheight += 14;
+            printf("Shifting\n");
         }
     }
+    printf("Ended\n");
     glictContainer::RemoveObject(object);
-    SetHeight(currentheight);
+    printf("Removed object\n");
+    __LISTDEBUGGING_____  = true;
+    SetWidth(width);
+    __LISTDEBUGGING_____  = false;
+    printf("Set the height\n");
+    printf("Ended removeobject\n");
 }
 
 void glictList::SetWidth(float width) {
