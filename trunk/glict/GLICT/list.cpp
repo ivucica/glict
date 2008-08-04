@@ -59,9 +59,9 @@ void glictList::RemoveObject(glictContainer *object) {
     printf("Ended\n");
     glictContainer::RemoveObject(object);
     printf("Removed object\n");
-    __LISTDEBUGGING_____  = true;
+//    __LISTDEBUGGING_____  = true;
     SetWidth(width);
-    __LISTDEBUGGING_____  = false;
+//    __LISTDEBUGGING_____  = false;
     printf("Set the height\n");
     printf("Ended removeobject\n");
 }
