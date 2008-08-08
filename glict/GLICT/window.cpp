@@ -22,6 +22,7 @@
 #include <GLICT/window.h>
 #include <GLICT/globals.h>
 #include <GLICT/fonts.h>
+#include <GLICT/types.h>
 #include <string.h>
 glictWindow::glictWindow() {
 
