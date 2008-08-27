@@ -102,10 +102,11 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Os" />
 					<Add option="-w" />
-					<Add option="-g" />
 				</Compiler>
 				<Linker>
+					<Add option="-s" />
 					<Add library="glut" />
 					<Add library="glut32" />
 					<Add library="winmm" />
@@ -120,11 +121,12 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Os" />
 					<Add option="-w" />
-					<Add option="-g" />
 					<Add option="-DNO_GL" />
 				</Compiler>
 				<Linker>
+					<Add option="-s" />
 					<Add library="mingw32" />
 					<Add library="SDLmain" />
 					<Add library="SDL" />
