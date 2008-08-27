@@ -1,5 +1,5 @@
     GLICT - Graphics Library Interface Creation Toolkit
-    Copyright (C) 2006 OBJECT Networks
+    Copyright (C) 2008 Ivan Vucica
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -323,3 +323,6 @@ how many people use it, so that we know if we can do critical API changes.
 2. 2. 2008.
 * Progressbar.cpp: small fix for progressbar
 
+--------------------------
+Below this point, history is no longer updated.
+Please refer to svn log for history.

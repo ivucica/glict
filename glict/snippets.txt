@@ -1,6 +1,8 @@
 GLICT - Takeoff Snippets
 ======================
 
+Note: these snippets were not updated for a long time. They were not checked for correctness for 1.1 release. 
+
 Hi there,
 
 thanks for downloading GLICT. This is my first opensourced library, and I see its purpose in implementing in an existing OpenGL program or game that needs get a GUI as quickly as possible, or within new programs for same purpose. It's been designed so it can be used with any approach to creating a window context, however mostly so that it can be used with relatively restrictive APIs such as GLUT.
@@ -185,8 +187,8 @@ By now we should have all the basic code we need for GLICT application. This is 
 
 AUTHOR & LEGAL
 ==============
-Ivan Vucica - OBJECT Networks
-(c) 2006 OBJECT Networks 
+Ivan Vucica
+(c) 2006-2008 Ivan Vucica
 This document is provided for free, without any warranty. You are free to modify and distribute, however you are obligated to keep the History section and add specific date when you started modifications to this file, along with your name on the same location. You also must keep original copyright notice and this notice in place.
 Otherwise you are free to do whatever you want with this file. (Note, this rule doesn't apply to rest of GLICT which is given out under GNU LGPL.)
 

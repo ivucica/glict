@@ -4,6 +4,8 @@ So far you'll need GLUT or SDL. Under Windows, you'll also need GLAUX.
 
 Please note, if you're using SVN version, examples can be built by choosing a different target in the Code::Blocks project. We have both GNU/Linux and Win32 targets.
 
+These examples are rarely tested.
+
 For Windows:
 To build these, create a new project. Add all files from a specific project into the project.
 You'll then need to link them with the following libraries.
