@@ -99,7 +99,7 @@
 			<Target title="examples-memory (win32)">
 				<Option output="glictmemory" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".objsmemory" />
-				<Option type="1" />
+				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-w" />
@@ -117,7 +117,7 @@
 			<Target title="examples-memory_sdl (win32)">
 				<Option output="glictmemory_sdl" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".objsmemorysdl" />
-				<Option type="1" />
+				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-w" />

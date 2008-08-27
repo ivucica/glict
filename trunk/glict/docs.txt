@@ -1,5 +1,5 @@
 GLICT DOCUMENTATION
-(c) 2006-2007 OBJECT Networks
+(c) 2006-2008 Ivan Vucica
 
 programmed by Ivan Vucica
 
@@ -8,8 +8,11 @@ how many people use it, so that we know if we can do critical API changes.
 
 Visit www.objectnetworks.net for more information on our projects.
 
+Note, this file was not exactly updated for over a year and definitely not for 
+1.1 release.
+
     GLICT - Graphics Library Interface Creation Toolkit
-    Copyright (C) 2006-2007 OBJECT Networks
+    Copyright (C) 2006-2008 Ivan Vucica
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public

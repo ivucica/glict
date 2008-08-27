@@ -1,5 +1,6 @@
 /*! \mainpage GLICT Documentation
-(c) 2006-2007 OBJECT Networks
+(c) 2006-2008 Ivan Vucica
+release 1.1
 
 \author Ivan Vucica
 
@@ -14,11 +15,11 @@ Visit www.objectnetworks.net for more information on our projects.
 If you use GLICT, you should make it a priority to contact us! We need to know
 how many people use it, so that we know if we can do critical API changes.
 
-\image html demoshot.jpg "GLICT in action; the UI in background is normal, the  one in front demonstrates transformations" width=50
+\image html demoshot.jpg "GLICT in action; the UI in background is normal, the  one in front demonstrates transformations. Note this is a very very old version." width=50
 
 \code
     GLICT - Graphics Library Interface Creation Toolkit
-    Copyright (C) 2006 OBJECT Networks
+    Copyright (C) 2006-2008 Ivan Vucica
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -57,10 +58,11 @@ how many people use it, so that we know if we can do critical API changes.
 GLICT is actively developed under Win32, but occasionally test builds are
 done under GNU/Linux.
 GNU Makefile is directly in the GLICT subfolder, and is not strictly
-maintained. It produces a library "libglict.a". There's no automatic
+maintained. It produces a library "libGLICT.a". There's no automatic
 installation.
-For building under Windows, you can use Code::Blocks project file that's
-included; for building library only choose the "library" target.
+For building under Windows, you can and should use Code::Blocks project 
+file that's included; for building library only choose the "library" 
+target.
 
 To build the documentation, use the Doxyfile that's included.
 
@@ -91,11 +93,7 @@ This library is still deep in development. We encourage capable people to join
 the project and assist in making this a library that's easy for implementation
 everywhere.
 
-\section five Todo
-
-For detailed todo, please take a look at the Doxygen-generated documentation
-
-\section six Contact
+\section five Contact
 
 To contact me please send an e-mail to
 \image html ivucica.gif "\@gm41l.kom"

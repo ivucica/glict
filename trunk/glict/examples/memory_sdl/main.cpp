@@ -216,7 +216,7 @@ void reshape(int x, int y) {
 SDL_Surface * screen;
 SDL_Surface * sysfontpic;
 
-void SDLRectDraw(float left, float right, float top, float bottom, glictColor &col) {
+void SDLRectDraw(float left, float right, float top, float bottom, const glictColor &col) {
 	static const SDL_VideoInfo* vi = SDL_GetVideoInfo();
 	int color = SDL_MapRGB(vi->vfmt, (int)(col.r * 255), (int)(col.g * 255), (int)(col.b * 255));
 	SDL_Rect rect = {left, top, right-left, bottom-top};
