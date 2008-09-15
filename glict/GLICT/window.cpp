@@ -29,7 +29,6 @@ glictWindow::glictWindow() {
 	this->containeroffsetx = 0;
 	this->containeroffsety = 12;
 
-
 	this->bgcolor.r = 0.75;
 	this->bgcolor.g = 0.75;
 	this->bgcolor.b = 0.75;
@@ -50,6 +49,11 @@ glictWindow::glictWindow() {
 	this->SetWidth(100);
 
 	this->SetPos(0,0);
+
+    titlebarpanel.SetPos(0,0);
+    titlebarpanel.SetCaption("");
+    titlebarpanel.SetBGActiveness(false);
+
 
 	/*this->glictContainer::AddObject(&panel);
 	panel.SetPos(0, 14);
@@ -115,7 +119,6 @@ void glictWindow::Paint() {
 
     }
 
-
 	this->CPaint();
 	//panel.Paint();
 
@@ -145,6 +148,7 @@ void glictWindow::Paint() {
 	glictFontRender(this->caption.c_str(),"system", this->x + glictGlobals.translation.x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize().w : 0) , this->y*+1. + (glictGlobals.windowBodySkin ? (glictGlobals.windowBodySkin->GetTopSize().h/2 - 10./2.) : 0) + glictGlobals.translation.y );
 
 
+    titlebarpanel.Paint();
 
     /*{
         int er;
@@ -178,6 +182,8 @@ void glictWindow::SetBGColor(float r, float g, float b, float a) {
 bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 	//printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
 	if (!GetVisible()) return false;
+	if (titlebarpanel.CastEvent(evt, wparam, lparam, returnvalue))
+        return true;
 	float oldx = this->x, oldy = this->y;
 
 	if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP || evt == GLICT_MOUSEMOVE) {
@@ -267,3 +273,27 @@ void glictWindow::FixContainerOffsets() {
     }
     //printf("%s container offsets %d %d\n", objtype,  containeroffsetx, containeroffsety);
 }
+
+
+
+void glictWindow::SetWidth(float w) {
+    glictContainer::SetWidth(w);
+    titlebarpanel.SetWidth(w);
+}
+void glictWindow::SetHeight(float h) {
+    glictContainer::SetHeight(h);
+    titlebarpanel.SetHeight(12);
+}
+void glictWindow::SetPos(float x, float y) {
+    glictContainer::SetPos(x,y);
+    titlebarpanel.SetPos(left, top);
+}
+
+
+void glictWindow::AddTitlebarObject(glictContainer* object) {
+    titlebarpanel.AddObject(object);
+}
+void glictWindow::RemoveTitlebarObject(glictContainer* object) {
+    titlebarpanel.AddObject(object);
+}
+
