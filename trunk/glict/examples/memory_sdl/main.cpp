@@ -71,7 +71,10 @@ glictWindow window;
 glictButton cards[16];
 glictPanel pnlSolveds;
 glictMessageBox* msgSuccess;
+glictButton btnClose;
 int windowhandle; // glut's window identifier
+
+bool running = true;
 
 
 
@@ -151,6 +154,11 @@ void CardOnClick(glictPos* relmousepos, glictContainer* callerclass) {
 
 }
 
+void CloseOnClick(glictPos* relmousepos, glictContainer* callerclass) {
+    // when close button is clicked on ingame window
+    running=false;
+}
+
 
 // game related, board generation function
 void generate() {
@@ -180,6 +188,12 @@ void MainWidgets() {
     generate();
     window.SetCaption("Board");
     desktop.AddObject(&window);
+    window.AddTitlebarObject(&btnClose);
+    btnClose.SetWidth(12);
+    btnClose.SetHeight(12);
+    btnClose.SetPos(96*4-12, 0);
+    btnClose.SetOnClick(CloseOnClick);
+    btnClose.SetCaption("X");
 
     for (int i=0; i<16;i++) {
 
@@ -286,7 +300,6 @@ int main(int argc, char** argv) {
 
 	glictGlobals.paintrectCallback = SDLRectDraw;
 	glictGlobals.enableGlTranslate = false;
-	bool running = true;
 	SDL_Event event;
 
 	// blanks the screen..

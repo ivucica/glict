@@ -41,10 +41,17 @@ class glictWindow : public glictContainer {
         virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Reacts to events in a way a window should.
         float GetBottomSize() const {if (glictGlobals.windowBodySkin) return glictGlobals.windowBodySkin->GetBottomSize().h; else return 0; }
         void FixContainerOffsets();
+
+        void SetWidth(float w);
+        void SetHeight(float h);
+        void SetPos(float x, float y);
+
+        void AddTitlebarObject(glictContainer* object);
+        void RemoveTitlebarObject(glictContainer* object);
     private:
         glictColor bgcolor;
         glictPos relmouse; // relative position of mouse acquired upon mousepress
-		glictPanel panel;
+		glictPanel titlebarpanel;
         bool mousedown; // is mouse currently down on the window?
     friend class glictContainer;
 };

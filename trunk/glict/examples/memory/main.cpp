@@ -45,6 +45,7 @@
 #include <GLICT/panel.h>
 #include <GLICT/messagebox.h>
 #include <GLICT/fonts.h>
+#include <stdlib.h>
 #include "glut-helper.h"
 // some nice strings for the cards... ;)
 char cardtitles[16][16] = { "Gecko", "Smygflik", "mips", "the fike", "Pekay", "Yorick", "tliff", "SimOne"};
