@@ -251,6 +251,23 @@ void glictButton::Paint() {
     if (highlighted) glictGlobals.Translatef(-2.,-2.,0.);
 	//glPopMatrix();
 
+
+	if (this->OnPaint) {
+		glictRect r, c;
+
+		r.top = this->top+containeroffsety;
+		r.bottom = this->bottom;
+		r.left = this->left+containeroffsetx;
+		r.right = this->right;
+
+		c.top = max(this->cliptop, this->top+containeroffsety);
+		c.bottom = this->clipbottom;
+		c.left = max(this->clipleft, this->left+containeroffsetx);
+		c.right = this->clipright;
+		this->OnPaint(&r, &c, this);
+	}
+
+
 	this->CPaint();
 }
 /**
