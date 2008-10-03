@@ -45,6 +45,7 @@
 #endif
 #include <string.h>
 #include "fonts.h"
+#include "globals.h"
 
 _GLICTFONTVECTOR glictFonts;
 
@@ -152,12 +153,12 @@ bool glictFontRender(const char* text, const char* fontname, float x, float y) {
 #ifdef NO_GL
 #define glMatrixMode(x)
 #define glScalef(x,y,z)
-
 #endif
 bool glictFontRender(const char* text, const char* fontname, float fontsize, float x, float y) {
 
 	glictFont* fnt;
-    glMatrixMode(GL_MODELVIEW);
+	if (glictGlobals.mayUseGL)
+		glMatrixMode(GL_MODELVIEW);
 
 	fnt = glictFindFont(fontname);
 	if (!fnt) {
@@ -173,10 +174,12 @@ bool glictFontRender(const char* text, const char* fontname, float fontsize, flo
 	if (fnt->RenderBoolNoSize) {
 		//glPushMatrix();
 
-		glScalef(fontsize, fontsize, fontsize);
+		if (glictGlobals.mayUseGL)
+			glScalef(fontsize, fontsize, fontsize);
 
 		bool r = fnt->RenderBoolNoSize(text, fnt->fontparam, x/fontsize, y/fontsize);
-		glScalef(1./fontsize, 1./fontsize, 1./fontsize);
+		if (glictGlobals.mayUseGL)
+			glScalef(1./fontsize, 1./fontsize, 1./fontsize);
 		//glPopMatrix();
 		return r;
 	}
@@ -186,9 +189,11 @@ bool glictFontRender(const char* text, const char* fontname, float fontsize, flo
 	}
 	if (fnt->RenderVoidNoSize) {
 		//glPushMatrix();
-		glScalef(fontsize, fontsize, fontsize);
+		if (glictGlobals.mayUseGL)
+			glScalef(fontsize, fontsize, fontsize);
 		fnt->RenderVoidNoSize(text, fnt->fontparam, x/fontsize, y/fontsize);
-		glScalef(1./fontsize, 1./fontsize, 1./fontsize);
+		if (glictGlobals.mayUseGL)
+			glScalef(1./fontsize, 1./fontsize, 1./fontsize);
 		//glPopMatrix();
 		return true;
 	}

@@ -63,8 +63,10 @@ void glictSkinner::Paint(glictSize *size) {
     static int x1, y1, x2, y2;
 
 #ifndef NO_GL
-    glEnable(GL_TEXTURE_2D);
-    glColor4f(1., 1., 1., 1.);
+	if (center || left || right || top || bottom || topleft || topright || bottomleft || bottomright)  {
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(1., 1., 1., 1.);
+	}
 #endif
 	static glictColor col (1, 1, 1, 1);
     // first the corners...
@@ -241,7 +243,9 @@ void glictSkinner::Paint(glictSize *size) {
 
 
 #ifndef NO_GL
-    glDisable(GL_TEXTURE_2D);
+	if (center || left || right || top || bottom || topleft || topright || bottomleft || bottomright)  {
+		glDisable(GL_TEXTURE_2D);
+	}
 #endif
 
 }
