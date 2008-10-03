@@ -43,8 +43,7 @@ glictGlobalsClass::glictGlobalsClass() {
 
 	drawPartialOut = true;
 	drawFocus = false;
-
-	lastMousePos.x = 0; lastMousePos.y = 0;
+		lastMousePos.x = 0; lastMousePos.y = 0;
 	srand(time(NULL));
 
 	topFocused = NULL;
@@ -57,9 +56,13 @@ glictGlobalsClass::glictGlobalsClass() {
 	this->clipperCallback = NULL;
 	#ifndef NO_GL
 	this->enableGlTranslate = true; // if we want SDL or any other rendering engine, we gotta turn this to false
+	this->mayUseGL = true; // FIXME (ivucica#1#) wherever we mention #ifdef NO_GL we also need to use mayUseGL. alwaz
 	#else
 	this->enableGlTranslate = false;
+	this->mayUseGL = false;
 	#endif
+	
+	
 	translation.x = 0; translation.y = 0;
 }
 glictGlobalsClass::~glictGlobalsClass() {
@@ -115,6 +118,7 @@ void glictGlobalsClass::PaintRectLines(float left, float right, float top, float
 
 void glictGlobalsClass::SetColor(float r, float g, float b, float a) {
 	#ifndef NO_GL
-	glColor4f(r,g,b,a);
+	if (mayUseGL)
+		glColor4f(r,g,b,a);
 	#endif
 }
