@@ -1,0 +1,382 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7FA62E940E9675D9000F69F1 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA62E930E9675D9000F69F1 /* OpenGL.framework */; };
+		7FA62ED80E967689000F69F1 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62EBB0E967688000F69F1 /* button.cpp */; };
+		7FA62ED90E967689000F69F1 /* button.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62EBC0E967688000F69F1 /* button.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EDA0E967689000F69F1 /* container.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62EBD0E967688000F69F1 /* container.cpp */; };
+		7FA62EDB0E967689000F69F1 /* container.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62EBE0E967689000F69F1 /* container.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EDC0E967689000F69F1 /* fonts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62EBF0E967689000F69F1 /* fonts.cpp */; };
+		7FA62EDD0E967689000F69F1 /* fonts.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62EC00E967689000F69F1 /* fonts.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EDE0E967689000F69F1 /* globals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62EC10E967689000F69F1 /* globals.cpp */; };
+		7FA62EDF0E967689000F69F1 /* globals.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62EC20E967689000F69F1 /* globals.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EE00E967689000F69F1 /* glut-helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62EC30E967689000F69F1 /* glut-helper.cpp */; };
+		7FA62EE10E967689000F69F1 /* glut-helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62EC40E967689000F69F1 /* glut-helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EE20E967689000F69F1 /* image.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62EC50E967689000F69F1 /* image.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EE30E967689000F69F1 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62EC60E967689000F69F1 /* list.cpp */; };
+		7FA62EE40E967689000F69F1 /* list.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62EC70E967689000F69F1 /* list.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EE50E967689000F69F1 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62EC80E967689000F69F1 /* Makefile */; };
+		7FA62EE60E967689000F69F1 /* messagebox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62EC90E967689000F69F1 /* messagebox.cpp */; };
+		7FA62EE70E967689000F69F1 /* messagebox.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62ECA0E967689000F69F1 /* messagebox.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EE80E967689000F69F1 /* panel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62ECB0E967689000F69F1 /* panel.cpp */; };
+		7FA62EE90E967689000F69F1 /* panel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62ECC0E967689000F69F1 /* panel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EEA0E967689000F69F1 /* progressbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62ECD0E967689000F69F1 /* progressbar.cpp */; };
+		7FA62EEB0E967689000F69F1 /* progressbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62ECE0E967689000F69F1 /* progressbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EEC0E967689000F69F1 /* scrollbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62ECF0E967689000F69F1 /* scrollbar.cpp */; };
+		7FA62EED0E967689000F69F1 /* scrollbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62ED00E967689000F69F1 /* scrollbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EEE0E967689000F69F1 /* skinner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62ED10E967689000F69F1 /* skinner.cpp */; };
+		7FA62EEF0E967689000F69F1 /* skinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62ED20E967689000F69F1 /* skinner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EF00E967689000F69F1 /* textbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62ED30E967689000F69F1 /* textbox.cpp */; };
+		7FA62EF10E967689000F69F1 /* textbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62ED40E967689000F69F1 /* textbox.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EF20E967689000F69F1 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62ED50E967689000F69F1 /* types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FA62EF30E967689000F69F1 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FA62ED60E967689000F69F1 /* window.cpp */; };
+		7FA62EF40E967689000F69F1 /* window.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FA62ED70E967689000F69F1 /* window.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8D07F2BE0486CC7A007CD1D0 /* GLICT_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32BAE0B70371A74B00C91783 /* GLICT_Prefix.pch */; };
+		8D07F2C00486CC7A007CD1D0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		32BAE0B70371A74B00C91783 /* GLICT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLICT_Prefix.pch; sourceTree = "<group>"; };
+		7FA62E930E9675D9000F69F1 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		7FA62EBB0E967688000F69F1 /* button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = button.cpp; path = ../GLICT/button.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62EBC0E967688000F69F1 /* button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = button.h; path = ../GLICT/button.h; sourceTree = SOURCE_ROOT; };
+		7FA62EBD0E967688000F69F1 /* container.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = container.cpp; path = ../GLICT/container.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62EBE0E967689000F69F1 /* container.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = container.h; path = ../GLICT/container.h; sourceTree = SOURCE_ROOT; };
+		7FA62EBF0E967689000F69F1 /* fonts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fonts.cpp; path = ../GLICT/fonts.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62EC00E967689000F69F1 /* fonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fonts.h; path = ../GLICT/fonts.h; sourceTree = SOURCE_ROOT; };
+		7FA62EC10E967689000F69F1 /* globals.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = globals.cpp; path = ../GLICT/globals.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62EC20E967689000F69F1 /* globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = globals.h; path = ../GLICT/globals.h; sourceTree = SOURCE_ROOT; };
+		7FA62EC30E967689000F69F1 /* glut-helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "glut-helper.cpp"; path = "../GLICT/glut-helper.cpp"; sourceTree = SOURCE_ROOT; };
+		7FA62EC40E967689000F69F1 /* glut-helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "glut-helper.h"; path = "../GLICT/glut-helper.h"; sourceTree = SOURCE_ROOT; };
+		7FA62EC50E967689000F69F1 /* image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = image.h; path = ../GLICT/image.h; sourceTree = SOURCE_ROOT; };
+		7FA62EC60E967689000F69F1 /* list.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = list.cpp; path = ../GLICT/list.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62EC70E967689000F69F1 /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = list.h; path = ../GLICT/list.h; sourceTree = SOURCE_ROOT; };
+		7FA62EC80E967689000F69F1 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = ../GLICT/Makefile; sourceTree = SOURCE_ROOT; };
+		7FA62EC90E967689000F69F1 /* messagebox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = messagebox.cpp; path = ../GLICT/messagebox.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62ECA0E967689000F69F1 /* messagebox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = messagebox.h; path = ../GLICT/messagebox.h; sourceTree = SOURCE_ROOT; };
+		7FA62ECB0E967689000F69F1 /* panel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = panel.cpp; path = ../GLICT/panel.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62ECC0E967689000F69F1 /* panel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = panel.h; path = ../GLICT/panel.h; sourceTree = SOURCE_ROOT; };
+		7FA62ECD0E967689000F69F1 /* progressbar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = progressbar.cpp; path = ../GLICT/progressbar.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62ECE0E967689000F69F1 /* progressbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = progressbar.h; path = ../GLICT/progressbar.h; sourceTree = SOURCE_ROOT; };
+		7FA62ECF0E967689000F69F1 /* scrollbar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scrollbar.cpp; path = ../GLICT/scrollbar.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62ED00E967689000F69F1 /* scrollbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scrollbar.h; path = ../GLICT/scrollbar.h; sourceTree = SOURCE_ROOT; };
+		7FA62ED10E967689000F69F1 /* skinner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = skinner.cpp; path = ../GLICT/skinner.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62ED20E967689000F69F1 /* skinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = skinner.h; path = ../GLICT/skinner.h; sourceTree = SOURCE_ROOT; };
+		7FA62ED30E967689000F69F1 /* textbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = textbox.cpp; path = ../GLICT/textbox.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62ED40E967689000F69F1 /* textbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = textbox.h; path = ../GLICT/textbox.h; sourceTree = SOURCE_ROOT; };
+		7FA62ED50E967689000F69F1 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = types.h; path = ../GLICT/types.h; sourceTree = SOURCE_ROOT; };
+		7FA62ED60E967689000F69F1 /* window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cpp; path = ../GLICT/window.cpp; sourceTree = SOURCE_ROOT; };
+		7FA62ED70E967689000F69F1 /* window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = window.h; path = ../GLICT/window.h; sourceTree = SOURCE_ROOT; };
+		8D07F2C70486CC7A007CD1D0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D07F2C80486CC7A007CD1D0 /* GLICT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GLICT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D07F2C30486CC7A007CD1D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FA62E940E9675D9000F69F1 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DDFF38A45A11DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D07F2C80486CC7A007CD1D0 /* GLICT.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* GLICT */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77ACFE841707C02AAC07 /* Source */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DDFF38A45A11DB9C8B /* Products */,
+			);
+			name = GLICT;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				7FA62E930E9675D9000F69F1 /* OpenGL.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8D07F2C70486CC7A007CD1D0 /* Info.plist */,
+				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77ACFE841707C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7FA62EBB0E967688000F69F1 /* button.cpp */,
+				7FA62EBC0E967688000F69F1 /* button.h */,
+				7FA62EBD0E967688000F69F1 /* container.cpp */,
+				7FA62EBE0E967689000F69F1 /* container.h */,
+				7FA62EBF0E967689000F69F1 /* fonts.cpp */,
+				7FA62EC00E967689000F69F1 /* fonts.h */,
+				7FA62EC10E967689000F69F1 /* globals.cpp */,
+				7FA62EC20E967689000F69F1 /* globals.h */,
+				7FA62EC30E967689000F69F1 /* glut-helper.cpp */,
+				7FA62EC40E967689000F69F1 /* glut-helper.h */,
+				7FA62EC50E967689000F69F1 /* image.h */,
+				7FA62EC60E967689000F69F1 /* list.cpp */,
+				7FA62EC70E967689000F69F1 /* list.h */,
+				7FA62EC80E967689000F69F1 /* Makefile */,
+				7FA62EC90E967689000F69F1 /* messagebox.cpp */,
+				7FA62ECA0E967689000F69F1 /* messagebox.h */,
+				7FA62ECB0E967689000F69F1 /* panel.cpp */,
+				7FA62ECC0E967689000F69F1 /* panel.h */,
+				7FA62ECD0E967689000F69F1 /* progressbar.cpp */,
+				7FA62ECE0E967689000F69F1 /* progressbar.h */,
+				7FA62ECF0E967689000F69F1 /* scrollbar.cpp */,
+				7FA62ED00E967689000F69F1 /* scrollbar.h */,
+				7FA62ED10E967689000F69F1 /* skinner.cpp */,
+				7FA62ED20E967689000F69F1 /* skinner.h */,
+				7FA62ED30E967689000F69F1 /* textbox.cpp */,
+				7FA62ED40E967689000F69F1 /* textbox.h */,
+				7FA62ED50E967689000F69F1 /* types.h */,
+				7FA62ED60E967689000F69F1 /* window.cpp */,
+				7FA62ED70E967689000F69F1 /* window.h */,
+				32BAE0B70371A74B00C91783 /* GLICT_Prefix.pch */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8D07F2BD0486CC7A007CD1D0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D07F2BE0486CC7A007CD1D0 /* GLICT_Prefix.pch in Headers */,
+				7FA62ED90E967689000F69F1 /* button.h in Headers */,
+				7FA62EDB0E967689000F69F1 /* container.h in Headers */,
+				7FA62EDD0E967689000F69F1 /* fonts.h in Headers */,
+				7FA62EDF0E967689000F69F1 /* globals.h in Headers */,
+				7FA62EE10E967689000F69F1 /* glut-helper.h in Headers */,
+				7FA62EE20E967689000F69F1 /* image.h in Headers */,
+				7FA62EE40E967689000F69F1 /* list.h in Headers */,
+				7FA62EE70E967689000F69F1 /* messagebox.h in Headers */,
+				7FA62EE90E967689000F69F1 /* panel.h in Headers */,
+				7FA62EEB0E967689000F69F1 /* progressbar.h in Headers */,
+				7FA62EED0E967689000F69F1 /* scrollbar.h in Headers */,
+				7FA62EEF0E967689000F69F1 /* skinner.h in Headers */,
+				7FA62EF10E967689000F69F1 /* textbox.h in Headers */,
+				7FA62EF20E967689000F69F1 /* types.h in Headers */,
+				7FA62EF40E967689000F69F1 /* window.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8D07F2BC0486CC7A007CD1D0 /* GLICT */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FADC24208B4156D00ABE55E /* Build configuration list for PBXNativeTarget "GLICT" */;
+			buildPhases = (
+				8D07F2BD0486CC7A007CD1D0 /* Headers */,
+				8D07F2BF0486CC7A007CD1D0 /* Resources */,
+				8D07F2C10486CC7A007CD1D0 /* Sources */,
+				8D07F2C30486CC7A007CD1D0 /* Frameworks */,
+				8D07F2C50486CC7A007CD1D0 /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GLICT;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = GLICT;
+			productReference = 8D07F2C80486CC7A007CD1D0 /* GLICT.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4FADC24608B4156D00ABE55E /* Build configuration list for PBXProject "GLICT" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* GLICT */;
+			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D07F2BC0486CC7A007CD1D0 /* GLICT */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D07F2BF0486CC7A007CD1D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D07F2C00486CC7A007CD1D0 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		8D07F2C50486CC7A007CD1D0 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D07F2C10486CC7A007CD1D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FA62ED80E967689000F69F1 /* button.cpp in Sources */,
+				7FA62EDA0E967689000F69F1 /* container.cpp in Sources */,
+				7FA62EDC0E967689000F69F1 /* fonts.cpp in Sources */,
+				7FA62EDE0E967689000F69F1 /* globals.cpp in Sources */,
+				7FA62EE00E967689000F69F1 /* glut-helper.cpp in Sources */,
+				7FA62EE30E967689000F69F1 /* list.cpp in Sources */,
+				7FA62EE50E967689000F69F1 /* Makefile in Sources */,
+				7FA62EE60E967689000F69F1 /* messagebox.cpp in Sources */,
+				7FA62EE80E967689000F69F1 /* panel.cpp in Sources */,
+				7FA62EEA0E967689000F69F1 /* progressbar.cpp in Sources */,
+				7FA62EEC0E967689000F69F1 /* scrollbar.cpp in Sources */,
+				7FA62EEE0E967689000F69F1 /* skinner.cpp in Sources */,
+				7FA62EF00E967689000F69F1 /* textbox.cpp in Sources */,
+				7FA62EF30E967689000F69F1 /* window.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C1666FE841158C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1667FE841158C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4FADC24308B4156D00ABE55E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = GLICT_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				PRODUCT_NAME = GLICT;
+				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		4FADC24408B4156D00ABE55E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = GLICT_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				PRODUCT_NAME = GLICT;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		4FADC24708B4156D00ABE55E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Debug;
+		};
+		4FADC24808B4156D00ABE55E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_PATH = "@executable_path/../Frameworks/";
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4FADC24208B4156D00ABE55E /* Build configuration list for PBXNativeTarget "GLICT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FADC24308B4156D00ABE55E /* Debug */,
+				4FADC24408B4156D00ABE55E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4FADC24608B4156D00ABE55E /* Build configuration list for PBXProject "GLICT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FADC24708B4156D00ABE55E /* Debug */,
+				4FADC24808B4156D00ABE55E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}
