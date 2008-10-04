@@ -10,3 +10,21 @@ http://panthermodem.com/blog/?page_id=174
 
 -- ivucica
 
+Oct 4 2008:
+NOTE!
+
+Apparently I haven't managed to set the installation directory correctly.
+So when compiling your application, in XCode, add a "Run shell script" build
+phase to your executable target. Rename it "Fix GLICT" and in the script put
+this code:
+
+--CUTHERE--
+# http://thirdcog.eu/apps/frameworks
+function relocateLibraryInCurrentApp() {
+  install_name_tool -change $1$2 @executable_path/../Frameworks/$2 $CONFIGURATION_BUILD_DIR/$EXECUTABLE_PATH
+}
+relocateLibraryInCurrentApp /Users/ivucica/Library/Frameworks/ GLICT.framework/Versions/A/GLICT #note the space
+--CUTHERE--
+
+Of course don't copy paste the --CUTHERE-- lines.
+
