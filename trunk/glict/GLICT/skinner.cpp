@@ -78,9 +78,9 @@ void glictSkinner::Paint(glictSize *size) {
         else if (!centerimg)
             glBindTexture(GL_TEXTURE_2D, center);
 		#endif
-        for (int pos = (left || leftf) ? lefts.w : 0; pos < size->w - ((right || rightf) ? rights.w : 0); pos+=centers.w) {
-            for (int pos2 = (top || topf) ? tops.h : 0; pos2 < size->h - ((bottom || bottomf) ? bottoms.h : 0); pos2+=centers.h) {
 
+        for (int pos = (left || leftf || leftimg) ? lefts.w : 0; pos < size->w - ((right || rightf || rightimg) ? rights.w : 0); pos+=centers.w) {
+            for (int pos2 = (top || topf || topimg) ? tops.h : 0; pos2 < size->h - ((bottom || bottomf || bottomimg) ? bottoms.h : 0); pos2+=centers.h) {
 
                 y1 = pos2;
                 y2 = min(size->h - ((bottom || bottomf) ? bottoms.h : 0), pos2 + centers.h);
@@ -108,9 +108,9 @@ void glictSkinner::Paint(glictSize *size) {
             glBindTexture(GL_TEXTURE_2D, top);
 		#endif
 
-        for (int pos = (topleft || topleftf) ? toplefts.w : 0; pos < size->w - ((topright || toprightf) ? toprights.w : 0); pos+=tops.w) {
+        for (int pos = (topleft || topleftf || topleftimg) ? toplefts.w : 0; pos < size->w - ((topright || toprightf || toprightimg) ? toprights.w : 0); pos+=tops.w) {
             x1 = pos; y1 = 0;
-            x2 = min(size->w - ((topright || toprightf) ? toprights.w : 0) , pos + tops.w); y2 = tops.h;
+            x2 = min(size->w - ((topright || toprightf || toprightimg) ? toprights.w : 0) , pos + tops.w); y2 = tops.h;
             if (topimg)
 				topimg->Paint(x1, y1, x2-x1, y2-y1);
 			else
@@ -125,9 +125,9 @@ void glictSkinner::Paint(glictSize *size) {
         else if (!bottomimg)
             glBindTexture(GL_TEXTURE_2D, bottom);
 		#endif
-        for (int pos = (bottomleft || bottomleftf) ? bottomlefts.w : 0; pos < size->w - ((bottomright || bottomrightf) ? bottomrights.w : 0); pos+=bottoms.w) {
+        for (int pos = (bottomleft || bottomleftf || bottomleftimg) ? bottomlefts.w : 0; pos < size->w - ((bottomright || bottomrightf || bottomrightimg) ? bottomrights.w : 0); pos+=bottoms.w) {
             x1 = pos; y1 = size->h - bottoms.h;
-            x2 = min(size->w - ((bottomleft || bottomleftf) ? bottomlefts.w : 0), pos + bottoms.w); y2 = size->h;
+            x2 = min(size->w - ((bottomleft || bottomleftf || bottomrightimg) ? bottomlefts.w : 0), pos + bottoms.w); y2 = size->h;
             if (bottomimg)
 				bottomimg->Paint(x1, y1, x2-x1, y2-y1);
 			else
@@ -145,9 +145,9 @@ void glictSkinner::Paint(glictSize *size) {
         else if (!leftimg)
             glBindTexture(GL_TEXTURE_2D, left);
 		#endif
-        for (int pos = (topleft || topleftf) ? toplefts.h : 0; pos < size->h - ((bottomleft || bottomleftf) ? bottomlefts.w : 0); pos+=lefts.h) {
+        for (int pos = (topleft || topleftf || topleftimg) ? toplefts.h : 0; pos < size->h - ((bottomleft || bottomleftf || bottomleftimg) ? bottomlefts.w : 0); pos+=lefts.h) {
             x1 = 0; y1 = pos;
-            x2 = lefts.w; y2 = min(size->h - ((bottomleft || bottomleftf) ? bottomlefts.h : 0), pos + lefts.h);
+            x2 = lefts.w; y2 = min(size->h - ((bottomleft || bottomleftf || bottomleftimg) ? bottomlefts.h : 0), pos + lefts.h);
             if (leftimg)
 				leftimg->Paint(x1, y1, x2-x1, y2-y1);
 			else
@@ -163,9 +163,9 @@ void glictSkinner::Paint(glictSize *size) {
         else if (!rightimg)
             glBindTexture(GL_TEXTURE_2D, right);
 		#endif
-        for (int pos = (topright || toprightf) ? toprights.h : 0; pos < size->h - ((bottomright || bottomrightf) ? bottomrights.w : 0); pos+=rights.h) {
+        for (int pos = (topright || toprightf || toprightimg) ? toprights.h : 0; pos < size->h - ((bottomright || bottomrightf || bottomrightimg) ? bottomrights.w : 0); pos+=rights.h) {
             x1 = size->w - rights.w; y1 = pos;
-            x2 = size->w; y2 = min(size->h - ((bottomright || bottomrightf) ? bottomrights.w : 0), pos + rights.h);
+            x2 = size->w; y2 = min(size->h - ((bottomright || bottomrightf || bottomrightimg) ? bottomrights.w : 0), pos + rights.h);
             if (rightimg)
 				rightimg->Paint(x1, y1, x2-x1, y2-y1);
 			else

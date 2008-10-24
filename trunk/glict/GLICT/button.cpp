@@ -235,7 +235,7 @@ void glictButton::Paint() {
 		}
 
 	//glPushMatrix();
-	if (highlighted) glictGlobals.Translatef(2.,2.,0.);
+	if (highlighted) glictGlobals.Translatef(1.,1.,0.);
 
 
 
@@ -248,7 +248,7 @@ void glictButton::Paint() {
 		);
 
 
-    if (highlighted) glictGlobals.Translatef(-2.,-2.,0.);
+    if (highlighted) glictGlobals.Translatef(-1.,-1.,0.);
 	//glPopMatrix();
 
 
