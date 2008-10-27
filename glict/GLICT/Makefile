@@ -18,3 +18,4 @@ libGLICT.a: $(OBJS)
 clean:
 	rm $(OBJS) libGLICT.a
 
+install: 	cp libGLICT.a /usr/lib 	cp -R ../GLICT/ /usr/include
