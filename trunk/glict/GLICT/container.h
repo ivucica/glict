@@ -115,6 +115,9 @@ class glictContainer  {
 
 		void SetFont(std::string name, unsigned int size=10); ///< Sets the name of the font to be used for rendering of any caption that the widget may be attempting to paint. Also sets the size, which may be disregarded by the font engine.
 
+		void SetCaptionColor(glictColor c); ///< Sets caption's text color, if supported by the widget.
+		void SetCaptionColor(double r, double g, double b, double a=1.);
+
 		float height, width; ///< Current height and width of the widget. FIXME: Make private/protected.
 		float x, y; ///< Current position of the widget. FIXME: Make private/protected.
 		float left, right, top, bottom; ///< Current boundaries of the widget, calculated from height, width, x and y. FIXME: Make private.
@@ -150,6 +153,7 @@ class glictContainer  {
         void(*OnPaint)(glictRect* real, glictRect* clipped, glictContainer* callerclass); ///< Pointer to function specified as OnPaint function.
 
 		std::string caption; ///< Caption written on the control, if control supports it.
+        glictColor captioncolor; ///< Caption's text color.
 
 		bool focusable;
 		std::vector <glictContainer*> delayedremove;

@@ -61,8 +61,8 @@ glictGlobalsClass::glictGlobalsClass() {
 	this->enableGlTranslate = false;
 	this->mayUseGL = false;
 	#endif
-	
-	
+
+
 	translation.x = 0; translation.y = 0;
 }
 glictGlobalsClass::~glictGlobalsClass() {

@@ -102,12 +102,13 @@ void glictPanel::Paint() {
 	    }
 	}
 
-
-
-
-	glictGlobals.SetColor(glictGlobals.panelTextColor.r , glictGlobals.panelTextColor.g, glictGlobals.panelTextColor.b, glictGlobals.panelTextColor.a);
+    glictColor oldcol = glictFontColor(fontname.c_str());
+    if (captioncolor.r == captioncolor.g == captioncolor.b == captioncolor.a == 1.)
+        glictFontColor(fontname.c_str(), glictGlobals.panelTextColor);
+    else
+        glictFontColor(fontname.c_str(), captioncolor);
 	glictFontRender(this->caption.c_str(), fontname.c_str(), x+glictGlobals.translation.x + textoffx , y + glictGlobals.translation.y + textoffy);
-	glictGlobals.SetColor(1., 1., 1., 1.);
+	glictFontColor(fontname.c_str(), oldcol);
 
 
 	if (this->OnPaint) {

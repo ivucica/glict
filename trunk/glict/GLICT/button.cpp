@@ -237,8 +237,8 @@ void glictButton::Paint() {
 	//glPushMatrix();
 	if (highlighted) glictGlobals.Translatef(1.,1.,0.);
 
-
-
+    glictColor oldcol = glictFontColor(fontname.c_str());
+    glictFontColor(fontname.c_str(), captioncolor);
 	glictFontRender(
 		this->caption.c_str(),
 		fontname.c_str(),
@@ -246,7 +246,7 @@ void glictButton::Paint() {
 		this->x + this->width / 2. - glictFontSize(this->caption.c_str(), fontname.c_str(), fontsize) / 2. +glictGlobals.translation.x,
 		(this->y + this->height / 2. - (fontsize/2.)*((float)glictFontNumberOfLines(this->caption.c_str())))*+1. +glictGlobals.translation.y
 		);
-
+    glictFontColor(fontname.c_str(),oldcol);
 
     if (highlighted) glictGlobals.Translatef(-1.,-1.,0.);
 	//glPopMatrix();

@@ -88,6 +88,7 @@ glictContainer::glictContainer() {
 	this->SetRect(this->x, this->y, this->x + this->width, this->y + this->height);
 	this->SetClip(this->left, this->top, this->right, this->bottom);
 
+    this->captioncolor.r = this->captioncolor.g = this->captioncolor.b = this->captioncolor.a = 1.f;
 	virtualsize.x = 0;
 	virtualsize.y = 0;
 
@@ -1323,3 +1324,15 @@ void glictContainer::SetPrevious(glictContainer* p) {
 void glictContainer::SetNext(glictContainer *n) {
 	next = n;
 }
+
+
+
+void glictContainer::SetCaptionColor(glictColor c){
+    captioncolor = c;
+}
+void glictContainer::SetCaptionColor(double r, double g, double b, double a){
+    glictColor c;
+    c.r = r; c.g = g; c.b = b; c.a = a;
+    SetCaptionColor(c);
+}
+
