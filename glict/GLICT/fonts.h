@@ -29,6 +29,7 @@
 
 #include <string>
 #include <vector>
+#include <GLICT/types.h>
 typedef bool(*_glictFontRenderFuncBoolNoSize)(const char* text, const void* font, float x, float y) ;
 typedef bool(*_glictFontRenderFuncBoolSize)(const char* text, const void* font, float size, float x, float y) ;
 typedef void(*_glictFontRenderFuncVoidNoSize)(const char* text, const void* font, float x, float y) ;
@@ -43,6 +44,8 @@ typedef void(*_glictFontRenderFuncVoidSize)(const char* text, const void* font, 
 
 typedef float(*_glictFontSizeFuncSize)(const char* text, const void* font, float size) ;
 typedef float(*_glictFontSizeFuncNoSize)(const char* text, const void* font) ;
+
+typedef void(*_glictFontColorFunc)(const void* font, glictColor &col) ;
 
 
 /// Represents one font usable by GLICT. (GLICT currently uses only one, "system")
@@ -66,7 +69,7 @@ class glictFont {
         void SetSizeFunc(_glictFontSizeFuncNoSize funcpointer);
 
 
-        void SetRenderFunc();
+        void SetColorFunc(_glictFontColorFunc funcpointer);
     private:
         std::string name;
         _glictFontRenderFuncBoolNoSize RenderBoolNoSize;
@@ -77,7 +80,9 @@ class glictFont {
         _glictFontSizeFuncSize SizeSize;
         _glictFontSizeFuncNoSize SizeNoSize;
 
+        _glictFontColorFunc SetColor;
 
+        glictColor activecolor;
         void* fontparam;
 
     friend bool glictFontRender(const char* text, const char* fontname, float x, float y);
@@ -85,6 +90,9 @@ class glictFont {
 
     friend float glictFontSize(const char* name, const char* font);
     friend float glictFontSize(const char* name, const char* font, float size);
+
+    friend void glictFontColor(const char* font, glictColor &col);
+    friend glictColor glictFontColor(const char* font);
 
 };
 
@@ -105,5 +113,8 @@ int glictFontNumberOfLines(const char* text);
 
 bool glictFontRender(const char* text, const char* fontname, float x, float y);
 bool glictFontRender(const char* text, const char* fontname, float fontsize, float x, float y);
+
+void glictFontColor(const char* fontname, glictColor &col);
+glictColor glictFontColor(const char* fontname);
 
 #endif

@@ -39,10 +39,12 @@ class glictMessageBox : public glictWindow {
 		void SetEnabled(bool enabled);
 		void SetBGColor(float r, float g, float b, float a);
 		void Focus(glictContainer* c);
+		void SetTextOffset(int x, int y);
 	private:
 		glictButton btnOk;
 		glictPanel pnlMessage;
 		std::string mesg;
+		int textoffsetx, textoffsety;
 		void(*OnDismissFunction)(glictPos* relmousepos, glictContainer* callerclass); //< Called upon dismiss of the msgbox. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
 
 	friend void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller);

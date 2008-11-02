@@ -209,8 +209,10 @@ float glictFontSize(const char* text, const char* font) {
 float glictFontSize(const char* text, const char* font, float size) {
 
 	glictFont* fnt = glictFindFont(font);
-	if (!fnt) printf("*** glictFontSize: Font %s not found\n", font);
-	if (!fnt) return false;
+	if (!fnt) {
+	    printf("*** glictFontSize: Font %s not found\n", font);
+        return false;
+	}
 	if (fnt->SizeSize) {
 		return fnt->SizeSize(text, fnt->fontparam, size); //
 	}
@@ -219,6 +221,29 @@ float glictFontSize(const char* text, const char* font, float size) {
 	}
 	return 0;
 }
+
+void glictFontColor(const char* font, glictColor &col) {
+    glictFont* fnt = glictFindFont(font);
+	if (!fnt) {
+	    printf("*** glictFontColor: Font %s not found\n", font);
+        return;
+	}
+	fnt->activecolor = col;
+	if (fnt->SetColor){
+	    fnt->SetColor(fnt->fontparam,col);
+	}
+}
+glictColor glictFontColor(const char* font) {
+    glictFont* fnt = glictFindFont(font);
+	if (!fnt) {
+	    printf("*** glictFontColor: Font %s not found\n", font);
+	    glictColor c;
+	    c.r = c.g = c.b = c.a = 1.;
+        return c;
+	}
+	return fnt->activecolor;
+}
+
 
 int glictFontNumberOfLines(const char* txt) {
 	int count=1; // at least 1 line
@@ -293,7 +318,13 @@ void glictFont::SetSizeFunc(_glictFontSizeFuncNoSize funcpointer) {
 	this->SizeSize = NULL;
 }
 
+/// Allows specification of custom data for font-painting engine to use.
 void glictFont::SetFontParam(void* fp) {
 	this->fontparam = fp;
+}
+
+/// Sets the color function that will be used to set font's active color.
+void glictFont::SetColorFunc(_glictFontColorFunc funcpointer) {
+    this->SetColor = funcpointer;
 }
 

@@ -135,17 +135,13 @@ void glictWindow::Paint() {
 
     }
 
-	glictGlobals.SetColor(glictGlobals.windowTitleColor.r, glictGlobals.windowTitleColor.g, glictGlobals.windowTitleColor.b, glictGlobals.windowTitleColor.a);
-
-/*
-    {
-        int er;
-        if ((er =glGetError())!=GL_NO_ERROR) printf("1EROR!!!\n");
-    }
-*/
-
-
+    glictColor oldcol = glictFontColor(fontname.c_str());
+    if (captioncolor.r == captioncolor.g == captioncolor.b == captioncolor.a == 1.)
+        glictFontColor(fontname.c_str(), glictGlobals.windowTitleColor);
+    else
+        glictFontColor(fontname.c_str(), captioncolor);
 	glictFontRender(this->caption.c_str(),"system", this->x + glictGlobals.translation.x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize().w : 0) , this->y*+1. + (glictGlobals.windowBodySkin ? (glictGlobals.windowBodySkin->GetTopSize().h/2 - 10./2.) : 0) + glictGlobals.translation.y );
+	glictFontColor(fontname.c_str(), oldcol);
 
 
     titlebarpanel.Paint();

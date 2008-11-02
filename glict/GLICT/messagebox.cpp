@@ -51,6 +51,8 @@ glictMessageBox::glictMessageBox() {
 	btnOk.SetPos(300/2 - 32, 100 - 21);
 	btnOk.Focus(NULL);
 
+    textoffsetx = textoffsety = 0;
+
 	SetWidth(300);
 	SetHeight(100);
 
@@ -90,16 +92,23 @@ void glictMessageBox::SetHeight(int h) {
 
 	btnOk.SetPos(width/2 - 32, height - 21);
 	if (this->GetEnabled())
-		pnlMessage.SetHeight(h-10 - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize().h : 0));
+		pnlMessage.SetHeight(h-10 - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize().h : 0) - textoffsety);
 	else
-		pnlMessage.SetHeight(h - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize().h : 0));
-	pnlMessage.SetPos(0,0);//containeroffsety);
+		pnlMessage.SetHeight(h - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize().h : 0) - textoffsety);
+	pnlMessage.SetPos(textoffsetx,textoffsety);//containeroffsety);
+    pnlMessage.SetHeight(h);
+
 
 }
 void glictMessageBox::SetWidth(int w) {
 	glictWindow::SetWidth(w);
 
 	btnOk.SetPos(width/2 - 32, height - 21);
+	if (this->GetEnabled())
+		pnlMessage.SetWidth(w-10 - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetRightSize().w : 0) - textoffsetx);
+	else
+		pnlMessage.SetWidth(w - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetRightSize().w : 0) - textoffsetx);
+	pnlMessage.SetPos(textoffsetx,textoffsety);//containeroffsety);
 	pnlMessage.SetWidth(w);
 
 }
@@ -117,4 +126,11 @@ void glictMessageBox::Focus(glictContainer* c) {
 		btnOk.Focus(NULL);
 	else
 		glictContainer::Focus(c);
+}
+
+void glictMessageBox::SetTextOffset(int x, int y){
+    textoffsetx = x;
+    textoffsety = y;
+    SetHeight(GetHeight());
+    SetWidth(GetWidth());
 }
