@@ -244,7 +244,7 @@ int main(int argc, char** argv) {
 	int videoflags = SDL_SWSURFACE  | SDL_ANYFORMAT|  SDL_DOUBLEBUF | SDL_RESIZABLE | SDL_SRCALPHA  ;
 	int width = 640;
 	int height = 480;
-	int video_bpp = 8;
+	int video_bpp = 32;
 
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0) {

@@ -121,12 +121,11 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-Os" />
 					<Add option="-w" />
+					<Add option="-g3 -O0" />
 					<Add option="-DNO_GL" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
 					<Add library="mingw32" />
 					<Add library="SDLmain" />
 					<Add library="SDL" />

@@ -260,7 +260,16 @@ int glictFontNumberOfLines(const char* txt) {
 
 
 glictFont::glictFont() {
-	// nope
+    RenderBoolNoSize = NULL;
+    RenderBoolSize = NULL;
+    RenderVoidNoSize = NULL;
+    RenderVoidSize = NULL;
+
+    SizeSize = NULL;
+    SizeNoSize = NULL;
+
+    SetColor = NULL;
+
 }
 
 glictFont::~glictFont() {
