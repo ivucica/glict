@@ -1,0 +1,24 @@
+Source: libglict
+Priority: extra
+Maintainer: Ivan Vucica <ivucica@gmail.com>
+Build-Depends: debhelper (>= 7), autotools-dev
+Standards-Version: 3.7.3
+Section: libs
+Homepage: http://glict.sf.net/
+
+Package: libglict-dev
+Section: libdevel
+Architecture: any
+#Depends: libglict1 (= ${binary:Version})
+Description: user interface library for games
+ GL Interface Creation Toolkit, or GLICT, is a library for creating
+ user interfaces for games. It has been successfully tested with
+ OpenGL and SDL.
+
+#Package: libglict1
+#Section: libs
+#Architecture: any
+#Depends: ${shlibs:Depends}, ${misc:Depends}
+#Description: user interface library for games
+# GL Interface Creation Toolkit, or GLICT, is a library for creating
+# user interfaces for games.
