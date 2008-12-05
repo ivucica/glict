@@ -1,0 +1,3 @@
+#ACLOCAL_AMFLAGS=-I m4
+SUBDIRS = GLICT
+EXTRA_DIST = autogen.sh
