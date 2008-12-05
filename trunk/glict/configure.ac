@@ -1,7 +1,7 @@
-AC_INIT(GLICT, 1.1, ivucica@gmail.com)
+AC_INIT(libglict, 1.1, ivucica@gmail.com)
 AC_CONFIG_SRCDIR(GLICT/container.cpp)
 
-PACKAGE=GLICT
+PACKAGE=libglict
 VERSION=1.1.0
 
 
