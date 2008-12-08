@@ -1,3 +1,5 @@
+AM_CFLAGS=-I..
+AM_CXXFLAGS=-I..
 lib_LIBRARIES = libGLICT.a
 libGLICT_a_includedir=$(includedir)/GLICT
 #libGLICT_a_configdir = $(libdir)/GLICT/include
