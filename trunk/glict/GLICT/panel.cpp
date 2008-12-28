@@ -220,7 +220,7 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
 		}
 	}
 
-	return false;
+	return DefaultCastEvent(evt, wparam, lparam, returnvalue);
 }
 
 /**
