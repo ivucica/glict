@@ -20,7 +20,7 @@
 #include <GLICT/globals.h>
 #include <string.h>
 glictList::glictList() {
-    forcedheight = 0;
+    forcedheight = 14;
     totalheight = 0;
     defocusabilize_element = true;
 
@@ -63,7 +63,17 @@ void glictList::RemoveObject(glictContainer *object) {
             (*it)->SetPos(0, currentheight);
             currentheight += (*it)->GetHeight();
         } else {
-            listlist.erase(it); // since this is std::list we can safely resume
+            std::list<glictContainer*>::iterator oldit=it;
+            if (listlist.begin() != it) {
+                it--;
+                listlist.erase(oldit); // since this is std::list we can safely resume
+            } else {
+                listlist.erase(it);
+                if (listlist.size())
+                    it = listlist.begin();
+                else
+                    break;
+            }
         }
     }
     glictContainer::RemoveObject(object);
