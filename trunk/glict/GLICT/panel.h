@@ -35,8 +35,8 @@ class glictPanel : public glictContainer {
         void SetBGColor(float r, float g, float b, float a);
 
         // redefined functions
-        void Paint();
-        bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
+        virtual void Paint();
+        virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
 
         void SetBGActiveness(bool bg);
 
@@ -44,6 +44,8 @@ class glictPanel : public glictContainer {
 		void VirtualScrollBottom();
 		void SetSkin(glictSkinner *skin);
 		void SetTextOffset(int x, int y) { textoffx = x; textoffy = y; }
+		bool IsVScrollbarVisible() const { return virtualsize.h > height; }
+		int GetCurrentVScrollbarWidth() const { return IsVScrollbarVisible() ? GetVScrollbarWidth() : 0; }
     private:
         glictColor bgcolor;
         glictSkinner *skin;
@@ -52,7 +54,9 @@ class glictPanel : public glictContainer {
         glictScrollbar sbVertical, sbHorizontal;
         int textoffx, textoffy;
     protected:
-        int GetScrollbarWidth();
+        int GetVScrollbarWidth() const;
+        int GetVScrollbarInternalWidth() const;
+
 
 };
 #endif

@@ -29,9 +29,18 @@ class glictList : public glictPanel {
 
         void AddObject(glictContainer* object);
         void RemoveObject(glictContainer *object);
-        void SetWidth(float w);
+        virtual void SetWidth(float w);
 
-    private:
+
+        void RebuildList();
+        void SetForcedHeight(int forcedheight);
+        int GetForcedHeight() const { return forcedheight; }
+    protected:
+        int forcedheight;
+        int totalheight;
+
+        bool defocusabilize_element; // for internal adjustment; should the element be made unfocusable? modified only by inherited classes
+        std::list<glictContainer*> listlist;
 };
 
 #endif

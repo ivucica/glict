@@ -101,6 +101,12 @@ glictContainer::glictContainer() {
 	previous = NULL;
 	next = NULL;
 
+	this->draggedchild = NULL;
+	this->dragging = false;
+
+	this->dragrelmouse.x = 0;
+	this->dragrelmouse.y = 0;
+
 	//printf("Container created.\n");
 
 }
@@ -678,37 +684,52 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 		case GLICT_MOUSEMOVE:
 			{
 			std::vector<glictContainer*>::reverse_iterator it;
-			//vector<glictContainer*>::iterator it;
+
+            // first let's handle dragging.
+            // if user dragged over some child object, then we would never reach the code below
+            // and that's why we must have dragging handled in separate section
+            if (evt == GLICT_MOUSEMOVE) {
+			    if (draggedchild) {
+                    draggedchild->SetPos(
+                        ((glictPos*)wparam)->x - draggedchild->dragrelmouse.x,
+                        ((glictPos*)wparam)->y - draggedchild->dragrelmouse.y
+                    );
+			    }
+			} else
+            if (evt == GLICT_MOUSEUP) {
+                if (draggedchild) {
+                    draggedchild->SetPos(
+                        ((glictPos*)wparam)->x - draggedchild->dragrelmouse.x,
+                        ((glictPos*)wparam)->y - draggedchild->dragrelmouse.y
+                    );
+                    StopDraggingChild(*(glictPos*)wparam);
+                }
+            }
 
 
+            // now let's give our children a chance to handle events
+            // in case they handle events, we "handled" the events too, so
+            // let's bail out
 			if  (((glictPos*)wparam)->x > this->clipleft &&
                  ((glictPos*)wparam)->x < this->clipright &&
                  ((glictPos*)wparam)->y > this->cliptop &&
-                 ((glictPos*)wparam)->y < this->clipbottom) {
-					if (objects.size()) {
-						for (it=objects.rbegin(); it != objects.rend(); it++) {
-						//for (it=objects.begin(); it!=objects.end(); it++) {
-							if (it != objects.rend() && *it ) {
+                 ((glictPos*)wparam)->y < this->clipbottom) { // we are inside the visible area of the widget?
 
-								//printf("Testing %s (%s)\n", (*it)->objtype, this->objtype );
-
-
-								if ((*it)->CastEvent(evt, wparam, lparam, returnvalue)) {
-									//printf("%s (%s) returned true\n", (*it)->objtype, this->objtype );
+                    // first let's try passing our children the event
+                    // if any of them parses the event, let's say to our parent that we parsed the event, too!
+					if (objects.size())
+						for (it=objects.rbegin(); it != objects.rend(); it++)
+							if (it != objects.rend() && *it )  // <=== FIXME do we need this? i don't think so
+								if ((*it)->CastEvent(evt, wparam, lparam, returnvalue))
 									return true;
-								}
-
-
-							}
-						}
-					}
 
 			}
 
 
-			//printf("Passing on to specific mouseevent processing in %s (%s).\n", objtype, parent ? parent->objtype : "NULL");
+			// now, since no child has parsed the event, we can take over!
+
+
 			if (evt == GLICT_MOUSEDOWN) {
-				//printf("Mouse down\n");
 				glictGlobals.lastMousePos.x = ((glictPos*)wparam)->x ; // remembers x and y when pressing the mouse down
 				glictGlobals.lastMousePos.y = ((glictPos*)wparam)->y ;
 				if (focusable) {
@@ -717,8 +738,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 					 ((glictPos*)wparam)->y > this->cliptop &&
 					 ((glictPos*)wparam)->y < this->clipbottom ) {
 
-
-						if (this->OnMouseDown) {
+						if (this->OnMouseDown) { // FIXME BUG: even if the object isn't focusable we should be calling OnMouseDown
 
                             glictPos relpos;
                             relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx + this->virtualpos.x;
@@ -731,8 +751,6 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 					 }
 				}
 			} else if (evt == GLICT_MOUSEUP) {
-				//printf("Mouse up on %s\n", objtype);
-
 
 				if (fabs (((glictPos*)wparam)->x - glictGlobals.lastMousePos.x) < 3 && // upon release verifies the location of mouse, and if nearby then it's a click - cast a click event
 					fabs (((glictPos*)wparam)->y - glictGlobals.lastMousePos.y) < 3 ) { // if up to 2 pixels diff
@@ -1326,13 +1344,70 @@ void glictContainer::SetNext(glictContainer *n) {
 }
 
 
-
+/**
+  * \param c color of caption
+  *
+  * Specifies with which color should the caption text be rendered.
+  *
+  * \sa glictContainer::SetCaptionColor(double r, double g, double b, double a), glictPanel::Paint()
+  */
 void glictContainer::SetCaptionColor(glictColor c){
     captioncolor = c;
 }
+/**
+  * \param r red component of caption color
+  * \param g green component of caption color
+  * \param b blue component of caption color
+  * \param a transparency
+  *
+  * Converts the four parameters R,G,B,A into glictColor and passes
+  * them to glictContainer::SetCaptionColor(glictColor).
+  *
+  * \sa glictContainer::SetCaptionColor(glictColor), glictPanel::Paint()
+  */
 void glictContainer::SetCaptionColor(double r, double g, double b, double a){
     glictColor c;
     c.r = r; c.g = g; c.b = b; c.a = a;
     SetCaptionColor(c);
 }
 
+/**
+  * \param draggedChild current object's child which should be dragged
+  * \param relmousepos  position relative to child's top-left on which the user clicked
+  *
+  * Starts dragging of an object that is the child of current object. This is done
+  * so that the current object can manage how the drag is performed. This means that
+  * for example window is no longer managing its own dragging.
+  *
+  * Example use is overriding the dragging behaviour. For example, we may want the
+  * container of the child object to block horizontal or vertical dragging, or we may
+  * want to render the dragging in a special way, such as an outline of the dragged
+  * object instead of object being dragged itself.
+  *
+  * Samples: Windows 9x rendering outline of dragged window, Tibia (a mmo game) locking
+  * dragging of some windows to vertical only and painting black box where the window
+  * will be moved to if dropped right now.
+  *
+  */
+void glictContainer::StartDraggingChild(glictContainer* draggedChild, const glictPos &relmousepos) {
+    Focus(NULL);
+    draggedchild = draggedChild;
+
+    draggedchild->dragrelmouse = relmousepos;
+    draggedchild->dragging = true;
+}
+
+/**
+  * \param eventmousepos Position of mouse when it released the child
+  *
+  * Stops dragging the child. Final position must be updated elsewhere (e.g.
+  * DefaultCastEvent() does that automatically).
+  */
+void glictContainer::StopDraggingChild(const glictPos &eventmousepos) {
+    //printf("glictContainer::StopDragChild() in %s\n", GetCaption().c_str());
+    if (draggedchild) {
+        draggedchild->dragging = false;
+        draggedchild = NULL;
+    } else
+        printf("Warning: stopping dragging child without child being dragged\n");
+}

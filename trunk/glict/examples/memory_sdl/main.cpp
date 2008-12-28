@@ -316,9 +316,10 @@ int main(int argc, char** argv) {
 
 					break;
 				case SDL_MOUSEBUTTONUP:
-				case SDL_MOUSEBUTTONDOWN:{
+				case SDL_MOUSEBUTTONDOWN:
+				case SDL_MOUSEMOTION:{
 					glictPos p = {event.button.x, event.button.y};
-					desktop.CastEvent(event.type == SDL_MOUSEBUTTONUP ? GLICT_MOUSEUP : GLICT_MOUSEDOWN, &p,0);
+					desktop.CastEvent(event.type == SDL_MOUSEBUTTONUP ? GLICT_MOUSEUP : (event.type == SDL_MOUSEBUTTONDOWN ? GLICT_MOUSEDOWN : GLICT_MOUSEMOVE), &p,0);
 
 					// blanks the screen..
 					glictColor c(0,0,0,1);
@@ -329,6 +330,7 @@ int main(int argc, char** argv) {
 
 					break;
 				}
+
 				case SDL_QUIT:
 					running = false;
 					break;
