@@ -50,9 +50,9 @@ class glictWindow : public glictContainer {
         void RemoveTitlebarObject(glictContainer* object);
     private:
         glictColor bgcolor;
-        glictPos relmouse; // relative position of mouse acquired upon mousepress
 		glictPanel titlebarpanel;
-        bool mousedown; // is mouse currently down on the window?
+        glictPos dragrelmouse; // relative position of mouse acquired upon mousepress
+        bool dragging; // is mouse currently down on the window?
     friend class glictContainer;
 };
 #endif
