@@ -777,6 +777,7 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
                         relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx + this->virtualpos.x;
                         relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety + this->virtualpos.y;
                         this->OnMouseUp(&relpos, this);
+                        return true;
                     }
                 }
 
