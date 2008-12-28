@@ -40,10 +40,10 @@ glictWindow::glictWindow() {
 
 	this->focusable = true;
 
-	this->mousedown = false;
+	this->dragging = false;
 
-	this->relmouse.x = 0;
-	this->relmouse.y = 0;
+	this->dragrelmouse.x = 0;
+	this->dragrelmouse.y = 0;
 
 	this->SetHeight(100);
 	this->SetWidth(100);
@@ -188,23 +188,23 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 			((glictPos*)wparam)->y > this->cliptop &&
 			((glictPos*)wparam)->y < this->clipbottom) {
 
-            //printf("Within %s\n", this->GetCaption().c_str());
 
-
+            // first check if we began dragging in "draggable" area
 			if (((glictPos*)wparam)->y <= this->cliptop + containeroffsety) {
 				if (evt == GLICT_MOUSEDOWN) {
 
 					this->Focus(NULL);
-					this->mousedown = true;
-					this->relmouse.x = ((glictPos*)wparam)->x-this->x ;
-					this->relmouse.y = ((glictPos*)wparam)->y-this->y ;
-					// dont to defaultcastevent as it might call a child that's below our titlebar
-                    //printf("DRAG!\n");
+					this->dragging = true;
+					this->dragrelmouse.x = ((glictPos*)wparam)->x-this->x ;
+					this->dragrelmouse.y = ((glictPos*)wparam)->y-this->y ;
+					// dont to defaultcastevent as it might call a child that's under our titlebar
+					// titlebar must be handled only by the window itself
 					return true;
 				}
 			}
 
-
+            // if mouse got down and it wasn't in the "draggable" area (titlebar)
+            // handle with default event handler
 			if (evt == GLICT_MOUSEDOWN) {
 				// we dont want any child to catch this one so return true
 
@@ -214,36 +214,41 @@ bool glictWindow::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 				return true;
 			}
 
-            if (evt == GLICT_MOUSEMOVE && this->mousedown) {
+            // if user is moving the mouse while she's dragging the mouse,
+            // keep on dragging and just update our position
+            if (evt == GLICT_MOUSEMOVE && this->dragging) {
                 this->SetPos(
-					((glictPos*)wparam)->x - this->relmouse.x,
-					((glictPos*)wparam)->y - this->relmouse.y
+					((glictPos*)wparam)->x - this->dragrelmouse.x,
+					((glictPos*)wparam)->y - this->dragrelmouse.y
 				);
 				return DefaultCastEvent(evt,wparam,lparam,returnvalue);
             }
 
-			if (evt == GLICT_MOUSEUP && this->mousedown) {
+            // if user has released the mouse while she was dragging the mouse,
+            // update the position and stop dragging
+			if (evt == GLICT_MOUSEUP && this->dragging) {
 				this->SetPos(
-					((glictPos*)wparam)->x - this->relmouse.x,
-					((glictPos*)wparam)->y - this->relmouse.y
+					((glictPos*)wparam)->x - this->dragrelmouse.x,
+					((glictPos*)wparam)->y - this->dragrelmouse.y
 				);
-				this->mousedown = false;
+				this->dragging = false;
 
 				return DefaultCastEvent(evt,wparam,lparam,returnvalue);
 			}
 
+            // otherwise just process as you'd normally process
 			if (GetEnabled())
 				return DefaultCastEvent(evt, wparam, lparam, returnvalue);
 			else
 				return false;
 		} else
 		// if mouse drag is done outside object...
-		if (evt == GLICT_MOUSEUP && this->mousedown) {
+		if ((evt == GLICT_MOUSEUP || evt == GLICT_MOUSEMOVE) && this->dragging) {
 			this->SetPos(
-				((glictPos*)wparam)->x - this->relmouse.x,
-				((glictPos*)wparam)->y - this->relmouse.y
+				((glictPos*)wparam)->x - this->dragrelmouse.x,
+				((glictPos*)wparam)->y - this->dragrelmouse.y
 			);
-			this->mousedown = false;
+			this->dragging = false;
             return true;
 		}
 
