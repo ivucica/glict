@@ -39,6 +39,7 @@ class glictWindow : public glictContainer {
 		//void SetHeight(int h);
 		//void SetWidth(int w);
         virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Reacts to events in a way a window should.
+        float GetTopSize() const {if (glictGlobals.windowBodySkin) return glictGlobals.windowBodySkin->GetTopSize().h; else return 0; }
         float GetBottomSize() const {if (glictGlobals.windowBodySkin) return glictGlobals.windowBodySkin->GetBottomSize().h; else return 0; }
         void FixContainerOffsets();
 
@@ -48,11 +49,10 @@ class glictWindow : public glictContainer {
 
         void AddTitlebarObject(glictContainer* object);
         void RemoveTitlebarObject(glictContainer* object);
+
     private:
         glictColor bgcolor;
 		glictPanel titlebarpanel;
-        glictPos dragrelmouse; // relative position of mouse acquired upon mousepress
-        bool dragging; // is mouse currently down on the window?
     friend class glictContainer;
 };
 #endif

@@ -61,8 +61,8 @@ class glictContainer  {
 		void DelayedRemove(); ///< Runs delayed removal of objects.
 		virtual void SetHeight(float h); ///< Sets object's height.
 		virtual void SetWidth(float w); ///< Sets object's width.
-		void SetPos(float x, float y); ///< Sets object's position using classical access using two integers.
-		void SetPos(glictPos pos); ///< Sets object's position using predefined type. Useful when exchanging data between library's functions.
+		virtual void SetPos(float x, float y); ///< Sets object's position using classical access using two integers.
+		virtual void SetPos(glictPos pos); ///< Sets object's position using predefined type. Useful when exchanging data between library's functions.
 		void GetPos(float* x, float* y); ///< Gets object's position and writes it into integers x and y.
 		void GetPos(glictPos* pos); ///< Gets object's position and writes it into predefined type. Useful when exchanging data between library's functions.
 		void GetSize(glictSize* size); ///< Gets object's size (height and width) and writes it into predefined type.
@@ -76,8 +76,16 @@ class glictContainer  {
 		void TransformScreenCoords(glictPos *pos); ///< Transforms screen coordinates into plane coordinates
 		float GetHeight(); ///< Returns object's height
 		float GetWidth(); ///< Returns object's width
-		float GetX() {return x;}  ///< Returns object position's x coordinate
-		float GetY() {return y;}  ///< Returns object position's y coordinate
+		inline float GetX() const {return x;}  ///< Returns object position's x coordinate
+		inline float GetY() const {return y;}  ///< Returns object position's y coordinate
+		inline float GetTop() const { return top; } ///< Returns top of object's overall rectangle.
+		inline float GetBottom() const { return bottom; } ///< Returns bottom of object's overall rectangle.
+		inline float GetLeft() const { return left; } ///< Returns left of object's overall rectangle.
+		inline float GetRight() const { return right; } ///< Returns right of object's overall rectangle.
+		inline float GetClippedTop() const { return cliptop; } ///< Returns top of object's overall rectangle.
+		inline float GetClippedBottom() const { return clipbottom; } ///< Returns bottom of object's overall rectangle.
+		inline float GetClippedLeft() const { return clipleft; } ///< Returns left of object's overall rectangle.
+		inline float GetClippedRight() const { return clipright; } ///< Returns right of object's overall rectangle.
 
 		virtual void SetVirtualSize(float w, float h);
 		virtual void VirtualScrollBottom();
@@ -126,7 +134,18 @@ class glictContainer  {
 		char objtype[50]; ///< Short descriptive string containing name of the object. (Each class actually rewrites this one upon intialization in constructor.)
 
 		virtual glictPos *GetVirtualPos() {return &virtualpos;}
-		virtual float GetBottomSize() const {return containeroffsety;}
+		virtual float GetLeftSize() const {return containeroffsetx;} // FIXME While theoretically ok, this should be overriden in a few places.
+		virtual float GetRightSize() const {return containeroffsetx;} // FIXME This is so wrong I can't even describe it. This needs to be overriden ... well, everywhere!
+		virtual float GetTopSize() const {return containeroffsety;} // FIXME While theoretically ok, this should be overriden in a few places.
+		virtual float GetBottomSize() const {return containeroffsety;} // FIXME This is so wrong I can't even describe it. This needs to be overriden ... well, everywhere!
+
+
+		virtual void StartDraggingChild(glictContainer* draggedChild, const glictPos &relmousepos);
+		virtual void StopDraggingChild(const glictPos &eventmousepos);
+
+
+		// USE ONLY INTERNALLY:
+		glictPos& _GetDragRelMouse() { return dragrelmouse; }
 	private:
 		// these should be called only internally
 		void SetRect(float left, float top, float right, float bottom); ///< Internal function. Sets the boundaries of the widget.
@@ -169,6 +188,13 @@ class glictContainer  {
 		unsigned int fontsize;
 
 		void* customdata;
+
+
+
+        glictContainer *draggedchild; ///< Dragged object's parent contains info on: which object is being dragged.
+        glictPos dragrelmouse; ///< Dragged object contains info on: Relative position of mouse acquired upon mousepress
+        bool dragging; ///< Dragged object contains info on: Is mouse currently down on the window? Is the object being currently dragged.
+
 
 
     /// \todo Remove this friend!

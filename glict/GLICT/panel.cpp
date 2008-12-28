@@ -70,10 +70,10 @@ void glictPanel::Paint() {
 
 
 
-    if (virtualsize.h > height) {
-        sbVertical.SetWidth(GetScrollbarWidth());
-        sbVertical.SetHeight(height );//- (virtualsize.w > width ? 10 : 0));
-        sbVertical.SetPos(width - GetScrollbarWidth(), +sbVertical.GetValue());
+    if (IsVScrollbarVisible()) {
+        sbVertical.SetWidth(GetVScrollbarInternalWidth()); //GetVScrollbarWidth() returns left size and right size, too; which is not good.
+        sbVertical.SetHeight(height);//- (virtualsize.w > width ? 10 : 0));
+        sbVertical.SetPos(width - GetVScrollbarWidth(), sbVertical.GetValue());
         sbVertical.SetVisible(true);
 
         sbVertical.SetMin(0);
@@ -132,8 +132,8 @@ void glictPanel::Paint() {
     this->CPaint();
 
 
-    if (virtualsize.h > height) {
-        sbVertical.SetPos(width - GetScrollbarWidth(), 0);
+    if (IsVScrollbarVisible()) {
+        sbVertical.SetPos(width - GetVScrollbarWidth(), 0);
     }
 
 
@@ -167,7 +167,8 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
 					}
 				}
 				default:
-					printf("Button getting %d\n", *((char*)wparam));
+					//printf("Panel getting key %d\n", *((char*)wparam));
+					break;
 
 			}
 			break;
@@ -239,7 +240,7 @@ void glictPanel::SetBGActiveness(bool bg) {
   * Scrolls to the virtual area's bottom.
   */
 void glictPanel::VirtualScrollBottom() {
-	if (virtualsize.h > height) {
+	if (IsVScrollbarVisible()) {
 		sbVertical.SetMax((int)(virtualsize.h - height));
 		sbVertical.SetValue(sbVertical.GetMax());
 	} else {
@@ -254,7 +255,7 @@ void glictPanel::VirtualScrollBottom() {
 
 void glictPanel::SetVirtualSize(float w, float h) {
 
-    bool newheightbigger = h <= height;
+    bool newheightbigger = (h <= height);
 
     glictContainer::SetVirtualSize(w,h);
 
@@ -281,9 +282,17 @@ void glictPanel::SetSkin(glictSkinner* skin) {
 }
 
 
-int glictPanel::GetScrollbarWidth() {
+int glictPanel::GetVScrollbarWidth() const {
     if (glictGlobals.scrollbarUpperSkin) {
-        return glictGlobals.scrollbarUpperSkin->GetCenterSize().w;
+        return  glictGlobals.scrollbarUpperSkin->GetLeftSize().w +
+                glictGlobals.scrollbarUpperSkin->GetCenterSize().w +
+                glictGlobals.scrollbarUpperSkin->GetRightSize().w;
+    }
+    return 10;
+}
+int glictPanel::GetVScrollbarInternalWidth() const {
+    if (glictGlobals.scrollbarUpperSkin) {
+        return  glictGlobals.scrollbarUpperSkin->GetCenterSize().w;
     }
     return 10;
 }

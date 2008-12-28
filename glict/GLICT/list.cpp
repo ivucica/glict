@@ -18,57 +18,79 @@
 */
 #include <GLICT/list.h>
 #include <GLICT/globals.h>
+#include <string.h>
 glictList::glictList() {
+    forcedheight = 0;
+    totalheight = 0;
+    defocusabilize_element = true;
+
+    strcpy(this->objtype, "List");
 
 }
 glictList::~glictList() {
 }
 
 void glictList::AddObject(glictContainer* object) {
-    object->SetPos(0, objects.size()*14 - 14 );
-    object->SetHeight(14);
+    object->SetPos(0, totalheight);
+    if(forcedheight)
+        object->SetHeight(forcedheight);
+    totalheight += object->GetHeight()+object->GetTopSize()+object->GetBottomSize();
 
     glictContainer::AddObject(object);
-	object->SetFocusable(false);
-    SetVirtualSize(width, objects.size() * 14 - 14);
+    listlist.push_back(object);
+    if (defocusabilize_element)
+        object->SetFocusable(false);
+    SetVirtualSize(width, totalheight);
     SetWidth(width);
 
 }
-bool __LISTDEBUGGING_____ = false;
 void glictList::RemoveObject(glictContainer *object) {
 
     float currentheight = 0;
-    printf("RemoveObject\n");
-    for (std::vector<glictContainer*>::iterator it = objects.begin() ; it != objects.end() ; it++) {
+    for (std::list<glictContainer*>::iterator it = listlist.begin() ; it != listlist.end() ; it++) {
         if ((*it)!=object) {
             bool proceed = true;
             for (std::vector<glictContainer*>::iterator it2 = delayedremove.begin(); it2 != delayedremove.end(); it2++) {
                 if ((*it2) == (*it)) {
-                    printf("Hit into an already removed object\n");
+                    //printf("Hit into an already removed object\n");
                     proceed = false;
                     break;
                 }
             }
-            if (!proceed) continue;
+            if (!proceed)  // the object that needs to be shifted has been removed already. skip.
+                continue;
 
             (*it)->SetPos(0, currentheight);
-            currentheight += 14;
-            printf("Shifting\n");
+            currentheight += (*it)->GetHeight();
+        } else {
+            listlist.erase(it); // since this is std::list we can safely resume
         }
     }
-    printf("Ended\n");
     glictContainer::RemoveObject(object);
-    printf("Removed object\n");
-//    __LISTDEBUGGING_____  = true;
     SetWidth(width);
-//    __LISTDEBUGGING_____  = false;
-    printf("Set the height\n");
-    printf("Ended removeobject\n");
 }
 
 void glictList::SetWidth(float width) {
     for (std::vector<glictContainer*>::iterator it = objects.begin() ; it != objects.end() ; it++) {
-        (*it)->SetWidth(width-(virtualsize.h > height ? GetScrollbarWidth() : 0));
+        (*it)->SetWidth(width - GetCurrentVScrollbarWidth() - (*it)->GetLeftSize() - (*it)->GetRightSize());
     }
     glictContainer::SetWidth(width);
+}
+
+void glictList::RebuildList(){
+
+    int currentheight=0;
+    for (std::list<glictContainer*>::iterator it = listlist.begin() ; it != listlist.end() ; it++) {
+        (*it)->SetPos(0, currentheight);
+        if (forcedheight)
+            (*it)->SetHeight(forcedheight);
+        (*it)->SetWidth(width - GetCurrentVScrollbarWidth() - (*it)->GetLeftSize() - (*it)->GetRightSize());
+        currentheight += (*it)->GetHeight()+(*it)->GetTopSize()+(*it)->GetBottomSize();
+    }
+
+    totalheight = currentheight;
+
+}
+void glictList::SetForcedHeight(int _fh){
+    this->forcedheight = _fh;
 }
