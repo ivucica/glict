@@ -71,6 +71,7 @@
 				</Linker>
 			</Target>
 			<Target title="examples-memory">
+				<Option platforms="Unix;" />
 				<Option output="glictmemory" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".objsmemory" />
 				<Option type="1" />
@@ -118,6 +119,7 @@
 				</Linker>
 			</Target>
 			<Target title="examples-memory_sdl (win32)">
+				<Option platforms="Windows;" />
 				<Option output="glictmemory_sdl" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".objsmemorysdl" />
 				<Option type="0" />
@@ -329,7 +331,6 @@
 			<code_completion />
 			<envvars />
 			<debugger />
-			<lib_finder />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

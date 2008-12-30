@@ -108,7 +108,7 @@ class glictContainer  {
 		const char *EvtTypeDescriptor(glictEvents evt); ///< Returns string with generated event.
 		virtual void Focus(glictContainer* callerchild); ///< Sets the focus to the current object.
 
-		glictContainer* GetParent();
+		glictContainer* GetParent() const;
 
 		void ReportDebug(); ///< Reports debug information to stdout.
 
@@ -142,10 +142,12 @@ class glictContainer  {
 
 		virtual void StartDraggingChild(glictContainer* draggedChild, const glictPos &relmousepos);
 		virtual void StopDraggingChild(const glictPos &eventmousepos);
+		inline void SetDraggable(bool value) { draggable = value; } // generic draggability
 
 
 		// USE ONLY INTERNALLY:
 		glictPos& _GetDragRelMouse() { return dragrelmouse; }
+
 	private:
 		// these should be called only internally
 		void SetRect(float left, float top, float right, float bottom); ///< Internal function. Sets the boundaries of the widget.
@@ -194,6 +196,7 @@ class glictContainer  {
         glictContainer *draggedchild; ///< Dragged object's parent contains info on: which object is being dragged.
         glictPos dragrelmouse; ///< Dragged object contains info on: Relative position of mouse acquired upon mousepress
         bool dragging; ///< Dragged object contains info on: Is mouse currently down on the window? Is the object being currently dragged.
+        bool draggable; ///< Can this object be dragged? This refers to the default event handler in DefaultCastEvent(). Window has separate dragging handling.
 
 
 

@@ -29,7 +29,9 @@ class glictList : public glictPanel {
 
         void AddObject(glictContainer* object);
         void RemoveObject(glictContainer *object);
+
         virtual void SetWidth(float w);
+        virtual void SetHeight(float h);
 
 
         void RebuildList();

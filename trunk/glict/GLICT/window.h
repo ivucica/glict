@@ -36,16 +36,14 @@ class glictWindow : public glictContainer {
         virtual void Paint(); ///< Paints the window.
 		//void AddObject(glictContainer *object);
 		//void RemoveObject(glictContainer *object);
-		//void SetHeight(int h);
-		//void SetWidth(int w);
         virtual bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Reacts to events in a way a window should.
         float GetTopSize() const {if (glictGlobals.windowBodySkin) return glictGlobals.windowBodySkin->GetTopSize().h; else return 0; }
         float GetBottomSize() const {if (glictGlobals.windowBodySkin) return glictGlobals.windowBodySkin->GetBottomSize().h; else return 0; }
         void FixContainerOffsets();
 
-        void SetWidth(float w);
-        void SetHeight(float h);
-        void SetPos(float x, float y);
+        virtual void SetWidth(float w);
+        virtual void SetHeight(float h);
+        virtual void SetPos(float x, float y);
 
         void AddTitlebarObject(glictContainer* object);
         void RemoveTitlebarObject(glictContainer* object);

@@ -45,8 +45,8 @@ glictWindow::glictWindow() {
 
 	this->SetPos(0,0);
 
-    titlebarpanel.SetPos(0,0);
-    titlebarpanel.SetCaption("");
+    this->AddObject(&titlebarpanel);
+    titlebarpanel.SetPos(0,-12);
     titlebarpanel.SetBGActiveness(false);
 
 
@@ -61,6 +61,7 @@ glictWindow::glictWindow() {
 }
 glictWindow::~glictWindow() {
 	//this->glictWindow::RemoveObject(&panel);
+	this->glictWindow::RemoveObject(&titlebarpanel);
 }
 
 /**
@@ -121,6 +122,7 @@ void glictWindow::Paint() {
 	// this is here so that scissoring resumes properly
 	this->SetScissor();
 
+
     if (!glictGlobals.windowBodySkin && !glictGlobals.windowTitleSkin) {
 		glictColor c;
 
@@ -138,8 +140,6 @@ void glictWindow::Paint() {
 	glictFontRender(this->caption.c_str(),"system", this->x + glictGlobals.translation.x + (this->width / 2 - glictFontSize(this->caption.c_str(), "system") / 2) + (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetLeftSize().w : 0) , this->y*+1. + (glictGlobals.windowBodySkin ? (glictGlobals.windowBodySkin->GetTopSize().h/2 - 10./2.) : 0) + glictGlobals.translation.y );
 	glictFontColor(fontname.c_str(), oldcol);
 
-
-    titlebarpanel.Paint();
 
     /*{
         int er;
@@ -270,8 +270,8 @@ void glictWindow::FixContainerOffsets() {
             this->containeroffsetx = glictGlobals.windowBodySkin->GetLeftSize().w;
             this->containeroffsety = glictGlobals.windowBodySkin->GetTopSize().h;
         } else { // there are separate body and titlebar skin
-            this->containeroffsetx = glictGlobals.windowBodySkin->GetLeftSize().w; // FIXME should not work this way
-            this->containeroffsety = glictGlobals.windowBodySkin->GetTopSize().h;
+            this->containeroffsetx = glictGlobals.windowTitleSkin->GetLeftSize().w; // FIXME should not work this way
+            this->containeroffsety = glictGlobals.windowTitleSkin->GetTopSize().h;
         }
     }
     //printf("%s container offsets %d %d\n", objtype,  containeroffsetx, containeroffsety);
@@ -282,14 +282,17 @@ void glictWindow::FixContainerOffsets() {
 void glictWindow::SetWidth(float w) {
     glictContainer::SetWidth(w);
     titlebarpanel.SetWidth(w);
+    titlebarpanel.SetPos(0,-GetTopSize());
 }
 void glictWindow::SetHeight(float h) {
     glictContainer::SetHeight(h);
-    titlebarpanel.SetHeight(12);
+    titlebarpanel.SetHeight(GetTopSize());
+    titlebarpanel.SetPos(0,-GetTopSize());
 }
 void glictWindow::SetPos(float x, float y) {
     glictContainer::SetPos(x,y);
-    titlebarpanel.SetPos(left, top);
+    titlebarpanel.SetPos(0,-GetTopSize());
+
 }
 
 
@@ -297,6 +300,6 @@ void glictWindow::AddTitlebarObject(glictContainer* object) {
     titlebarpanel.AddObject(object);
 }
 void glictWindow::RemoveTitlebarObject(glictContainer* object) {
-    titlebarpanel.AddObject(object);
+    titlebarpanel.RemoveObject(object);
 }
 

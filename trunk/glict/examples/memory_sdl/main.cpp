@@ -236,7 +236,34 @@ void SDLRectDraw(float left, float right, float top, float bottom, const glictCo
 	SDL_Rect rect = {left, top, right-left, bottom-top};
 	SDL_FillRect(screen, &rect, color);
 }
+void SDLRectLDraw(float left, float right, float top, float bottom, const glictColor &color) {
 
+	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
+	int col = SDL_MapRGBA(vi->vfmt, (int)(color.r), (int)(color.g), (int)(color.b), (int)(color.a));
+	int height = bottom-top;
+	int width = right-left;
+	int x = left;
+	int y = top;
+	{
+		SDL_Rect rect = {(int)x, (int)y, 1, (int)height};
+		SDL_FillRect(screen, &rect, col);
+	}
+
+	{
+		SDL_Rect rect = {(int)(x+width-1.f), (int)y, 1, (int)height};
+		SDL_FillRect(screen, &rect, col);
+	}
+
+	{
+		SDL_Rect rect = {(int)x, (int)y, (int)width, 1};
+		SDL_FillRect(screen, &rect, col);
+	}
+
+	{
+		SDL_Rect rect = {(int)x, (int)(y+height-1.f), (int)width, 1};
+		SDL_FillRect(screen, &rect, col);
+	}
+}
 
 // the main function initializes everything
 int main(int argc, char** argv) {
@@ -299,6 +326,7 @@ int main(int argc, char** argv) {
 	reshape(width,height);
 
 	glictGlobals.paintrectCallback = SDLRectDraw;
+	glictGlobals.paintrectlinesCallback = SDLRectLDraw;
 	glictGlobals.enableGlTranslate = false;
 	SDL_Event event;
 

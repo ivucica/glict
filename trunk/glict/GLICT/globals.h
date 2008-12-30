@@ -83,6 +83,6 @@ extern glictGlobalsClass glictGlobals;
 #define GLICT_RENDERING false
 #define GLICT_SELECTING true
 
-#define GLICT_APIREV 95 // from which subversion repository revision does this install come (manually changed upon relevant API changes)
+#define GLICT_APIREV 98 // from which subversion repository revision does this install come (manually changed upon relevant API changes)
 
 #endif

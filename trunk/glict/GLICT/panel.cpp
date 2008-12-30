@@ -49,6 +49,7 @@ glictPanel::glictPanel() {
 	//sbHorizontal.SetVisible(false);// FIXME horizontal scrollbar widget must be done in order to be implemented here
 
 	skin = NULL;
+	draggable = false;
 }
 glictPanel::~glictPanel() {
 
@@ -68,17 +69,29 @@ void glictPanel::Paint() {
         sbHorizontal.SetMax(virtualsize.w);
     }*/
 
+    /* DEBUGGING CODE REMOVEME
+    if (glictGlobals.clipperCallback)
+        glictGlobals.clipperCallback(clipleft,clipright,cliptop,clipbottom);
+    glictGlobals.PaintRectLines(left,right,top,bottom);
+    glictGlobals.PaintRectLines(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+								   this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y);
+    */
+
+
+    SetScissor();
 
 
     if (IsVScrollbarVisible()) {
         sbVertical.SetWidth(GetVScrollbarInternalWidth()); //GetVScrollbarWidth() returns left size and right size, too; which is not good.
-        sbVertical.SetHeight(height);//- (virtualsize.w > width ? 10 : 0));
+        sbVertical.SetHeight(GetHeight());//- (virtualsize.w > width ? 10 : 0));
         sbVertical.SetPos(width - GetVScrollbarWidth(), sbVertical.GetValue());
         sbVertical.SetVisible(true);
 
         sbVertical.SetMin(0);
         sbVertical.SetMax((int)(virtualsize.h - height));
 		if (sbVertical.GetValue() > virtualsize.h - height) sbVertical.SetValue((int)(virtualsize.h - height));
+    } else {
+        sbVertical.SetVisible(false);
     }
 
     this->virtualpos.x = 0;
@@ -109,7 +122,6 @@ void glictPanel::Paint() {
         glictFontColor(fontname.c_str(), captioncolor);
 	glictFontRender(this->caption.c_str(), fontname.c_str(), x+glictGlobals.translation.x + textoffx , y + glictGlobals.translation.y + textoffy);
 	glictFontColor(fontname.c_str(), oldcol);
-
 
 	if (this->OnPaint) {
 		glictRect r, c;
@@ -186,16 +198,6 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
 				((glictPos*)wparam)->y < this->clipbottom) {
                 //printf("EVENT WITHIN PANEL %s (%s)...!\n", objtype, parent ? parent->objtype : "NULL");
 
-                if (evt == GLICT_MOUSEDOWN && this->OnMouseDown) {
-                        if (this->OnMouseDown) {
-
-                            glictPos relpos;
-                            relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx + this->virtualpos.x;
-                            relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety + this->virtualpos.y;
-                            this->OnMouseDown(&relpos, this);
-                        }
-
-                }
                 sbVertical.SetPos(sbVertical.GetX(), sbVertical.GetY() + sbVertical.GetValue());
                 if (sbVertical.CastEvent(evt, wparam, lparam, returnvalue)) { // scrollbar related begin
                     sbVertical.SetPos(sbVertical.GetX(), sbVertical.GetY() - sbVertical.GetValue());
@@ -204,6 +206,17 @@ bool glictPanel::CastEvent(glictEvents evt, void* wparam, long lparam, void* ret
                 } // scrollbar related end
                 sbVertical.SetPos(sbVertical.GetX(), sbVertical.GetY() - sbVertical.GetValue());
 
+
+                if (evt == GLICT_MOUSEDOWN && this->OnMouseDown) {
+                        if (this->OnMouseDown) {
+
+                            glictPos relpos;
+                            relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx + this->virtualpos.x;
+                            relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety + this->virtualpos.y;
+                            this->OnMouseDown(&relpos, this);
+                            return true;
+                        }
+                }
 
 				// if a child caught click, we dont handle it otherwise
 				return DefaultCastEvent(evt, wparam, lparam, returnvalue);
@@ -295,4 +308,14 @@ int glictPanel::GetVScrollbarInternalWidth() const {
         return  glictGlobals.scrollbarUpperSkin->GetCenterSize().w;
     }
     return 10;
+}
+void glictPanel::SetHeight(float height) {
+    glictContainer::SetHeight(height);
+    sbVertical.SetHeight(GetHeight());
+
+    if (height < GetHeight())
+        if (IsVScrollbarVisible())
+            sbVertical.SetValue(virtualsize.h-height);
+        else
+            sbVertical.SetValue(0);
 }
