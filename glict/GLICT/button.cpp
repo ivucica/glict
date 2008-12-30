@@ -56,6 +56,9 @@ glictButton::glictButton() {
 	this->focusable = true;
 
 	this->caption = "Button";
+
+	this->skin = NULL;
+	this->hskin = NULL;
 }
 
 /**
@@ -167,14 +170,31 @@ bool glictButton::CastEvent(glictEvents evt, void* wparam, long lparam, void* re
 void glictButton::Paint() {
 	if (!GetVisible()) return;
 
+    glictSkinner*  skin_final = glictGlobals.buttonSkin;
+    glictSkinner* hskin_final = glictGlobals.buttonHighlightSkin;
+
+    if (this->skin) skin_final = this->skin;
+    if (this->hskin) hskin_final = this->hskin;
+
+
 
 	if (glictGlobals.debugCallback) {
 		glictGlobals.debugCallback(strlen("glictButton::Paint()"), "glictButton::Paint()");
 	}
 
+	/* DEBUGGING CODE REMOVEME
+    if (glictGlobals.clipperCallback)
+        glictGlobals.clipperCallback(clipleft,clipright,cliptop,clipbottom);
+    glictGlobals.PaintRectLines(left,right,top,bottom);
+            glictGlobals.PaintRectLines(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+								this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y);
+    */
+
+
+
 	this->SetScissor();
 
-	if (!((glictGlobals.buttonSkin && (!highlighted && !hold)) || (glictGlobals.buttonHighlightSkin && (highlighted || hold)))) {
+	if (!((skin_final && (!highlighted && !hold)) || (hskin_final && (highlighted || hold)))) {
 		// if skin is not set, then let's draw a plain rectangle
 		glictColor col;
         if (!highlighted || !hold) {
@@ -195,10 +215,11 @@ void glictButton::Paint() {
 
         glictGlobals.Translatef(this->x, this->y, 0);
         if (!highlighted && !hold)
-            glictGlobals.buttonSkin->Paint(&s);
+            skin_final->Paint(&s);
         else
-            glictGlobals.buttonHighlightSkin->Paint(&s);
+            hskin_final->Paint(&s);
         glictGlobals.Translatef(-this->x, -this->y, 0);
+
 	}
 
 	// restore color

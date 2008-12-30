@@ -109,6 +109,7 @@ glictContainer::glictContainer() {
 
 	//printf("Container created.\n");
 
+	draggable = false;
 }
 
 /**
@@ -706,7 +707,6 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
                 }
             }
 
-
             // now let's give our children a chance to handle events
             // in case they handle events, we "handled" the events too, so
             // let's bail out
@@ -738,8 +738,22 @@ bool glictContainer::DefaultCastEvent(glictEvents evt, void* wparam, long lparam
 					 ((glictPos*)wparam)->y > this->cliptop &&
 					 ((glictPos*)wparam)->y < this->clipbottom ) {
 
-						if (this->OnMouseDown) { // FIXME BUG: even if the object isn't focusable we should be calling OnMouseDown
 
+                        if (draggable) {
+                            if (!parent)
+                                return false;
+
+                            glictPos p;
+                            p.x = ((glictPos*)wparam)->x-this->x ;
+                            p.y = ((glictPos*)wparam)->y-this->y ;
+
+                            parent->StartDraggingChild(this, p);
+                        }
+
+
+
+
+						if (this->OnMouseDown) { // FIXME BUG: even if the object isn't focusable we should be calling OnMouseDown
                             glictPos relpos;
                             relpos.x = ((glictPos*)wparam)->x - this->left - this->containeroffsetx + this->virtualpos.x;
                             relpos.y = ((glictPos*)wparam)->y - this->top - this->containeroffsety + this->virtualpos.y;
@@ -1145,7 +1159,7 @@ std::string glictContainer::GetCaption() {
 /**
   * Obtains the current object's parent, as stored in parent variable.
   */
-glictContainer* glictContainer::GetParent() {
+glictContainer* glictContainer::GetParent() const {
 	return parent;
 }
 

@@ -76,15 +76,18 @@ void glictList::RemoveObject(glictContainer *object) {
             }
         }
     }
+    totalheight = currentheight;
     glictContainer::RemoveObject(object);
     SetWidth(width);
 }
 
 void glictList::SetWidth(float width) {
-    for (std::vector<glictContainer*>::iterator it = objects.begin() ; it != objects.end() ; it++) {
-        (*it)->SetWidth(width - GetCurrentVScrollbarWidth() - (*it)->GetLeftSize() - (*it)->GetRightSize());
-    }
-    glictContainer::SetWidth(width);
+    glictPanel::SetWidth(width);
+    RebuildList();
+}
+void glictList::SetHeight(float height) {
+    glictPanel::SetHeight(height);
+    RebuildList();
 }
 
 void glictList::RebuildList(){
@@ -99,7 +102,7 @@ void glictList::RebuildList(){
     }
 
     totalheight = currentheight;
-
+    //SetVirtualSize(width, totalheight);
 }
 void glictList::SetForcedHeight(int _fh){
     this->forcedheight = _fh;

@@ -40,12 +40,13 @@ class glictPanel : public glictContainer {
 
         void SetBGActiveness(bool bg);
 
-        void SetVirtualSize(float w, float h);
+        virtual void SetVirtualSize(float w, float h);
+        virtual void SetHeight(float h);
 		void VirtualScrollBottom();
 		void SetSkin(glictSkinner *skin);
 		void SetTextOffset(int x, int y) { textoffx = x; textoffy = y; }
-		bool IsVScrollbarVisible() const { return virtualsize.h > height; }
-		int GetCurrentVScrollbarWidth() const { return IsVScrollbarVisible() ? GetVScrollbarWidth() : 0; }
+		inline bool IsVScrollbarVisible() const { return virtualsize.h > height; }
+		inline int GetCurrentVScrollbarWidth() const { return IsVScrollbarVisible() ? GetVScrollbarWidth() : 0; }
     private:
         glictColor bgcolor;
         glictSkinner *skin;

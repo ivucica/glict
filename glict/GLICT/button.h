@@ -31,6 +31,8 @@
 #include <GLICT/container.h>
 #include <GLICT/types.h>
 
+class glictSkinner;
+
 /**
  * \brief Button class widget
  *
@@ -48,6 +50,9 @@ class glictButton : public glictContainer {
 
 		void SetHold (bool holdvalue);
 
+        inline void SetSkin(glictSkinner* newskin)           { skin  = newskin; }
+        inline void SetHighlightSkin(glictSkinner* newskin)  { hskin = newskin; }
+
         // redefined functions
         void Paint(); ///< Paints the button.
         bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue); ///< Event processing for button widget.
@@ -58,6 +63,7 @@ class glictButton : public glictContainer {
         glictColor fgcolor; ///< Stores the foreground color.
         bool highlighted; ///< Is mouse pressed or not
         bool hold; ///< Should we render as if mouse is pressed no matter what
+        glictSkinner *skin, *hskin; ///< Which skin should we use. Overrides the glictGlobals setting
 };
 #endif
 
