@@ -20,6 +20,7 @@
 #ifndef __GLICT_SKINNER_H
 #define __GLICT_SKINNER_H
 #ifdef WIN32
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #endif
 #ifndef NO_GL
