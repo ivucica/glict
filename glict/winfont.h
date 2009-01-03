@@ -1,5 +1,4 @@
-// NOT A PART OF GLICT.
-// This code is not licensed under GNU GPL.
+// This code is licensed under GNU LGPL.
 
 #ifndef __WINFONT_H
 #define __WINFONT_H
@@ -10,6 +9,7 @@
 #define WINFONT_UNDERLINE 4
 #define WINFONT_STRIKEOUT 8
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <GL/gl.h>
 
