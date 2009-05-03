@@ -161,11 +161,14 @@ void glictScrollbar::PaintVertical() {
             + this->width // this is bottom, add some more
 	};
 
-    if (!glictGlobals.scrollbarDragSkin) {
-        glictGlobals.PaintRect(scrollerchipRect,MultiplyColorRGB(bgcolor, 0.6));
-    }
-    else
-        PaintSkinned(scrollerchipRect, glictGlobals.scrollbarDragSkin);
+	if ((float)(this->max - this->min) != 0) // protection against division by zero
+	{
+        if (!glictGlobals.scrollbarDragSkin) {
+            glictGlobals.PaintRect(scrollerchipRect,MultiplyColorRGB(bgcolor, 0.6));
+        }
+        else
+            PaintSkinned(scrollerchipRect, glictGlobals.scrollbarDragSkin);
+	}
 
 	this->CPaint();
 
@@ -285,12 +288,14 @@ void glictScrollbar::PaintHorizontal() {
 
 	};
 
-    if (!glictGlobals.scrollbarDragSkin) {
-        glictGlobals.PaintRect(scrollerchipRect,MultiplyColorRGB(bgcolor, 0.6));
-    }
-    else
-        PaintSkinned(scrollerchipRect, glictGlobals.scrollbarDragSkin);
-
+    if ((float)(this->max - this->min) != 0) // protection against division by zero
+	{
+        if (!glictGlobals.scrollbarDragSkin) {
+            glictGlobals.PaintRect(scrollerchipRect,MultiplyColorRGB(bgcolor, 0.6));
+        }
+        else
+            PaintSkinned(scrollerchipRect, glictGlobals.scrollbarDragSkin);
+	}
 	this->CPaint();
 
 	// this is here so that scissoring resumes properly
