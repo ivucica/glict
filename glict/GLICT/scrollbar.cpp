@@ -52,7 +52,7 @@ glictScrollbar::glictScrollbar() {
 	this->value = 0;
 	this->step = 1;
 
-
+	this->draggingchip = false;
 }
 glictScrollbar::~glictScrollbar() {
 	//this->glictWindow::RemoveObject(&panel);
@@ -144,7 +144,7 @@ void glictScrollbar::PaintVertical() {
 	    PaintSkinned(backpanelRect, glictGlobals.scrollbarPanelSkin);
 
 	// scroller chip
-	glictRect scrollerchipRect = {
+	glictRect scrollerchipRect = GetScrollerChip();/*{
             this->x+glictGlobals.translation.x,
             this->x + this->width +glictGlobals.translation.x,
 
@@ -159,7 +159,7 @@ void glictScrollbar::PaintVertical() {
             ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
             * (float)(this->height - this->width*2 - this->width) // which should be a height, reduced by top and bottom button's height, but also by scroller's height
             + this->width // this is bottom, add some more
-	};
+	};*/
 
 	if ((float)(this->max - this->min) != 0) // protection against division by zero
 	{
@@ -270,7 +270,7 @@ void glictScrollbar::PaintHorizontal() {
 	    PaintSkinned(backpanelRect, glictGlobals.scrollbarPanelSkin);
 
 	// scroller chip
-	glictRect scrollerchipRect = {
+	glictRect scrollerchipRect = GetScrollerChip();/*= {
             this->x +glictGlobals.translation.x + // normal beginning coord of the object
             this->height + // increased by width of top button
             ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
@@ -286,7 +286,7 @@ void glictScrollbar::PaintHorizontal() {
             this->y+glictGlobals.translation.y,
             this->y + this->height +glictGlobals.translation.y
 
-	};
+	};*/
 
     if ((float)(this->max - this->min) != 0) // protection against division by zero
 	{
@@ -342,6 +342,8 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
             const float w = GetWidth();
             const float h = GetHeight();
 
+            glictRect scrollerChip = GetScrollerChip();
+
 
 			if (evt == GLICT_MOUSECLICK) {
 				this->Focus(this);
@@ -350,7 +352,7 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
                         if (this->value > this->min) this->value -= this->step;
                         if (this->value < this->min) this->value = this->min;
                     }
-                    if (((glictPos*)wparam)->y - this->top > this->height - this->width) { // mousedown within upper button?
+                    else if (((glictPos*)wparam)->y - this->top > this->height - this->width) { // mousedown within upper button?
                         if (this->value < this->max) this->value += this->step;
                         if (this->value > this->max) this->value = this->max;
                     }
@@ -359,7 +361,7 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
                         if (this->value > this->min) this->value -= this->step;
                         if (this->value < this->min) this->value = this->min;
                     }
-                    if (((glictPos*)wparam)->x - this->left > this->width - this->height) { // mousedown within upper button?
+                    else if (((glictPos*)wparam)->x - this->left > this->width - this->height) { // mousedown within upper button?
                         if (this->value < this->max) this->value += this->step;
                         if (this->value > this->max) this->value = this->max;
                     }
@@ -370,21 +372,40 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
                     if (((glictPos*)wparam)->y - this->top < this->width) { // mousedown within upper button?
                         this->highlightup = true;
                     }
-                    if (((glictPos*)wparam)->y - this->top > this->height - this->width) { // mousedown within upper button?
+                    else if (((glictPos*)wparam)->y - this->top > this->height - this->width) { // mousedown within upper button?
                         this->highlightdn = true;
                     }
+                    else if((((glictPos*)wparam)->y > scrollerChip.top) && (((glictPos*)wparam)->y > scrollerChip.bottom)) { // mousedown within chip?
+						draggingchip = true;
+					}
 			    } else { // horizontal
 			        if (((glictPos*)wparam)->x - this->left < this->height) { // mousedown within upper button?
                         this->highlightup = true;
                     }
-                    if (((glictPos*)wparam)->x - this->left > this->width - this->height) { // mousedown within upper button?
+                    else if (((glictPos*)wparam)->x - this->left > this->width - this->height) { // mousedown within upper button?
                         this->highlightdn = true;
                     }
+                    else if((((glictPos*)wparam)->x > scrollerChip.right) && (((glictPos*)wparam)->x > scrollerChip.left)) { // mousedown within chip?
+						draggingchip = true;
+					}
 			    }
 			}
 			if (evt == GLICT_MOUSEUP) {
 				this->highlightdn = false;
 				this->highlightup = false;
+
+				if(draggingchip) { // chip dragging
+					// TODO: make this actually work as expected. I might just be doing something retarded here.
+					if (h > w) { // vertical
+						this->value = ((this->height - (((glictPos*)wparam)->y - this->top)) / (this->max - this->min));
+						this->value -= this->value % this->step; // fix to the proper step
+					}
+					else { // horizontal
+						this->value = this->max - ((this->width - (((glictPos*)wparam)->x - this->left)) / (this->max - this->min));
+						this->value -= this->value % this->step; // fix to the proper step
+					}
+					draggingchip = false;
+				}
 			}
 
 		}
@@ -443,4 +464,50 @@ glictColor glictScrollbar::MultiplyColorRGB(const glictColor &col, float mul) co
     c.g *= mul;
     c.b *= mul;
     return c;
+}
+
+glictRect glictScrollbar::GetScrollerChip()
+{
+	if(GetHeight() > GetWidth()) {
+		// scroller chip
+		glictRect scrollerchipRect = {
+            this->x+glictGlobals.translation.x,
+            this->x + this->width +glictGlobals.translation.x,
+
+            this->y +glictGlobals.translation.y + // normal beginning coord of the object
+            this->width + // increased by height of top button
+            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+            * (float)(this->height - this->width*2 - this->width), // which should be a height, reduced by top and bottom button's height, but also by scroller's height
+
+
+            this->y +glictGlobals.translation.y + // normal beginning coord of the object
+            this->width + // increased by height of top button
+            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+            * (float)(this->height - this->width*2 - this->width) // which should be a height, reduced by top and bottom button's height, but also by scroller's height
+            + this->width // this is bottom, add some more
+		};
+		return scrollerchipRect;
+	}
+	else {
+		glictRect scrollerchipRect = {
+            this->x +glictGlobals.translation.x + // normal beginning coord of the object
+            this->height + // increased by width of top button
+            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+            * (float)(this->width - this->height*2 - this->height), // which should be a width, reduced by left and right button's width, but also by scroller's width
+
+            this->x +glictGlobals.translation.x + // normal beginning coord of the object
+            this->height + // increased by height of left button
+            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
+            * (float)(this->width - this->height*2 - this->height) // which should be a width, reduced by left and right button's width, but also by scroller's width
+            + this->height, // this is right, add some more
+
+
+            this->y+glictGlobals.translation.y,
+            this->y + this->height +glictGlobals.translation.y
+
+		};
+		return scrollerchipRect;
+	}
+	glictRect scrollerchipRect = {0,0,0,0};
+	return scrollerchipRect;
 }

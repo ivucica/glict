@@ -55,6 +55,10 @@ class glictScrollbar : public glictContainer {
 		bool highlightup;
 		bool highlightdn;
 
+		//scrollerchip functions
+		glictRect GetScrollerChip();
+		bool draggingchip;
+
 		int min, max, value; ///< \todo TODO (Khaos#2#) These should be floats.
 		unsigned int step;
 		friend class glictContainer;
