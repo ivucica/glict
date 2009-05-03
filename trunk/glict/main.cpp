@@ -269,7 +269,7 @@ void paintrectcallback(float left, float right, float top, float bottom, glictCo
 }
 
 
-void prlc(float left, float right, float top, float bottom, glictColor &col) {
+void prlc(float left, float right, float top, float bottom, const glictColor &col) {
 
 	glColor4f(col.r, col.g, col.b, col.a);
 

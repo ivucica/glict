@@ -144,22 +144,7 @@ void glictScrollbar::PaintVertical() {
 	    PaintSkinned(backpanelRect, glictGlobals.scrollbarPanelSkin);
 
 	// scroller chip
-	glictRect scrollerchipRect = GetScrollerChip();/*{
-            this->x+glictGlobals.translation.x,
-            this->x + this->width +glictGlobals.translation.x,
-
-            this->y +glictGlobals.translation.y + // normal beginning coord of the object
-            this->width + // increased by height of top button
-            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
-            * (float)(this->height - this->width*2 - this->width), // which should be a height, reduced by top and bottom button's height, but also by scroller's height
-
-
-            this->y +glictGlobals.translation.y + // normal beginning coord of the object
-            this->width + // increased by height of top button
-            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
-            * (float)(this->height - this->width*2 - this->width) // which should be a height, reduced by top and bottom button's height, but also by scroller's height
-            + this->width // this is bottom, add some more
-	};*/
+	glictRect scrollerchipRect = GetScrollerChip();
 
 	if ((float)(this->max - this->min) != 0) // protection against division by zero
 	{
@@ -270,23 +255,7 @@ void glictScrollbar::PaintHorizontal() {
 	    PaintSkinned(backpanelRect, glictGlobals.scrollbarPanelSkin);
 
 	// scroller chip
-	glictRect scrollerchipRect = GetScrollerChip();/*= {
-            this->x +glictGlobals.translation.x + // normal beginning coord of the object
-            this->height + // increased by width of top button
-            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
-            * (float)(this->width - this->height*2 - this->height), // which should be a width, reduced by left and right button's width, but also by scroller's width
-
-            this->x +glictGlobals.translation.x + // normal beginning coord of the object
-            this->height + // increased by height of left button
-            ((float)(this->value-this->min) / (float)(this->max - this->min)) // at this percent
-            * (float)(this->width - this->height*2 - this->height) // which should be a width, reduced by left and right button's width, but also by scroller's width
-            + this->height, // this is right, add some more
-
-
-            this->y+glictGlobals.translation.y,
-            this->y + this->height +glictGlobals.translation.y
-
-	};*/
+	glictRect scrollerchipRect = GetScrollerChip();
 
     if ((float)(this->max - this->min) != 0) // protection against division by zero
 	{
@@ -333,7 +302,7 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
 	//printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
 	if (!GetVisible()) return false;
 	int oldx = this->x, oldy = this->y;
-	if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP) {
+	if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP || evt == GLICT_MOUSEMOVE) {
 		if (((glictPos*)wparam)->x > this->clipleft &&
 			((glictPos*)wparam)->x < this->clipright &&
 			((glictPos*)wparam)->y > this->cliptop &&
@@ -395,24 +364,54 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
 				this->highlightup = false;
 
 				if(draggingchip) { // chip dragging
-					// TODO: make this actually work as expected. I might just be doing something retarded here.
-					if (h > w) { // vertical
-						this->value = ((this->height - (((glictPos*)wparam)->y - this->top)) / (this->max - this->min));
-						this->value -= this->value % this->step; // fix to the proper step
-					}
-					else { // horizontal
-						this->value = this->max - ((this->width - (((glictPos*)wparam)->x - this->left)) / (this->max - this->min));
-						this->value -= this->value % this->step; // fix to the proper step
-					}
+                    UpdateScrollchipDragging(((glictPos*)wparam)->x,((glictPos*)wparam)->y);
 					draggingchip = false;
 				}
 			}
+			if (evt == GLICT_MOUSEMOVE) {
+				if(draggingchip) { // chip dragging
+                    UpdateScrollchipDragging(((glictPos*)wparam)->x,((glictPos*)wparam)->y);
+				}
+			}
+
 
 		}
 		return DefaultCastEvent(evt, wparam, lparam, returnvalue);
 	}
 
 	return false;
+}
+
+void glictScrollbar::UpdateScrollchipDragging(int mousex, int mousey)
+{
+    const float w = GetWidth();
+    const float h = GetHeight();
+
+    if (h > w) { // vertical
+        this->value =
+            // we calculate internal position by taking position at which we're currently positioning
+            // the mouse. then we subtract the relative position of mouse when we started dragging.
+            // this is because we're interested in chip's position, not in mouse's position.
+            // then, we subtract top coordinate from the chip's position. this way we get the coordinates
+            // in the coordinate system of the scrollbar itself. however that's not all. we don't really
+            // need coordinates in the system of scrollbar: we need coordinates in the system of
+            // draggable area. that means we're now offsetting everything by height of top button.
+            // for vertical scrollbar this is (or should be!) GetWidth().
+            (mousey /* FIXME - relative y from top of chip upon start of dragging */ - this->top - this->GetWidth())
+            // now we need to scale from GetHeight() - (topchip + bottomchip + scrollchip) to max-min
+            * ((this->max - this->min) / (float)(GetHeight() - GetWidth()*3))
+             ;
+        this->value -= this->value % this->step; // fix to the proper step
+        if (this->value > this->max)
+            this->value = this->max;
+        if (this->value < this->min)
+            this->value = this->min;
+
+    }
+    else { // horizontal
+        // FIXME implement according to above
+    }
+
 }
 
 void glictScrollbar::SetValue(int val) {
