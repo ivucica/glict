@@ -27,8 +27,8 @@ class glictList : public glictPanel {
         glictList();
         ~glictList();
 
-        void AddObject(glictContainer* object);
-        void RemoveObject(glictContainer *object);
+        virtual void AddObject(glictContainer* object);
+        virtual void RemoveObject(glictContainer *object);
 
         virtual void SetWidth(float w);
         virtual void SetHeight(float h);
@@ -38,7 +38,7 @@ class glictList : public glictPanel {
         void SetForcedHeight(int forcedheight);
         int GetForcedHeight() const { return forcedheight; }
     protected:
-        int forcedheight;
+        int forcedheight; // forced height specifies how tall MUST each element be. if 0, elements will be able to set their own height.
         int totalheight;
 
         bool defocusabilize_element; // for internal adjustment; should the element be made unfocusable? modified only by inherited classes

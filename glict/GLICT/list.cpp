@@ -94,6 +94,8 @@ void glictList::RebuildList(){
 
     int currentheight=0;
     for (std::list<glictContainer*>::iterator it = listlist.begin() ; it != listlist.end() ; it++) {
+        if (!(*it)->GetVisible())
+            continue;
         (*it)->SetPos(0, currentheight);
         if (forcedheight)
             (*it)->SetHeight(forcedheight);
@@ -102,7 +104,7 @@ void glictList::RebuildList(){
     }
 
     totalheight = currentheight;
-    //SetVirtualSize(width, totalheight);
+    SetVirtualSize(width, totalheight);
 }
 void glictList::SetForcedHeight(int _fh){
     this->forcedheight = _fh;
