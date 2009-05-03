@@ -51,12 +51,15 @@ class glictScrollbar : public glictContainer {
         void PaintHorizontal();
         void PaintVertical();
         glictColor MultiplyColorRGB(const glictColor &col, float mul) const;
+
+		//scrollerchip functions
+		glictRect GetScrollerChip();
+        void UpdateScrollchipDragging(int mousex, int mousey);
+
 		// upper and lower "button" highlighted?
 		bool highlightup;
 		bool highlightdn;
 
-		//scrollerchip functions
-		glictRect GetScrollerChip();
 		bool draggingchip;
 
 		int min, max, value; ///< \todo TODO (Khaos#2#) These should be floats.

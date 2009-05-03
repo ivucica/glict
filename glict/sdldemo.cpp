@@ -100,7 +100,7 @@ void SDLRectLinesDraw(float left, float right, float top, float bottom, const gl
 }
 
 
-int main () {
+int main (int,char**) {
 	int videoflags = SDL_HWSURFACE  | SDL_ANYFORMAT| SDL_DOUBLEBUF | SDL_RESIZABLE;
 	int width = 640;
 	int height = 480;
@@ -141,11 +141,11 @@ int main () {
 	btn.SetBGColor(.5,.5,.5,1.);
 
     win.AddObject(&scb);
-    scb.SetPos(0,50);
-    scb.SetWidth(100);
-    scb.SetHeight(15);
+    scb.SetPos(50,0);
+    scb.SetWidth(15);
+    scb.SetHeight(100);
     scb.SetMin(0);
-    scb.SetMax(100);
+    scb.SetMax(20);
     scb.SetValue(0);
     scb.SetBGColor(.5,.5,.5,1.);
     scb.SetOnClick(onclickscb);
@@ -169,13 +169,19 @@ int main () {
 				case SDL_KEYDOWN:
 
 					break;
+                case SDL_MOUSEMOTION:
+                {
+                    glictPos p = {event.button.x, event.button.y};
+                    desktop.CastEvent(GLICT_MOUSEMOVE, &p, 0);
+                    break;
+                }
 				case SDL_MOUSEBUTTONUP:
 				case SDL_MOUSEBUTTONDOWN:{
-					glictPos p = {event.button.x, event.button.y};
-					printf("%d %d\n", event.button.x, event.button.y);
+				{
+                    glictPos p = {event.button.x, event.button.y};
 					desktop.CastEvent(event.type == SDL_MOUSEBUTTONUP ? GLICT_MOUSEUP : GLICT_MOUSEDOWN, &p,0);
-
 					break;
+				}
 				}
 				case SDL_QUIT:
 						running = false;

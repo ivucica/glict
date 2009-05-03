@@ -63,10 +63,13 @@
 				<Option object_output=".objsdemosdl" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option projectCompilerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-DNO_GL" />
 				</Compiler>
 				<Linker>
+					<Add library="mingw32" />
+					<Add library="SDLmain" />
 					<Add library="SDL" />
 				</Linker>
 			</Target>
