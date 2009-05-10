@@ -1,7 +1,6 @@
 #include <GLICT/progressbar.h>
 #include <GLICT/globals.h>
-#include <GLICT/types.h>
-glictProgressBar::glictProgressBar () {
+glictProgressBar::glictProgressBar () : bgColor(.75,.75,.75,.75), fgColor(0,1,0,1), borderColor(0,0,0,0) {
 	percent = 0;
 }
 
@@ -10,16 +9,15 @@ glictProgressBar::~glictProgressBar () {
 }
 
 void glictProgressBar::Paint() {
-
-	static glictColor white(.75,.75,.75,.75);
-	static glictColor green(0,1,0,1);
-	glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
-		this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y, white);
+	if(bgactive)
+		glictGlobals.PaintRect(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+			this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y, bgColor);
 
 	if (percent>0)
 		glictGlobals.PaintRect(this->x+glictGlobals.translation.x +1, this->x+((this->width-1)* percent/100.)+glictGlobals.translation.x,
-			this->y+glictGlobals.translation.y +1,  this->y+this->height+glictGlobals.translation.y -1, green);
-
+			this->y+glictGlobals.translation.y +1,  this->y+this->height+glictGlobals.translation.y -1, fgColor);
+	glictGlobals.PaintRectLines(this->x+glictGlobals.translation.x, this->x+this->width+glictGlobals.translation.x,
+		this->y+glictGlobals.translation.y, this->y+this->height+glictGlobals.translation.y, borderColor);
 
 	this->CPaint();
 
