@@ -223,7 +223,7 @@
 			mainGroup = 0867D691FE84028FC02AAC07 /* GLICT */;
 			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
 			projectDirPath = "";
-			projectRoot = "";
+			projectRoot = ..;
 			targets = (
 				8D07F2BC0486CC7A007CD1D0 /* GLICT */,
 			);
