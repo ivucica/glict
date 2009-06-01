@@ -347,6 +347,10 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
                     else if((((glictPos*)wparam)->y > scrollerChip.top) && (((glictPos*)wparam)->y > scrollerChip.bottom)) { // mousedown within chip?
 						draggingchip = true;
 					}
+					else { // clicking
+						this->value = (((glictPos*)wparam)->y - this->top) * ((this->max - this->min) / (float)(GetHeight() - GetWidth()*3));
+						this->value -= this->value % this->step;
+					}
 			    } else { // horizontal
 			        if (((glictPos*)wparam)->x - this->left < this->height) { // mousedown within upper button?
                         this->highlightup = true;
@@ -356,6 +360,10 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
                     }
                     else if((((glictPos*)wparam)->x > scrollerChip.right) && (((glictPos*)wparam)->x > scrollerChip.left)) { // mousedown within chip?
 						draggingchip = true;
+					}
+					else { // clicking
+						this->value = (((glictPos*)wparam)->x - this->left) * ((this->max - this->min) / (float)(GetWidth() - GetHeight()*3));
+						this->value -= this->value % this->step;
 					}
 			    }
 			}
@@ -409,7 +417,25 @@ void glictScrollbar::UpdateScrollchipDragging(int mousex, int mousey)
 
     }
     else { // horizontal
-        // FIXME implement according to above
+        this->value =
+            // we calculate internal position by taking position at which we're currently positioning
+            // the mouse. then we subtract the relative position of mouse when we started dragging.
+            // this is because we're interested in chip's position, not in mouse's position.
+            // then, we subtract top coordinate from the chip's position. this way we get the coordinates
+            // in the coordinate system of the scrollbar itself. however that's not all. we don't really
+            // need coordinates in the system of scrollbar: we need coordinates in the system of
+            // draggable area. that means we're now offsetting everything by height of top button.
+            // for vertical scrollbar this is (or should be!) GetWidth().
+            (mousex /* FIXME - relative x from top of chip upon start of dragging */ - this->left - this->GetHeight())
+            // now we need to scale from GetHeight() - (topchip + bottomchip + scrollchip) to max-min
+            * ((this->max - this->min) / (float)(GetWidth() - GetHeight()*3))
+             ;
+        this->value -= this->value % this->step; // fix to the proper step
+        if (this->value > this->max)
+            this->value = this->max;
+        if (this->value < this->min)
+            this->value = this->min;
+
     }
 
 }
