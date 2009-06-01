@@ -33,14 +33,14 @@ class glictScrollbar : public glictContainer {
 		virtual ~glictScrollbar();
 
 		void SetBGColor(float r, float g, float b, float a);
-		void SetValue(int val);
-		int GetValue();
-		void SetStep (unsigned int newstep); ///<How much is increased/decreased by each step
-		unsigned int GetStep();
-		void SetMin (int newmin);
-		int GetMin();
-		void SetMax (int newmax);
-		int GetMax();
+		void SetValue(float val);
+		float GetValue();
+		void SetStep (float newstep); ///<How much is increased/decreased by each step
+		float GetStep();
+		void SetMin (float newmin);
+		float GetMin();
+		void SetMax (float newmax);
+		float GetMax();
 		// redefined functions
 		virtual void Paint();
 		bool CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue);
@@ -54,7 +54,7 @@ class glictScrollbar : public glictContainer {
 
 		//scrollerchip functions
 		glictRect GetScrollerChip();
-        void UpdateScrollchipDragging(int mousex, int mousey);
+        void UpdateScrollchipDragging(float mousex, float mousey);
 
 		// upper and lower "button" highlighted?
 		bool highlightup;
@@ -62,8 +62,8 @@ class glictScrollbar : public glictContainer {
 
 		bool draggingchip;
 
-		int min, max, value; ///< \todo TODO (Khaos#2#) These should be floats.
-		unsigned int step;
+		float min, max, value;
+		float step; // unsigned
 		friend class glictContainer;
 };
 #endif

@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include "scrollbar.h"
 #include "globals.h"
 #include "fonts.h"
@@ -301,7 +302,7 @@ void glictScrollbar::SetBGColor(float r, float g, float b, float a) {
 bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void* returnvalue) {
 	//printf("Event of type %s passing through %s (%s)\n", EvtTypeDescriptor(evt), objtype, parent ? parent->objtype : "NULL");
 	if (!GetVisible()) return false;
-	int oldx = this->x, oldy = this->y;
+	float oldx = this->x, oldy = this->y;
 	if (evt == GLICT_MOUSECLICK || evt == GLICT_MOUSEDOWN || evt == GLICT_MOUSEUP || evt == GLICT_MOUSEMOVE) {
 		if (((glictPos*)wparam)->x > this->clipleft &&
 			((glictPos*)wparam)->x < this->clipright &&
@@ -349,7 +350,7 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
 					}
 					else { // clicking
 						this->value = (((glictPos*)wparam)->y - this->top) * ((this->max - this->min) / (float)(GetHeight() - GetWidth()*3));
-						this->value -= this->value % this->step;
+						this->value -= fmod(this->value, this->step);
 					}
 			    } else { // horizontal
 			        if (((glictPos*)wparam)->x - this->left < this->height) { // mousedown within upper button?
@@ -363,7 +364,7 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
 					}
 					else { // clicking
 						this->value = (((glictPos*)wparam)->x - this->left) * ((this->max - this->min) / (float)(GetWidth() - GetHeight()*3));
-						this->value -= this->value % this->step;
+						this->value -= fmod(this->value, this->step);
 					}
 			    }
 			}
@@ -390,7 +391,7 @@ bool glictScrollbar::CastEvent(glictEvents evt, void* wparam, long lparam, void*
 	return false;
 }
 
-void glictScrollbar::UpdateScrollchipDragging(int mousex, int mousey)
+void glictScrollbar::UpdateScrollchipDragging(float mousex, float mousey)
 {
     const float w = GetWidth();
     const float h = GetHeight();
@@ -409,7 +410,7 @@ void glictScrollbar::UpdateScrollchipDragging(int mousex, int mousey)
             // now we need to scale from GetHeight() - (topchip + bottomchip + scrollchip) to max-min
             * ((this->max - this->min) / (float)(GetHeight() - GetWidth()*3))
              ;
-        this->value -= this->value % this->step; // fix to the proper step
+        this->value -= fmod(this->value, this->step); // fix to the proper step
         if (this->value > this->max)
             this->value = this->max;
         if (this->value < this->min)
@@ -430,7 +431,7 @@ void glictScrollbar::UpdateScrollchipDragging(int mousex, int mousey)
             // now we need to scale from GetHeight() - (topchip + bottomchip + scrollchip) to max-min
             * ((this->max - this->min) / (float)(GetWidth() - GetHeight()*3))
              ;
-        this->value -= this->value % this->step; // fix to the proper step
+        this->value -= fmod(this->value, this->step); // fix to the proper step
         if (this->value > this->max)
             this->value = this->max;
         if (this->value < this->min)
@@ -440,28 +441,28 @@ void glictScrollbar::UpdateScrollchipDragging(int mousex, int mousey)
 
 }
 
-void glictScrollbar::SetValue(int val) {
+void glictScrollbar::SetValue(float val) {
 	this->value = val;
 }
-int glictScrollbar::GetValue() {
+float glictScrollbar::GetValue() {
 	return this->value;
 }
-void glictScrollbar::SetStep (unsigned int newstep) {
-	this->step = newstep;
+void glictScrollbar::SetStep (float newstep) {
+	this->step = fabs(newstep);
 }
-unsigned int glictScrollbar::GetStep() {
+float glictScrollbar::GetStep() {
 	return this->step;
 }
-void glictScrollbar::SetMin (int newmin) {
+void glictScrollbar::SetMin (float newmin) {
 	this->min = newmin;
 }
-int glictScrollbar::GetMin() {
+float glictScrollbar::GetMin() {
 	return min;
 }
-void glictScrollbar::SetMax (int newmax) {
+void glictScrollbar::SetMax (float newmax) {
 	this->max = newmax;
 }
-int glictScrollbar::GetMax() {
+float glictScrollbar::GetMax() {
 	return this->max;
 }
 

@@ -297,15 +297,15 @@ void glictPanel::SetSkin(glictSkinner* skin) {
 
 int glictPanel::GetVScrollbarWidth() const {
     if (glictGlobals.scrollbarUpperSkin) {
-        return  glictGlobals.scrollbarUpperSkin->GetLeftSize().w +
-                glictGlobals.scrollbarUpperSkin->GetCenterSize().w +
-                glictGlobals.scrollbarUpperSkin->GetRightSize().w;
+        return  int(glictGlobals.scrollbarUpperSkin->GetLeftSize().w +
+                    glictGlobals.scrollbarUpperSkin->GetCenterSize().w +
+                    glictGlobals.scrollbarUpperSkin->GetRightSize().w);
     }
     return 10;
 }
 int glictPanel::GetVScrollbarInternalWidth() const {
     if (glictGlobals.scrollbarUpperSkin) {
-        return  glictGlobals.scrollbarUpperSkin->GetCenterSize().w;
+        return  int(glictGlobals.scrollbarUpperSkin->GetCenterSize().w);
     }
     return 10;
 }

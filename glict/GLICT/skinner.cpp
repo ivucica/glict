@@ -61,7 +61,7 @@ glictSkinner::~glictSkinner() {
 }
 
 void glictSkinner::Paint(glictSize *size) {
-    static int x1, y1, x2, y2;
+    static float x1, y1, x2, y2;
 
 #ifndef NO_GL
 	if (center || left || right || top || bottom || topleft || topright || bottomleft || bottomright)  {
@@ -80,8 +80,8 @@ void glictSkinner::Paint(glictSize *size) {
             glBindTexture(GL_TEXTURE_2D, center);
 		#endif
 
-        for (int pos = (left || leftf || leftimg) ? lefts.w : 0; pos < size->w - ((right || rightf || rightimg) ? rights.w : 0); pos+=centers.w) {
-            for (int pos2 = (top || topf || topimg) ? tops.h : 0; pos2 < size->h - ((bottom || bottomf || bottomimg) ? bottoms.h : 0); pos2+=centers.h) {
+        for (float pos = (left || leftf || leftimg) ? lefts.w : 0; pos < size->w - ((right || rightf || rightimg) ? rights.w : 0); pos+=centers.w) {
+            for (float pos2 = (top || topf || topimg) ? tops.h : 0; pos2 < size->h - ((bottom || bottomf || bottomimg) ? bottoms.h : 0); pos2+=centers.h) {
 
                 y1 = pos2;
                 y2 = min(size->h - ((bottom || bottomf) ? bottoms.h : 0), pos2 + centers.h);
@@ -109,7 +109,7 @@ void glictSkinner::Paint(glictSize *size) {
             glBindTexture(GL_TEXTURE_2D, top);
 		#endif
 
-        for (int pos = (topleft || topleftf || topleftimg) ? toplefts.w : 0; pos < size->w - ((topright || toprightf || toprightimg) ? toprights.w : 0); pos+=tops.w) {
+        for (float pos = (topleft || topleftf || topleftimg) ? toplefts.w : 0; pos < size->w - ((topright || toprightf || toprightimg) ? toprights.w : 0); pos+=tops.w) {
             x1 = pos; y1 = 0;
             x2 = min(size->w - ((topright || toprightf || toprightimg) ? toprights.w : 0) , pos + tops.w); y2 = tops.h;
             if (topimg)
@@ -126,7 +126,7 @@ void glictSkinner::Paint(glictSize *size) {
         else if (!bottomimg)
             glBindTexture(GL_TEXTURE_2D, bottom);
 		#endif
-        for (int pos = (bottomleft || bottomleftf || bottomleftimg) ? bottomlefts.w : 0; pos < size->w - ((bottomright || bottomrightf || bottomrightimg) ? bottomrights.w : 0); pos+=bottoms.w) {
+        for (float pos = (bottomleft || bottomleftf || bottomleftimg) ? bottomlefts.w : 0; pos < size->w - ((bottomright || bottomrightf || bottomrightimg) ? bottomrights.w : 0); pos+=bottoms.w) {
             x1 = pos; y1 = size->h - bottoms.h;
             x2 = min(size->w - ((bottomleft || bottomleftf || bottomrightimg) ? bottomlefts.w : 0), pos + bottoms.w); y2 = size->h;
             if (bottomimg)
@@ -146,7 +146,7 @@ void glictSkinner::Paint(glictSize *size) {
         else if (!leftimg)
             glBindTexture(GL_TEXTURE_2D, left);
 		#endif
-        for (int pos = (topleft || topleftf || topleftimg) ? toplefts.h : 0; pos < size->h - ((bottomleft || bottomleftf || bottomleftimg) ? bottomlefts.w : 0); pos+=lefts.h) {
+        for (float pos = (topleft || topleftf || topleftimg) ? toplefts.h : 0; pos < size->h - ((bottomleft || bottomleftf || bottomleftimg) ? bottomlefts.w : 0); pos+=lefts.h) {
             x1 = 0; y1 = pos;
             x2 = lefts.w; y2 = min(size->h - ((bottomleft || bottomleftf || bottomleftimg) ? bottomlefts.h : 0), pos + lefts.h);
             if (leftimg)
@@ -164,7 +164,7 @@ void glictSkinner::Paint(glictSize *size) {
         else if (!rightimg)
             glBindTexture(GL_TEXTURE_2D, right);
 		#endif
-        for (int pos = (topright || toprightf || toprightimg) ? toprights.h : 0; pos < size->h - ((bottomright || bottomrightf || bottomrightimg) ? bottomrights.w : 0); pos+=rights.h) {
+        for (float pos = (topright || toprightf || toprightimg) ? toprights.h : 0; pos < size->h - ((bottomright || bottomrightf || bottomrightimg) ? bottomrights.w : 0); pos+=rights.h) {
             x1 = size->w - rights.w; y1 = pos;
             x2 = size->w; y2 = min(size->h - ((bottomright || bottomrightf || bottomrightimg) ? bottomrights.w : 0), pos + rights.h);
             if (rightimg)

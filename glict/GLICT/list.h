@@ -36,10 +36,10 @@ class glictList : public glictPanel {
 
         void RebuildList();
         void SetForcedHeight(int forcedheight);
-        int GetForcedHeight() const { return forcedheight; }
+        double GetForcedHeight() const { return forcedheight; }
     protected:
-        int forcedheight; // forced height specifies how tall MUST each element be. if 0, elements will be able to set their own height.
-        int totalheight;
+        double forcedheight; // forced height specifies how tall MUST each element be. if 0, elements will be able to set their own height.
+        double totalheight;
 
         bool defocusabilize_element; // for internal adjustment; should the element be made unfocusable? modified only by inherited classes
         std::list<glictContainer*> listlist;
