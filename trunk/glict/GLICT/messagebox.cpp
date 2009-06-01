@@ -87,7 +87,7 @@ void glictMessageBox::SetOnDismiss(void(*OnDism)(glictPos* relmousepos, glictCon
 	OnDismissFunction = OnDism;
 }
 
-void glictMessageBox::SetHeight(int h) {
+void glictMessageBox::SetHeight(float h) {
 	glictWindow::SetHeight(h);
 
 	btnOk.SetPos(width/2 - 32, height - 21);
@@ -100,7 +100,7 @@ void glictMessageBox::SetHeight(int h) {
 
 
 }
-void glictMessageBox::SetWidth(int w) {
+void glictMessageBox::SetWidth(float w) {
 	glictWindow::SetWidth(w);
 
 	btnOk.SetPos(width/2 - 32, height - 21);

@@ -92,7 +92,7 @@ void glictList::SetHeight(float height) {
 
 void glictList::RebuildList(){
 
-    int currentheight=0;
+    float currentheight=0;
     for (std::list<glictContainer*>::iterator it = listlist.begin() ; it != listlist.end() ; it++) {
         if (!(*it)->GetVisible())
             continue;

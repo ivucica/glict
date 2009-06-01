@@ -34,8 +34,8 @@ class glictMessageBox : public glictWindow {
 		void Paint();
 		void SetMessage(std::string msg); //< Sets the message that will be displayed on the messagebox. (Not the caption, the message itself!)
 		void SetOnDismiss(void(*OnClickFunction)(glictPos* relmousepos, glictContainer* callerclass)); //< Sets function to be called upon dismiss of the msgbox. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
-		void SetHeight(int height);
-		void SetWidth(int width);
+		void SetHeight(float height);
+		void SetWidth(float width);
 		void SetEnabled(bool enabled);
 		void SetBGColor(float r, float g, float b, float a);
 		void Focus(glictContainer* c);
