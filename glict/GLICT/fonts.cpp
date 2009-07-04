@@ -45,6 +45,7 @@
 	#endif
 #endif
 #include <string.h>
+#include <stdio.h>
 #include "fonts.h"
 #include "globals.h"
 
