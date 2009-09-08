@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="GLICT"
 	ProjectGUID="{214308DE-1919-4566-AE4F-2940734A80B5}"
 	RootNamespace="GLICT"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -22,6 +23,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Copies all the headers (and some extra junk :/ ) to the VC&apos;s include folder."
+				CommandLine="xcopy /q /y &quot;$(ProjectDir)GLICT&quot; &quot;$(VCInstallDir)include\GLICT&quot;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -41,6 +44,9 @@
 				Optimization="0"
 				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -73,6 +79,7 @@
 				Name="VCPostBuildEventTool"
 				Description="Copies all the headers (and some extra junk :/ ) to the VC&apos;s include folder."
 				CommandLine="xcopy /q /y &quot;$(ProjectDir)GLICT&quot; &quot;$(VCInstallDir)include\GLICT&quot;"
+				ExcludedFromBuild="false"
 			/>
 		</Configuration>
 		<Configuration
@@ -83,6 +90,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Copies all the headers (and some extra junk :/ ) to the VC&apos;s include folder."
+				CommandLine="xcopy /q /y &quot;$(ProjectDir)GLICT&quot; &quot;$(VCInstallDir)include\GLICT&quot;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -99,6 +108,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -111,6 +122,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="$(VCInstallDir)lib\$(ProjectName).lib"
 				IgnoreAllDefaultLibraries="true"
 			/>
 			<Tool

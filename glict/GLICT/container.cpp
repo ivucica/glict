@@ -261,10 +261,11 @@ void glictContainer::SetPos(float x, float y) {
 	for (std::vector<glictContainer*>::iterator it=objects.begin(); it!=objects.end(); it++) {
 	    //if (__LISTDEBUGGING_____) printf("Running for a child\n");
 
+        // FIXME delayedremove should become a std::set and we should just find within it
         bool proceed = true;
         for (std::vector<glictContainer*>::iterator it2 = delayedremove.begin(); it2 != delayedremove.end(); it2++) {
             if ((*it2) == (*it)) {
-                printf("Hit into an already removed object while setposing\n");
+                //printf("Hit into an already removed object while setposing\n");
                 proceed = false;
                 break;
             }

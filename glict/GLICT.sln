@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLICT", "GLICT.vcproj", "{214308DE-1919-4566-AE4F-2940734A80B5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLICTce", "GLICTce.vcproj", "{8CEBC502-C94B-4779-9389-F91B454150E3}"
