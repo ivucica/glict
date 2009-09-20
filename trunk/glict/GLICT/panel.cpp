@@ -116,10 +116,11 @@ void glictPanel::Paint() {
 	}
 
     glictColor oldcol = glictFontColor(fontname.c_str());
-    if (captioncolor.r == captioncolor.g == captioncolor.b == captioncolor.a == 1.)
+    if (captioncolor.r == captioncolor.g && captioncolor.g == captioncolor.b && captioncolor.b == captioncolor.a == 1.)
         glictFontColor(fontname.c_str(), glictGlobals.panelTextColor);
     else
         glictFontColor(fontname.c_str(), captioncolor);
+
 	glictFontRender(this->caption.c_str(), fontname.c_str(), x+glictGlobals.translation.x + textoffx , y + glictGlobals.translation.y + textoffy);
 	glictFontColor(fontname.c_str(), oldcol);
 
