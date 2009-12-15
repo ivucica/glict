@@ -89,7 +89,7 @@ void glictTextbox::Paint() {
 	}
 
     glictColor oldcol = glictFontColor(fontname.c_str());
-    if (captioncolor.r == captioncolor.g == captioncolor.b == captioncolor.a == 1.)
+    if (captioncolor.r == captioncolor.g && captioncolor.g == captioncolor.b && captioncolor.b == captioncolor.a == 1.)
         glictFontColor(fontname.c_str(), glictGlobals.textboxTextColor);
     else
         glictFontColor(fontname.c_str(), captioncolor);
