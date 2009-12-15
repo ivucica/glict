@@ -967,11 +967,11 @@ void glictContainer::RememberTransformations() {
 void glictContainer::ReportDebug() {
 
 	printf("--%s--\n", objtype);
-	printf("Height: %d\n", height);
-	printf("Width: %d\n", width);
-	printf("Pos: %d %d\n", x, y);
-	printf("Rect TBLR: %d %d %d %d\n", top, bottom, left, right);
-	printf("Clip TBLR: %d %d %d %d\n", cliptop, clipbottom, clipleft, clipright);
+	printf("Height: %g\n", height);
+	printf("Width: %g\n", width);
+	printf("Pos: %g %g\n", x, y);
+	printf("Rect TBLR: %g %g %g %g\n", top, bottom, left, right);
+	printf("Clip TBLR: %g %g %g %g\n", cliptop, clipbottom, clipleft, clipright);
 	printf("GUID: %d\n", guid);
 	std::vector<glictContainer*>::iterator it;
 	for (it=objects.begin(); it!=objects.end(); it++) {
