@@ -73,7 +73,7 @@ float SDLFontSize(const char* txt, const void* font) {
 void SDLRectDraw(float left, float right, float top, float bottom, const glictColor &col) {
 	const SDL_VideoInfo* vi = SDL_GetVideoInfo();
 	int color = SDL_MapRGB(vi->vfmt, (int)(col.r * 255), (int)(col.g * 255), (int)(col.b * 255));
-	SDL_Rect rect = {left, top, right-left, bottom-top};
+	SDL_Rect rect = {(short)left, (short)top, (unsigned short)(right-left), (unsigned short)(bottom-top)};
 	SDL_FillRect(screen, &rect, color);
 }
 
@@ -82,19 +82,19 @@ void SDLRectLinesDraw(float left, float right, float top, float bottom, const gl
 	int color = SDL_MapRGB(vi->vfmt, (int)(col.r * 255), (int)(col.g * 255), (int)(col.b * 255));
 	//SDL_Rect rect = {left, top, right-left, bottom-top};
 	{
-		SDL_Rect rect = {left, top, 1, bottom-top};
+		SDL_Rect rect = {(short)left, (short)top, 1, (unsigned short)(bottom-top)};
 		SDL_FillRect(screen, &rect, color);
 	}
 	{
-		SDL_Rect rect = {right-1, top, 1, bottom-top};
+		SDL_Rect rect = {(short)(right-1), (short)top, 1, (unsigned short)(bottom-top)};
 		SDL_FillRect(screen, &rect, color);
 	}
 	{
-		SDL_Rect rect = {left, top, right-left, 1};
+		SDL_Rect rect = {(short)left, (short)top, (unsigned short)(right-left), 1};
 		SDL_FillRect(screen, &rect, color);
 	}
 	{
-		SDL_Rect rect = {left, bottom-1,right-left, 1};
+		SDL_Rect rect = {(short)left, (short)(bottom-1), (unsigned short)(right-left), 1};
 		SDL_FillRect(screen, &rect, color);
 	}
 }
@@ -171,14 +171,14 @@ int main (int,char**) {
 					break;
                 case SDL_MOUSEMOTION:
                 {
-                    glictPos p = {event.button.x, event.button.y};
+                    glictPos p = {(float)event.button.x, (float)event.button.y};
                     desktop.CastEvent(GLICT_MOUSEMOVE, &p, 0);
                     break;
                 }
 				case SDL_MOUSEBUTTONUP:
 				case SDL_MOUSEBUTTONDOWN:{
 				{
-                    glictPos p = {event.button.x, event.button.y};
+                    glictPos p = {(float)event.button.x, (float)event.button.y};
 					desktop.CastEvent(event.type == SDL_MOUSEBUTTONUP ? GLICT_MOUSEUP : GLICT_MOUSEDOWN, &p,0);
 					break;
 				}
