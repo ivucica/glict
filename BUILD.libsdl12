@@ -1,0 +1,36 @@
+cc_library(
+    name = "sdl",
+    srcs = glob([
+        # Based on README.Porting
+        "src/*.c",                "src/*.h",
+        "src/audio/*.c",          "src/audio/*.h",
+        "src/cdrom/*.c",          "src/cdrom/*.h",
+        "src/cpuinfo/*.c",        "src/cpuinfo/*.h",
+        "src/events/*.c",         "src/events/*.h",
+        "src/file/*.c",           "src/file/*.h",
+        "src/joystick/*.c",       "src/joystick/*.h",
+        "src/stdlib/*.c",         "src/stdlib/*.h",
+        "src/thread/*.c",         "src/thread/*.h",
+        "src/timer/*.c",          "src/timer/*.h",
+        "src/video/*.c",          "src/video/*.h",
+        "src/audio/disk/*.c",     "src/audio/disk/*.h",
+        "src/video/dummy/*.c",    "src/video/dummy/*.h",
+        "src/joystick/dummy/*.c", "src/joystick/dummy/*.h",
+        "src/cdrom/dummy/*.c",    "src/cdrom/dummy/*.h",
+        "src/thread/generic/*.c", "src/thread/generic/*.h",
+        "src/timer/dummy/*.c",    "src/timer/dummy/*.h",
+        "src/loadso/dummy/*.c",   "src/loadso/dummy/*.h",]) +
+        glob(["src/thread/pthread/*.h"]) +
+        [
+            "@macx11//:X11/Xlib.h",
+            "@macx11//:X11/X.h",
+            "@macx11//:X11/Xfuncproto.h",
+            "@macx11//:X11/Xosdefs.h",
+            "@macx11//:X11/Xatom.h"
+        ] +
+        [],
+    hdrs = glob(["include/*.h"]),
+    includes = ["include"],
+    copts = ["-Iexternal/macx11"],
+    visibility = ["//visibility:public"],
+)
