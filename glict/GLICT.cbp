@@ -318,9 +318,6 @@
 		<Unit filename="sdldemo.cpp">
 			<Option target="demosdl" />
 		</Unit>
-		<Unit filename="sdlfont.h">
-			<Option target="demosdl" />
-		</Unit>
 		<Unit filename="texload.c">
 			<Option compilerVar="CC" />
 			<Option target="demowin32" />
