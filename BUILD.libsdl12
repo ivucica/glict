@@ -1,3 +1,29 @@
+workspace_name = "libsdl12"
+
+macx11_hdrs = [
+    "@macx11//:X11/Xlib.h",
+    "@macx11//:X11/X.h",
+    "@macx11//:X11/Xfuncproto.h",
+    "@macx11//:X11/Xosdefs.h",
+    "@macx11//:X11/Xatom.h",
+
+    "@macx11//:X11/Xlibint.h",
+    "@macx11//:X11/Xproto.h",
+    "@macx11//:X11/Xmd.h",
+    "@macx11//:X11/Xprotostr.h",
+    "@macx11//:X11/XlibConf.h",
+    "@macx11//:X11/Xfuncs.h",
+    "@macx11//:X11/Xutil.h",
+    "@macx11//:X11/keysym.h",
+    "@macx11//:X11/keysymdef.h",
+    "@macx11//:X11/extensions/XShm.h",
+    "@macx11//:X11/extensions/shm.h",
+    "@macx11//:X11/extensions/Xrandr.h",
+    "@macx11//:X11/extensions/randr.h",
+    "@macx11//:X11/extensions/Xrender.h",
+    "@macx11//:X11/extensions/render.h",
+    "@macx11//:X11/Xdefs.h",
+]
 cc_library(
     name = "sdl",
     srcs = glob([
@@ -37,34 +63,15 @@ cc_library(
         "src/video/Xext/*.c",     "src/video/Xext/*.h",
         ]) +
         glob(["src/thread/pthread/*.h"]) +
-        [
-            "@macx11//:X11/Xlib.h",
-            "@macx11//:X11/X.h",
-            "@macx11//:X11/Xfuncproto.h",
-            "@macx11//:X11/Xosdefs.h",
-            "@macx11//:X11/Xatom.h",
-
-            "@macx11//:X11/Xlibint.h",
-            "@macx11//:X11/Xproto.h",
-            "@macx11//:X11/Xmd.h",
-            "@macx11//:X11/Xprotostr.h",
-            "@macx11//:X11/XlibConf.h",
-            "@macx11//:X11/Xfuncs.h",
-            "@macx11//:X11/Xutil.h",
-            "@macx11//:X11/keysym.h",
-            "@macx11//:X11/keysymdef.h",
-            "@macx11//:X11/extensions/XShm.h",
-            "@macx11//:X11/extensions/shm.h",
-            "@macx11//:X11/extensions/Xrandr.h",
-            "@macx11//:X11/extensions/randr.h",
-            "@macx11//:X11/extensions/Xrender.h",
-            "@macx11//:X11/extensions/render.h",
-            "@macx11//:X11/Xdefs.h",
-        ] +
+        macx11_hdrs +
         [],
     hdrs = [i.replace("include/", "SDL/") for i in glob(["include/*.h"])],
     includes = [".", "SDL"],
-    copts = ["-Iexternal/macx11"],
+    copts = [
+        "-Iexternal/macx11",
+        "-DSDL_VIDEO_DRIVER_QUARTZ=1",
+    ],
+    deps = [":sdlobjc"],
     visibility = ["//visibility:public"],
 )
 
@@ -74,4 +81,47 @@ genrule(
     outs = [i.replace("include", "SDL") for i in glob(["include/*.h"])],
     cmd = "mkdir -p $(@D)/SDL; for i in $(SRCS) ; do cp \"$$i\" \"$(@D)/SDL/$$(basename \"$${i}\")\"; done",
     visibility = ["//visibility:public"],
+)
+
+# objc_library() is only intended for use with iOS. This is most
+# unfortunate.
+# We'll instead append .c to the inputs, then use Clang with the
+# -x objective-c option.
+genrule(
+    name = "objectivec-as-c-hack",
+    srcs = glob([
+        "src/video/quartz/*.m",
+        #"Xcode/TemplatesForXcodeSnowLeopard/SDL Cocoa Application/*.m",
+        ]),
+    outs = ["objc" + i + ".c" for i in glob([
+        "src/video/quartz/*.m",
+        #"Xcode/TemplatesForXcodeSnowLeopard/SDL Cocoa Application/*.m",
+        ])],
+    cmd = "mkdir -p $(@D)/objcsrc/video/quartz; for i in $(SRCS) ; do cp \"$$i\" \"$(@D)/objcsrc/video/quartz/$$(basename \"$${i}\").c\"; done",
+    visibility = ["//visibility:private"],
+)
+
+cc_library(
+    name = "sdlobjc",
+    srcs = (["objc" + i + ".c" for i in glob(["src/video/quartz/*.m"])] +
+        glob(["src/video/quartz/*.h", "src/video/*.h"]) +
+        [i.replace("include/", "SDL/") for i in glob(["include/*.h"])]) +
+        macx11_hdrs,
+    includes = [".", "SDL"],
+    copts = [
+        "-x", "objective-c",
+        "-Iexternal/macx11",
+        "-Iexternal/" + workspace_name + "/src/video/quartz",
+    ]
+)
+
+# TODO(ivucica): Figure out how to work around the space in the path.
+cc_library(
+    name = "sdlmain",
+    srcs = [
+        #"objcXcode/TemplatesForXcodeSnowLeopard/SDL Cocoa Application/SDLMain.m",
+    ],
+    copts = [
+        "-x", "objective-c",
+     ],
 )
