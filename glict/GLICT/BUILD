@@ -1,6 +1,6 @@
 
 cc_library(
-    name = "glict",
+    name = "GLICT",
     srcs = [
         "button.cpp",
         "container.cpp",
@@ -33,4 +33,5 @@ cc_library(
     ],
     # make #include <GLICT/foo.h> work by passing parent to -isystem
     includes = [".."],
+    visibility = ["//visibility:public"],
 )
