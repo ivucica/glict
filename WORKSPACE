@@ -1,3 +1,7 @@
+workspace(name="glict")
+
+load("//:x11-helper.bzl", "x11_repository")
+
 new_http_archive(
     name = "libsdl12",
     url = "http://www.libsdl.org/release/SDL-1.2.15.tar.gz",
@@ -14,10 +18,6 @@ new_local_repository(
     path = __workspace_dir__ + "/SDL-1.2.15/",
 )
 
-new_local_repository(
-    name = "macx11",
-    build_file_content = "exports_files(glob(['**']), visibility = ['//visibility:public'])",
-    path = "/opt/X11/include",
-)
+x11_repository()
 
-workspace(name="glict")
+
