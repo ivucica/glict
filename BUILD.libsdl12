@@ -1,29 +1,34 @@
-workspace_name = "libsdl12"
+workspace_name = REPOSITORY_NAME[1:]
 
-macx11_hdrs = [
-    "@macx11//:X11/Xlib.h",
-    "@macx11//:X11/X.h",
-    "@macx11//:X11/Xfuncproto.h",
-    "@macx11//:X11/Xosdefs.h",
-    "@macx11//:X11/Xatom.h",
+x11repository_hdrs = [
+    "@x11repository//:X11/Xlib.h",
+    "@x11repository//:X11/X.h",
+    "@x11repository//:X11/Xfuncproto.h",
+    "@x11repository//:X11/Xosdefs.h",
+    "@x11repository//:X11/Xatom.h",
 
-    "@macx11//:X11/Xlibint.h",
-    "@macx11//:X11/Xproto.h",
-    "@macx11//:X11/Xmd.h",
-    "@macx11//:X11/Xprotostr.h",
-    "@macx11//:X11/XlibConf.h",
-    "@macx11//:X11/Xfuncs.h",
-    "@macx11//:X11/Xutil.h",
-    "@macx11//:X11/keysym.h",
-    "@macx11//:X11/keysymdef.h",
-    "@macx11//:X11/extensions/XShm.h",
-    "@macx11//:X11/extensions/shm.h",
-    "@macx11//:X11/extensions/Xrandr.h",
-    "@macx11//:X11/extensions/randr.h",
-    "@macx11//:X11/extensions/Xrender.h",
-    "@macx11//:X11/extensions/render.h",
-    "@macx11//:X11/Xdefs.h",
+    "@x11repository//:X11/Xlibint.h",
+    "@x11repository//:X11/Xproto.h",
+    "@x11repository//:X11/Xmd.h",
+    "@x11repository//:X11/Xprotostr.h",
+    "@x11repository//:X11/XlibConf.h",
+    "@x11repository//:X11/Xfuncs.h",
+    "@x11repository//:X11/Xutil.h",
+    "@x11repository//:X11/keysym.h",
+    "@x11repository//:X11/keysymdef.h",
+    "@x11repository//:X11/extensions/XShm.h",
+    "@x11repository//:X11/extensions/shm.h",
+    "@x11repository//:X11/extensions/Xrandr.h",
+    "@x11repository//:X11/extensions/randr.h",
+    "@x11repository//:X11/extensions/Xrender.h",
+    "@x11repository//:X11/extensions/render.h",
+    "@x11repository//:X11/Xdefs.h",
 ]
+config_setting(
+    name = "darwin",
+    values = {"host_cpu": "darwin"}
+)
+
 cc_library(
     name = "sdl",
     srcs = glob([
@@ -48,38 +53,65 @@ cc_library(
         "src/timer/dummy/*.c",    "src/timer/dummy/*.h",
         "src/loadso/dummy/*.c",   "src/loadso/dummy/*.h",
 
-        "src/audio/macosx/*.c",   "src/audio/macosx/*.h",
-        "src/cdrom/macosx/*.c",   "src/cdrom/macosx/*.h",
-        "src/joystick/darwin/*.c","src/joystick/darwin/*.h",
         "src/loadso/dlopen/*.c",  "src/loadso/dlopen/*.h",
-        "src/loadso/macosx/*.c",  "src/loadso/macosx/*.h",
         "src/timer/unix/*.c",     "src/timer/unix/*.h",
-        "src/video/quartz/*.c",   "src/video/quartz/*.h",  # TODO(ivucica): add .m
-        #"src/video/maccommon/*.c","src/video/maccommon/*.h",
-        #"src/video/macdsp/*.c",   "src/video/macdsp/*.h",
-        #"src/video/macrom/*.c",   "src/video/macrom/*.h",
-        #"src/video/x11/*.c",      "src/video/x11/*.h",
-        "src/video/dga/*.c",      "src/video/dga/*.h",
         "src/video/Xext/*.c",     "src/video/Xext/*.h",
-        ]) +
+        ]) + select({
+            ":darwin": glob([
+                "src/audio/macosx/*.c",   "src/audio/macosx/*.h",
+                "src/cdrom/macosx/*.c",   "src/cdrom/macosx/*.h",
+                "src/joystick/darwin/*.c","src/joystick/darwin/*.h",
+                "src/loadso/macosx/*.c",  "src/loadso/macosx/*.h",
+                "src/video/quartz/*.c",   "src/video/quartz/*.h",  # TODO(ivucica): add .m
+                "src/video/dga/*.c",      "src/video/dga/*.h",
+                #"src/video/maccommon/*.c","src/video/maccommon/*.h",
+                #"src/video/macdsp/*.c",   "src/video/macdsp/*.h",
+                #"src/video/macrom/*.c",   "src/video/macrom/*.h",
+            ]),
+            "//conditions:default": glob([
+                "src/video/x11/*.c",      "src/video/x11/*.h",
+            ]),
+        }) +
         glob(["src/thread/pthread/*.h"]) +
-        macx11_hdrs +
-        [],
+	x11repository_hdrs,
     hdrs = [i.replace("include/", "SDL/") for i in glob(["include/*.h"])],
     includes = [".", "SDL"],
     copts = [
-        "-Iexternal/macx11",
-        "-DSDL_VIDEO_DRIVER_QUARTZ=1",
-    ],
-    deps = [":sdlobjc"],
+        "-Iexternal/x11repository",
+    ] + select({
+        ":darwin": ["-DSDL_VIDEO_DRIVER_QUARTZ=1"],
+	"//conditions:default": [],
+    }),
+    deps = select({
+        ":darwin": [":sdlobjc"],
+	"//conditions:default": [],
+    }),
     visibility = ["//visibility:public"],
 )
 
+# TODO(ivucica): Running configure should be done only on Linux, and not
+# on OS X.
 genrule(
     name = "sdlheaders",
-    srcs = glob(["include/*.h"]),
+    srcs = ["configure", "README", "Makefile.in", "sdl-config.in", "sdl.pc.in", "SDL.spec.in", "SDL.qpg.in", "include/SDL_config.h.in"] + glob(["build-scripts/*", "include/*.h"]),
     outs = [i.replace("include", "SDL") for i in glob(["include/*.h"])],
-    cmd = "mkdir -p $(@D)/SDL; for i in $(SRCS) ; do cp \"$$i\" \"$(@D)/SDL/$$(basename \"$${i}\")\"; done",
+    cmd = "\n".join([
+        "mkdir -p $(@D)/SDL",
+        "mkdir -p $(@D)/build-scripts",
+        "mkdir -p $(@D)/include",
+        "for i in $(SRCS) ; do",
+        "  if [[ $${i} == external/" + workspace_name + "/include/* ]] ; then",  # TODO(ivucica): don't hardcode repo name.
+        "    cp \"$$i\" \"$(@D)/SDL/$$(basename \"$${i}\")\"",
+        "    cp \"$$i\" \"$(@D)/include/$$(basename \"$${i}\")\"",
+        "  elif [[ $${i} == external/" + workspace_name + "/build-scripts/* ]] ; then",
+        "    cp \"$$i\" \"$(@D)/build-scripts/$$(basename \"$${i}\")\"",
+        "  else",
+        "    cp \"$${i}\" \"$(@D)/$$(basename \"$${i}\")\"",
+        "  fi",
+        "done",
+        "$(@D)/configure > $(@D)/configure.consoleoutput 2>&1 " +
+        "  || (cat $(@D)/configure.consoleoutput; exit 1)",
+    ]),
     visibility = ["//visibility:public"],
 )
 
@@ -106,11 +138,11 @@ cc_library(
     srcs = (["objc" + i + ".c" for i in glob(["src/video/quartz/*.m"])] +
         glob(["src/video/quartz/*.h", "src/video/*.h"]) +
         [i.replace("include/", "SDL/") for i in glob(["include/*.h"])]) +
-        macx11_hdrs,
+        x11repository_hdrs,
     includes = [".", "SDL"],
     copts = [
         "-x", "objective-c",
-        "-Iexternal/macx11",
+        "-Iexternal/x11repository",
         "-Iexternal/" + workspace_name + "/src/video/quartz",
     ]
 )
