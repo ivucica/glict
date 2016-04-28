@@ -6,8 +6,8 @@ I would not encourage its use today. The largest project I used it in
 was *Yet Another Tibia Client*, which itself went out of development in
 2011.
 
-More documentation can be found in <glict/README>, inside the source
-code, and you can build it using Doxygen.
+More documentation can be found in [glict/README](glict/README), inside the
+source code, and you can build documentation using Doxygen.
 
 The easiest way to build and install GLICT is to use the provided
 autotools-based build. So:
