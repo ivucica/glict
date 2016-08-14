@@ -1,3 +1,4 @@
+# -*-Python-*-
 
 cc_library(
     name = "GLICT",

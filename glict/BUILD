@@ -1,3 +1,4 @@
+# -*-Python-*-
 cc_binary(
     name = "sdldemo",
     srcs = [

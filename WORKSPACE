@@ -1,3 +1,4 @@
+# -*-Python-*-
 workspace(name="glict")
 
 load("//:x11-helper.bzl", "x11_repository")

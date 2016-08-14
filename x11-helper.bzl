@@ -1,3 +1,4 @@
+# -*-Python-*-
 def x11_repository():
     return native.new_local_repository(
         name = "x11repository",

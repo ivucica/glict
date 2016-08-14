@@ -1,3 +1,4 @@
+# -*-Python-*-
 workspace_name = REPOSITORY_NAME[1:]
 
 x11repository_hdrs = [
@@ -24,6 +25,7 @@ x11repository_hdrs = [
     "@x11repository//:X11/extensions/render.h",
     "@x11repository//:X11/Xdefs.h",
 ]
+
 config_setting(
     name = "darwin",
     values = {"host_cpu": "darwin"}
