@@ -20,3 +20,12 @@ autotools-based build. So:
 I'm also toying with providing <bazel.io> `BUILD` files.
 
 - ivucica, 2016
+
+## Build deps
+
+### Bazel
+
+Incomplete. Some of it is pulled in by SDL.
+
+* `libx11-dev`
+* `libxrandr-dev`
