@@ -57,7 +57,8 @@ cc_library(
 
         "src/loadso/dlopen/*.c",  "src/loadso/dlopen/*.h",
         "src/timer/unix/*.c",     "src/timer/unix/*.h",
-        "src/video/Xext/*.c",     "src/video/Xext/*.h",
+        #"src/video/Xext/*.c",     "src/video/Xext/*.h",
+        "src/video/Xext/extensions/*.h",
         ]) + select({
             ":darwin": glob([
                 "src/audio/macosx/*.c",   "src/audio/macosx/*.h",
@@ -96,7 +97,8 @@ cc_library(
 genrule(
     name = "sdlheaders",
     srcs = ["configure", "README", "Makefile.in", "sdl-config.in", "sdl.pc.in", "SDL.spec.in", "SDL.qpg.in", "include/SDL_config.h.in"] + glob(["build-scripts/*", "include/*.h"]),
-    outs = [i.replace("include", "SDL") for i in glob(["include/*.h"])],
+    outs = [i.replace("include", "SDL") for i in glob(["include/*.h"])] + [
+        "configure.consoleoutput"],
     cmd = "\n".join([
         "mkdir -p $(@D)/SDL",
         "mkdir -p $(@D)/build-scripts",
@@ -113,6 +115,7 @@ genrule(
         "done",
         "$(@D)/configure > $(@D)/configure.consoleoutput 2>&1 " +
         "  || (cat $(@D)/configure.consoleoutput; exit 1)",
+        "cp include/SDL_config.h $(@D)/SDL/SDL_config.h",
     ]),
     visibility = ["//visibility:public"],
 )
