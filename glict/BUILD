@@ -11,4 +11,7 @@ cc_binary(
     data = [
         "@libsdl12//:sdlheaders",
     ],
+    linkopts = [
+        "-ldl",
+    ],
 )
