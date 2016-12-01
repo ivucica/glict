@@ -35,4 +35,8 @@ cc_library(
     # make #include <GLICT/foo.h> work by passing parent to -isystem
     includes = [".."],
     visibility = ["//visibility:public"],
+
+    defines = [
+        "NO_GL",
+    ],
 )
