@@ -73,12 +73,19 @@ cc_library(
             ]),
             "//conditions:default": glob([
                 "src/video/x11/*.c",      "src/video/x11/*.h",
-            ]),
+            ], exclude=[
+                "src/video/x11/SDL_x11sym.h",  # see [patch1]
+            ]) + [
+                "patch1/src/video/x11/SDL_x11sym.h",  # see [patch1]
+            ],
         }) +
         glob(["src/thread/pthread/*.h"]) +
 	x11repository_hdrs,
     hdrs = [i.replace("include/", "SDL/") for i in glob(["include/*.h"])],
-    includes = [".", "SDL"],
+    includes = [
+        ".", "SDL",
+        "patch1", "patch1/src/video/x11"  # see [patch1]
+    ],
     copts = [
         "-Iexternal/x11repository",
     ] + select({
@@ -96,15 +103,23 @@ cc_library(
 # on OS X.
 genrule(
     name = "sdlheaders",
-    srcs = ["configure", "README", "Makefile.in", "sdl-config.in", "sdl.pc.in", "SDL.spec.in", "SDL.qpg.in", "include/SDL_config.h.in"] + glob(["build-scripts/*", "include/*.h"]),
+    srcs = ["configure", "README", "Makefile.in", "sdl-config.in", "sdl.pc.in", "SDL.spec.in", "SDL.qpg.in", "include/SDL_config.h.in",
+            # see [patch1] for more info
+            "src/video/x11/SDL_x11sym.h",
+
+        ] + glob(["build-scripts/*", "include/*.h"]),
     outs = [i.replace("include", "SDL") for i in glob(["include/*.h"])] + [
-        "configure.consoleoutput"],
+        "configure.consoleoutput",
+
+        # see [patch1] for more info
+        "patch1/src/video/x11/SDL_x11sym.h",
+    ],
     cmd = "\n".join([
         "mkdir -p $(@D)/SDL",
         "mkdir -p $(@D)/build-scripts",
         "mkdir -p $(@D)/include",
         "for i in $(SRCS) ; do",
-        "  if [[ $${i} == external/" + workspace_name + "/include/* ]] ; then",  # TODO(ivucica): don't hardcode repo name.
+        "  if [[ $${i} == external/" + workspace_name + "/include/* ]] ; then",
         "    cp \"$$i\" \"$(@D)/SDL/$$(basename \"$${i}\")\"",
         "    cp \"$$i\" \"$(@D)/include/$$(basename \"$${i}\")\"",
         "  elif [[ $${i} == external/" + workspace_name + "/build-scripts/* ]] ; then",
@@ -113,6 +128,11 @@ genrule(
         "    cp \"$${i}\" \"$(@D)/$$(basename \"$${i}\")\"",
         "  fi",
         "done",
+
+        # see [patch1] for more info
+        "mkdir -p $(@D)/patch1/src/video/x11",
+        "sed -e '/_XData32/s:register long:register _Xconst long:' external/" + workspace_name + "/src/video/x11/SDL_x11sym.h > $(@D)/patch1/src/video/x11/SDL_x11sym.h",
+
         "$(@D)/configure > $(@D)/configure.consoleoutput 2>&1 " +
         "  || (cat $(@D)/configure.consoleoutput; exit 1)",
         "cp include/SDL_config.h $(@D)/SDL/SDL_config.h",
@@ -162,3 +182,7 @@ cc_library(
         "-x", "objective-c",
      ],
 )
+
+
+# [patch1]: http://www.linuxfromscratch.org/blfs/view/svn/multimedia/sdl.html
+# for _XData32 conflict.
