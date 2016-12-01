@@ -51,7 +51,7 @@ cc_library(
         "src/video/dummy/*.c",    "src/video/dummy/*.h",
         "src/joystick/dummy/*.c", "src/joystick/dummy/*.h",
         "src/cdrom/dummy/*.c",    "src/cdrom/dummy/*.h",
-        "src/thread/generic/*.c", "src/thread/generic/*.h",
+        #"src/thread/generic/*.c", "src/thread/generic/*.h",
         "src/timer/dummy/*.c",    "src/timer/dummy/*.h",
         "src/loadso/dummy/*.c",   "src/loadso/dummy/*.h",
 
@@ -86,13 +86,13 @@ cc_library(
                 "src/audio/alsa/*.c",     "src/audio/alsa/*.h",
                 "src/audio/dsp/*.c",      "src/audio/dsp/*.h",
                 "src/audio/dma/*.c",      "src/audio/dma/*.h",
+                "src/thread/pthread/*.c", "src/thread/pthread/*.h",
             ], exclude=[
                 "src/video/x11/SDL_x11sym.h",  # see [patch1]
             ]) + [
                 "patch1/src/video/x11/SDL_x11sym.h",  # see [patch1]
             ],
         }) +
-        glob(["src/thread/pthread/*.h"]) +
 	x11repository_hdrs,
     hdrs = [i.replace("include/", "SDL/") for i in glob(["include/*.h"])],
     includes = [
@@ -110,6 +110,7 @@ cc_library(
 	"//conditions:default": [],
     }),
     visibility = ["//visibility:public"],
+    linkstatic = 1,
 )
 
 # TODO(ivucica): Running configure should be done only on Linux, and not
