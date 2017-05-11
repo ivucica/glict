@@ -164,8 +164,8 @@ genrule(
 
         # see [patch2] for more info
         "mkdir -p $(@D)/patch2/src/video/quartz",
-        "patch -o $(@D)/patch2/src/video/quartz/SDL_QuartzVideo.h.intermed external/" + workspace_name + "/src/video/quartz/SDL_QuartzVideo.h $(location :e9466ead70e5.patch)",
-        "patch -o $(@D)/patch2/src/video/quartz/SDL_QuartzVideo.h $(@D)/patch2/src/video/quartz/SDL_QuartzVideo.h.intermed $(location :bbfb41c13a87.patch)",
+        "patch --follow-symlinks -o $(@D)/patch2/src/video/quartz/SDL_QuartzVideo.h.intermed external/" + workspace_name + "/src/video/quartz/SDL_QuartzVideo.h $(location :e9466ead70e5.patch)",
+        "patch --follow-symlinks -o $(@D)/patch2/src/video/quartz/SDL_QuartzVideo.h $(@D)/patch2/src/video/quartz/SDL_QuartzVideo.h.intermed $(location :bbfb41c13a87.patch)",
         "rm $(@D)/patch2/src/video/quartz/SDL_QuartzVideo.h.intermed",
 
         "$(@D)/configure > $(@D)/configure.consoleoutput $$(if [[ $$(uname) == Darwin ]]; then echo --disable-video-x11 ; fi) 2>&1 " +
