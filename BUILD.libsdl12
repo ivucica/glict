@@ -76,6 +76,7 @@ cc_library(
                 "src/video/quartz/SDL_QuartzVideo.h",  # see [patch2]
             ]) + [
                 "patch2/src/video/quartz/SDL_QuartzVideo.h",  # see [patch2]
+                "fix_mac_audioplayer.c",
             ],
             "//conditions:default": glob([
                 "src/video/x11/*.c",      "src/video/x11/*.h",
@@ -110,7 +111,22 @@ cc_library(
     copts = [
         "-Iexternal/x11repository",
     ] + select({
-        ":darwin": ["-DSDL_VIDEO_DRIVER_QUARTZ=1"],
+        ":darwin": [
+            "-DSDL_VIDEO_DRIVER_QUARTZ=1",
+        ],
+        "//conditions:default": [],
+    }),
+    linkopts = select({
+        ":darwin": [
+            "-framework Foundation",
+            "-framework AppKit",
+            "-framework OpenGL",
+            "-framework IOKit",
+            "-framework CoreFoundation",
+            "-framework CoreAudio",
+            "-framework AudioToolbox",
+            "-framework Carbon",
+        ],
         "//conditions:default": [],
     }),
     deps = select({
@@ -185,19 +201,35 @@ genrule(
         "src/video/quartz/*.m",
         "Xcode/TemplatesForXcodeSnowLeopard/SDL Cocoa Application/*.m",
         ]),
-    outs = ["objc" + i + ".c" for i in glob([
+    outs = ["objc" + i.replace(" ", "_") + ".c" for i in glob([
         "src/video/quartz/*.m",
         "Xcode/TemplatesForXcodeSnowLeopard/SDL Cocoa Application/*.m",
         ])],
     cmd = "\n".join(["echo '$(SRCS)' | sed 's/ external/@external/g'",
         "export IFS=\"@\n\"",
-        "for i in $$(echo $(SRCS) | sed 's/ external/@external/g')",
+        "for i in $$(echo '$(SRCS)' | sed 's/ external/@external/g')",
         "do",
-        " mkdir -p \"$$(dirname \"$(@D)/objc$${i}\")\"",
-        " cp -v \"$$i\" \"$(@D)/objc$${i#external/libsdl12/}.c\"",
+        " echo $${i}",
+        " inospace=$${i// /_}",
+        " echo $${inospace}",
+        " mkdir -p \"$$(dirname \"$(@D)/objc$${inospace#external/libsdl12/}\")\"",
+        " cp -v \"$$i\" \"$(@D)/objc$${inospace#external/libsdl12/}.c\"",
         "done",
     ]),
     visibility = ["//visibility:public"],
+)
+
+genrule(
+    name = "no-spaces",
+    srcs = ["Xcode/TemplatesForXcodeSnowLeopard/SDL Cocoa Application/SDLMain.h"],
+    outs = ["Xcode/TemplatesForXcodeSnowLeopard/SDL_Cocoa_Application/SDLMain.h"],
+    cmd = "mkdir -p $$(dirname $(OUTS)) && cp \"$(SRCS)\" $(OUTS)",
+)
+
+genrule(
+    name = "fix-mac-audioplayer",
+    outs = ["fix_mac_audioplayer.c"],
+    cmd = "echo 'int IsConnected() { return 1; }' > $(OUTS)" # This function is expected #if DEBUG
 )
 
 cc_library(
@@ -220,15 +252,15 @@ cc_library(
 cc_library(
     name = "sdlmain",
     srcs = [
-        "objcXcode/TemplatesForXcodeSnowLeopard/SDL Cocoa Application/SDLMain.m.c",
+        "objcXcode/TemplatesForXcodeSnowLeopard/SDL_Cocoa_Application/SDLMain.m.c",
     ],
     copts = [
         "-x", "objective-c",
     ],
     hdrs = [
-        "Xcode/TemplatesForXcodeSnowLeopard/SDL Cocoa Application/SDLMain.h",
+        "Xcode/TemplatesForXcodeSnowLeopard/SDL_Cocoa_Application/SDLMain.h",
     ],
-    includes = ["Xcode/TemplatesForXcodeSnowLeopard/SDL Cocoa Application"],
+    includes = ["Xcode/TemplatesForXcodeSnowLeopard/SDL_Cocoa_Application"],
     deps = [":sdl"],
     visibility = ["//visibility:public"],
 )
