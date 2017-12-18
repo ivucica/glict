@@ -307,7 +307,54 @@ int main(int argc, char** argv) {
 
 
     glictFont* sysfont = glictCreateFont("system");
-	sysfontpic = SDL_LoadBMP("font.bmp");
+#if !BAZEL_WIN32
+        sysfontpic = SDL_LoadBMP("font.bmp");
+#else
+        {
+                char exe[2048];
+                GetModuleFileName(NULL, exe, 2048 - sizeof(".runfiles\\MANIFEST"));
+                strcat(exe, ".runfiles\\MANIFEST");
+                FILE * manifest = fopen(exe, "r");
+                if (!manifest)
+                {
+                        fprintf(stderr, "runfile manifest not found on a bazel win32 build, aborting\n");
+                        exit(95);
+                }
+                char line[2048 + 1] = { 0 };
+                while(fgets(line, 2048, manifest) != NULL)
+                {
+                        char * space = strchr(line, ' ');
+                        if (space && *space == ' ')
+                        {
+                                *space = 0;
+                                char * left = line;
+                                char * right = space+1;
+                                if (strcmp(left, "glict/glict/examples/memory_sdl/font.bmp") == NULL)
+                                {
+                                        for(char * p = right; *p; p++)
+                                        {
+                                                if (*p == '/')
+                                                {
+                                                        *p = '\\';
+                                                }
+                                                if (*p == '\n' || *p == '\r')
+                                                {
+                                                        *p = 0;
+                                                }
+                                        }
+                                        sysfontpic = SDL_LoadBMP(right);
+                                        break;
+                                }
+                        }
+                }
+                fclose(manifest);
+        }
+#endif
+	if (!sysfontpic)
+	{
+		printf("Font pic could not be loaded\n");
+		exit(94);
+	}
 	SDL_SetColorKey(sysfontpic, SDL_SRCCOLORKEY | SDL_RLEACCEL, SDL_MapRGB(SDL_GetVideoInfo()->vfmt, 0xFF, 0, 0xFF)); // magneta is transparent
 
     sysfont->SetFontParam(sysfontpic);
