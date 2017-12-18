@@ -1,5 +1,23 @@
 # -*-Python-*-
 
+config_setting(
+    name = "windows",
+    values = {"cpu": "x64_windows"},
+    visibility = ["//:__subpackages__"],
+)
+
+config_setting(
+    name = "windows_msys",
+    values = {"cpu": "x64_windows_msys"},
+    visibility = ["//:__subpackages__"],
+)
+
+config_setting(
+    name = "windows_msvc",
+    values = {"cpu": "x64_windows_msvc"},
+    visibility = ["//:__subpackages__"],
+)
+
 cc_library(
     name = "GLICT",
     srcs = [
@@ -38,5 +56,10 @@ cc_library(
 
     defines = [
         "NO_GL",
-    ],
+    ] + select({
+        ":windows": ["WIN32"],
+	":windows_msys": ["WIN32"],
+	":windows_msvc": ["WIN32"],
+        "//conditions:default": [],
+    }),
 )
