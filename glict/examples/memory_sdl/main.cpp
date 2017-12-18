@@ -33,6 +33,8 @@
 //  simple game made with GLICT
 //  to compile you'll need SDL
 
+#include <time.h>
+
 // SDL includes
 // we use sdl because it's cross platform compatible
 #include <SDL/SDL.h>
