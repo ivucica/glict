@@ -63,7 +63,7 @@ float cardcolor[16][3] = { { 1., 0., 0.}, { 0., 0., .9 }, {.8, .8, 0.}, {.7, 0.,
 char matrix[16]; // matrix specifies where is each card
 char taken[16]; // taken specifies if we've used a card in generation, so we dont generate same pair again
 char solved[16]; // solved specifies if a piece has been solved
-char flipd[2]; // which cards are currently flipped
+signed char flipd[2]; // which cards are currently flipped
 
 
 int totalsolved = 0, totalopens = 0;
