@@ -31,6 +31,8 @@
 #include "globals.h"
 #include "fonts.h"
 
+#include <algorithm>
+
 /**
   * It fills up the class with default infos.
   */
@@ -281,9 +283,9 @@ void glictButton::Paint() {
 		r.left = this->left+containeroffsetx;
 		r.right = this->right;
 
-		c.top = max(this->cliptop, this->top+containeroffsety);
+		c.top = std::max(this->cliptop, this->top+containeroffsety);
 		c.bottom = this->clipbottom;
-		c.left = max(this->clipleft, this->left+containeroffsetx);
+		c.left = std::max(this->clipleft, this->left+containeroffsetx);
 		c.right = this->clipright;
 		this->OnPaint(&r, &c, this);
 	}

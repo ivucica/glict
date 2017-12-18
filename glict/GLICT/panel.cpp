@@ -22,6 +22,9 @@
 #include "panel.h"
 #include "globals.h"
 #include "fonts.h"
+
+#include <algorithm>
+
 glictPanel::glictPanel() {
 	this->bgcolor.r = 0.75;
 	this->bgcolor.g = 0.75;
@@ -132,9 +135,9 @@ void glictPanel::Paint() {
 		r.left = this->left+containeroffsetx;
 		r.right = this->right;
 
-		c.top = max(this->cliptop, this->top+containeroffsety);
+		c.top = std::max(this->cliptop, this->top+containeroffsety);
 		c.bottom = this->clipbottom;
-		c.left = max(this->clipleft, this->left+containeroffsetx);
+		c.left = std::max(this->clipleft, this->left+containeroffsetx);
 		c.right = this->clipright;
 		this->OnPaint(&r, &c, this);
 	}

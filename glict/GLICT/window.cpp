@@ -24,6 +24,8 @@
 #include <GLICT/fonts.h>
 #include <GLICT/types.h>
 #include <string.h>
+#include <algorithm>
+
 glictWindow::glictWindow() {
 
 	this->containeroffsetx = 0;
@@ -106,10 +108,10 @@ void glictWindow::Paint() {
         r.left = this->left + containeroffsetx;
         r.right = this->right - containeroffsetx;// - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetRightSize()->w : 0) ;
 
-        c.top = max(this->cliptop, this->top + containeroffsety);
-        c.bottom = min(this->clipbottom, this->bottom - containeroffsety); //- (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize()->h : 0) );
-        c.left = max(this->clipleft, this->left + containeroffsetx);
-        c.right = min(this->clipright, this->right - containeroffsetx); //- (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetRightSize()->w : 0) );
+        c.top = std::max(this->cliptop, this->top + containeroffsety);
+        c.bottom = std::min(this->clipbottom, this->bottom - containeroffsety); //- (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize()->h : 0) );
+        c.left = std::max(this->clipleft, this->left + containeroffsetx);
+        c.right = std::min(this->clipright, this->right - containeroffsetx); //- (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetRightSize()->w : 0) );
 
         this->OnPaint(&r, &c, this);
 
