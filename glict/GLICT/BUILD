@@ -18,6 +18,12 @@ config_setting(
     visibility = ["//:__subpackages__"],
 )
 
+config_setting(
+    name = "darwin",
+    values = {"cpu": "darwin"},
+    visibility = ["//:__subpackages__"],
+)
+
 cc_library(
     name = "GLICT",
     srcs = [
@@ -54,12 +60,17 @@ cc_library(
     includes = [".."],
     visibility = ["//visibility:public"],
 
-    defines = [
-        "NO_GL",
-    ] + select({
+    defines = select({
         ":windows": ["WIN32"],
 	":windows_msys": ["WIN32"],
 	":windows_msvc": ["WIN32"],
         "//conditions:default": [],
+    }),
+    linkopts = select({
+        ":windows": ["-lopengl32",],
+        ":windows_msys": ["-lopengl32",],
+        ":windows_msvc": ["-lopengl32",],
+        ":darwin": ["-framework OpenGL"],
+        "//conditions:default": ["-lGL"],
     }),
 )
