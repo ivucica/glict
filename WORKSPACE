@@ -3,7 +3,7 @@ workspace(name="glict")
 
 git_repository(
     name = "rules_libsdl12",
-    commit = "d10dbe78f20e433f828e0a14810092d79bb6a707",
+    commit = "dd936853e64dd2e06bba3b0cb34073a6c7df66a7",
     remote = "https://github.com/ivucica/rules_libsdl12",
 )
 
