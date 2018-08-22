@@ -57,7 +57,7 @@ cc_library(
         "window.h",
     ],
     # make #include <GLICT/foo.h> work by passing parent to -isystem
-    includes = [".."],
+    includes = ["external/glict/glict"],
     visibility = ["//visibility:public"],
 
     defines = select({
