@@ -56,8 +56,7 @@ cc_library(
         "types.h",
         "window.h",
     ],
-    # make #include <GLICT/foo.h> work by passing parent to -isystem
-    includes = ["external/glict/glict"],
+    includes = ["."],
     visibility = ["//visibility:public"],
 
     defines = select({
@@ -73,4 +72,27 @@ cc_library(
         ":darwin": ["-framework OpenGL"],
         "//conditions:default": ["-lGL"],
     }),
+    deps = ["glict_sys_headers"],
+)
+
+# make #include <GLICT/foo.h> work
+cc_library(
+    name = "glict_sys_headers",
+    hdrs = [
+        "button.h",
+        "container.h",
+        "fonts.h",
+        "globals.h",
+        "image.h",
+        "list.h",
+        "messagebox.h",
+        "panel.h",
+        "progressbar.h",
+        "scrollbar.h",
+        "skinner.h",
+        "textbox.h",
+        "types.h",
+        "window.h",
+    ],
+    include_prefix = "GLICT",
 )
