@@ -24,6 +24,7 @@
 #include <GLICT/window.h>
 #include <GLICT/button.h>
 #include <GLICT/panel.h>
+#include <GLICT/types.h>
 
 /// Derived from window, this widget contains a panel with settable caption, and an OK button which closes the messagebox and possibly calls a settable function
 class glictMessageBox : public glictWindow {
@@ -40,12 +41,28 @@ class glictMessageBox : public glictWindow {
 		void SetBGColor(float r, float g, float b, float a);
 		void Focus(glictContainer* c);
 		void SetTextOffset(int x, int y);
+		void SetButtonCaption(std::string caption);
+		void SetButtonFont(std::string font, unsigned int size=10);
+		void SetButtonAlignment(glictVerticalAlignment valign);
+		void SetButtonMarginX(float marginX);
+		void SetButtonMarginY(float marginY);
+		void SetButtonWidth(float width);
+		void SetButtonHeight(float height);
+		void EnableSeparator(glictSkinner *skin, float height=2, float marginX=2, float marginY=2, float r=0, float g=0, float b=0, float a=1);
+
 	private:
 		glictButton btnOk;
 		glictPanel pnlMessage;
+		glictPanel pnlSeparator;
+		glictVerticalAlignment buttonVAlign;
+		int buttonMarginX, buttonMarginY;
+		int separatorMarginX, separatorMarginY;
 		std::string mesg;
 		int textoffsetx, textoffsety;
 		void(*OnDismissFunction)(glictPos* relmousepos, glictContainer* callerclass); //< Called upon dismiss of the msgbox. OBJECT MUST NOT DESTROY ITSELF OR REMOVE ITSELF FROM OBJECT LIST OF ITS PARENT FROM WITHIN.
+
+		void RepositionButton();
+		void RepositionSeparator();
 
 	friend void _glictMessageBox_Closer(glictPos* relmousepos, glictContainer* caller);
 };

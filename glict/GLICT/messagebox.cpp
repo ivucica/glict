@@ -51,7 +51,16 @@ glictMessageBox::glictMessageBox() {
 	btnOk.SetPos(300/2 - 32, 100 - 21);
 	btnOk.Focus(NULL);
 
+	this->AddObject(&pnlSeparator);
+	pnlSeparator.SetVisible(false);
+	pnlSeparator.SetHeight(2);
+	pnlSeparator.SetBGColor(0,0,0,1);
+
     textoffsetx = textoffsety = 0;
+	separatorMarginX = 2;
+	buttonMarginX = 5;
+	buttonMarginY = 5;
+	buttonVAlign = GLICT_VALIGN_CENTER;
 
 	SetWidth(300);
 	SetHeight(100);
@@ -90,7 +99,7 @@ void glictMessageBox::SetOnDismiss(void(*OnDism)(glictPos* relmousepos, glictCon
 void glictMessageBox::SetHeight(float h) {
 	glictWindow::SetHeight(h);
 
-	btnOk.SetPos(width/2 - 32, height - 21);
+	RepositionButton();
 	if (this->GetEnabled())
 		pnlMessage.SetHeight(h-10 - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetBottomSize().h : 0) - textoffsety);
 	else
@@ -98,12 +107,12 @@ void glictMessageBox::SetHeight(float h) {
 	pnlMessage.SetPos(textoffsetx,textoffsety);//containeroffsety);
     pnlMessage.SetHeight(h);
 
-
+	RepositionSeparator();
 }
 void glictMessageBox::SetWidth(float w) {
 	glictWindow::SetWidth(w);
 
-	btnOk.SetPos(width/2 - 32, height - 21);
+	RepositionButton();
 	if (this->GetEnabled())
 		pnlMessage.SetWidth(w-10 - (glictGlobals.windowBodySkin ? glictGlobals.windowBodySkin->GetRightSize().w : 0) - textoffsetx);
 	else
@@ -111,6 +120,7 @@ void glictMessageBox::SetWidth(float w) {
 	pnlMessage.SetPos(textoffsetx,textoffsety);//containeroffsety);
 	pnlMessage.SetWidth(w);
 
+	RepositionSeparator();
 }
 void glictMessageBox::SetEnabled(bool enabled) {
 	glictContainer::SetEnabled(enabled);
@@ -133,4 +143,78 @@ void glictMessageBox::SetTextOffset(int x, int y){
     textoffsety = y;
     SetHeight(GetHeight());
     SetWidth(GetWidth());
+}
+
+void glictMessageBox::SetButtonCaption(std::string caption) {
+	btnOk.SetCaption(caption);
+}
+
+void glictMessageBox::SetButtonFont(std::string font, unsigned int size) {
+	btnOk.SetFont(font, size);
+}
+
+void glictMessageBox::SetButtonWidth(float w) {
+	btnOk.SetWidth(w);
+	RepositionButton();
+}
+
+void glictMessageBox::SetButtonHeight(float h) {
+	btnOk.SetHeight(h);
+	RepositionButton();
+	RepositionSeparator();
+}
+
+void glictMessageBox::SetButtonMarginX(float marginX) {
+	buttonMarginX = marginX;
+	RepositionButton();
+}
+
+void glictMessageBox::SetButtonMarginY(float marginY) {
+	buttonMarginY = marginY;
+	RepositionButton();
+	RepositionSeparator();
+}
+
+void glictMessageBox::SetButtonAlignment(glictVerticalAlignment valign) {
+	buttonVAlign = valign;
+	RepositionButton();
+}
+
+void glictMessageBox::RepositionSeparator() {
+	if (pnlSeparator.GetVisible()) {
+		pnlSeparator.SetPos(separatorMarginX, btnOk.GetY() - separatorMarginY - pnlSeparator.GetHeight());
+		pnlSeparator.SetWidth(GetWidth() - separatorMarginX * 2);
+	}
+}
+void glictMessageBox::RepositionButton() {
+	float x = 0, y = 0;
+	switch (this->buttonVAlign) {
+		case GLICT_VALIGN_LEFT:
+		x = buttonMarginX;
+		break;
+		case GLICT_VALIGN_RIGHT:
+		x = GetWidth() - btnOk.GetWidth() - buttonMarginX;
+		break;
+		case GLICT_VALIGN_CENTER:
+		default:
+		x = GetWidth()/2 - btnOk.GetWidth()/2;
+		break;
+	}
+
+	y = GetHeight() - btnOk.GetHeight() - buttonMarginY;
+	btnOk.SetPos(x, y);
+}
+
+void glictMessageBox::EnableSeparator(glictSkinner *skin, float height, float marginX, float marginY, float r, float g, float b, float a) {
+	pnlSeparator.SetVisible(true);
+	pnlSeparator.SetBGColor(r,g,b,a);
+	pnlSeparator.SetHeight(height);
+	pnlSeparator.SetSkin(skin);
+
+	separatorMarginX = marginX;
+	separatorMarginY = marginY;
+
+	pnlSeparator.SetPos(marginX, btnOk.GetY() - marginY - height);
+	pnlSeparator.SetWidth(GetWidth() - marginX * 2);
+	pnlSeparator.SetHeight(height);
 }

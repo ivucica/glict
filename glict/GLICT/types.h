@@ -92,5 +92,13 @@ enum glictClippingMode {
     GLICT_STENCILTEST = 2 ///< Use stencil testing; compatible with transformations, slow
 };
 
+/**
+ * \brief Enumerate vertical alignments that can be used.
+ */
+enum glictVerticalAlignment {
+    GLICT_VALIGN_LEFT = 0,
+    GLICT_VALIGN_CENTER = 1,
+    GLICT_VALIGN_RIGHT = 2,
+};
 
 #endif
