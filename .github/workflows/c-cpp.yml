@@ -1,0 +1,23 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: configure
+      run: cd glict && ./configure
+    - name: make
+      run: cd glict && make
+    - name: make check
+      run: cd glict && make check
+    - name: make distcheck
+      run: cd glict && make distcheck
