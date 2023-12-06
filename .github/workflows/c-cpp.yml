@@ -1,0 +1,28 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: install deps
+      run: sudo apt-get update && sudo apt-get install libsdl1.2-dev libsdl-gfx1.2-dev autoconf automake libgl1-mesa-dev libglu1-mesa-dev
+    - name: autogen
+      run: cd glict && ./autogen.sh
+    - name: configure
+      run: cd glict && ./configure
+    - name: make
+      run: cd glict && make
+    - name: make check
+      run: cd glict && make check
+    # TODO: enable distcheck once unbroken (currently breaks on an attempt to #include using <system/style.h> includes).
+    #- name: make distcheck
+    #  run: cd glict && make distcheck
