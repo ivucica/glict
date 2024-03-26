@@ -144,5 +144,13 @@ cc_library(
         "types.h",
         "window.h",
     ],
+    deps = select({
+        "//conditions:default": [],
+        ":linux_deps_bin": [
+            "@libgl-dev//:hdrs",
+            "@libgl-dev//:libs",
+            "@libgl-dev//:libgl-dev",
+        ],
+    }),
     include_prefix = "GLICT",
 )
