@@ -153,4 +153,6 @@ cc_library(
         ],
     }),
     include_prefix = "GLICT",
+    includes = ["."],
+    visibility = ["//visibility:public"], # should not be public, but may help those who need <GLICT/foo.h> work if other stuff is misconfigured
 )
