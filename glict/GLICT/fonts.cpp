@@ -78,6 +78,10 @@ glictFont* glictCreateFont(const char* name) {
 	return fnt;
 }
 
+/** \brief Return the font specified by the passed name.
+  * \param name Specifies the name of the font, for example `system`
+  * \return The font specified by the name
+  */
 glictFont* glictFindFont(const char* name) {
 
 	_GLICTFONTVECTORITERATOR it;
@@ -86,6 +90,10 @@ glictFont* glictFindFont(const char* name) {
 	return NULL;
 }
 
+/** \brief Unregisters the font specified by the passed name.
+  * \param name Specifies the name of the font to be deleted
+  * \return True if the font was deleted, false if it was not found
+  */
 bool glictDeleteFont(const char* name) {
 	_GLICTFONTVECTORITERATOR it;
 
@@ -202,10 +210,31 @@ bool glictFontRender(const char* text, const char* fontname, float fontsize, flo
 	return false;
 }
 
+/** \brief Returns the rendered dimensions of the passed text for the passed font.
+  * \param text Specifies the text being drawn
+  * \param font Specifies the font used for rendering
+  * \return Returns the width of the text in pixels
+  *
+  * This is a convenience function that calls the other version of this function
+  * with default font size of 10.
+  */
 float glictFontSize(const char* text, const char* font) {
 	return glictFontSize(text, font, 10);
 }
 
+/**
+  * \brief Returns the rendered dimensions of the passed text for the passed font.
+  * \param text Specifies the text being drawn
+  * \param font Specifies the font used for rendering
+  * \param size Specifies the height of the font
+  * \return Width of the text in pixels
+  *
+  * This function finds the font specified by font parameter, and then calls its
+  * size function. If the font does not support size function, it will attempt to
+  * resize the font by calling the render function with a scaling factor. In
+  * this case, the scaling factor assumes that the font is rendered at size 1
+  * (height of 1px).
+  */
 float glictFontSize(const char* text, const char* font, float size) {
 
 	glictFont* fnt = glictFindFont(font);
@@ -222,6 +251,10 @@ float glictFontSize(const char* text, const char* font, float size) {
 	return 0;
 }
 
+/** \brief Sets the currently active color for the passed font.
+  * \param font Specifies the font for which the color is being set
+  * \param col Specifies the color to be set
+  */
 void glictFontColor(const char* font, glictColor &col) {
     glictFont* fnt = glictFindFont(font);
 	if (!fnt) {
@@ -233,6 +266,11 @@ void glictFontColor(const char* font, glictColor &col) {
 	    fnt->SetColor(fnt->fontparam,col);
 	}
 }
+
+/** \brief Returns the currently active color for the passed font.
+  * \param font Specifies the font for which the color is being retrieved
+  * \return Currently active color for the font
+ */
 glictColor glictFontColor(const char* font) {
     glictFont* fnt = glictFindFont(font);
 	if (!fnt) {
@@ -244,7 +282,10 @@ glictColor glictFontColor(const char* font) {
 	return fnt->activecolor;
 }
 
-
+/** \brief Counts the number of lines in the passed string.
+  * \param txt The text in which lines are being counted
+  * \return The number of lines in the text
+  */
 int glictFontNumberOfLines(const char* txt) {
 	int count=1; // at least 1 line
 	for (unsigned int i=0;i<strlen(txt);i++) {
@@ -276,9 +317,19 @@ glictFont::~glictFont() {
 	// nope
 }
 
+/** \brief Sets the name of the font represented by this class instance.
+  * \param name The name of the font
+  *
+  * This function sets the name of the font. The name is used to identify the
+  * font in the font list.
+  */
 void glictFont::SetName(const char* name) {
 	this->name = name;
 }
+
+/** \brief Gets the name of this font.
+  * \return The name of the font
+  */
 std::string glictFont::GetName() {
 	return this->name;
 }
