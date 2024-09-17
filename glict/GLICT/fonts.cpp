@@ -64,7 +64,6 @@ _GLICTFONTVECTOR glictFonts;
   *
   * \sa glictFont::SetRenderFunc(), glictFont::SetSizeFunc()
   */
-
 glictFont* glictCreateFont(const char* name) {
 
 	if (glictFindFont(name)) return NULL;
@@ -122,11 +121,15 @@ bool glictDeleteFont(const char* name) {
   *
   * \sa glictFont::SetRenderFunc
   */
-
 bool glictFontRender(const char* text, const char* fontname, float x, float y) {
 	return glictFontRender(text, fontname, 10, x, y);
 }
 
+
+#ifdef NO_GL
+#define glMatrixMode(x)
+#define glScalef(x,y,z)
+#endif
 
 /** \brief Renders the font using specified size
   * \param text Specifies the text being drawn
@@ -149,13 +152,8 @@ bool glictFontRender(const char* text, const char* fontname, float x, float y) {
   * There is an overloaded variant of this function that renders using default
   * font size.
   *
-  *
+  * \sa glictFont::SetRenderFunc
   */
-
-#ifdef NO_GL
-#define glMatrixMode(x)
-#define glScalef(x,y,z)
-#endif
 bool glictFontRender(const char* text, const char* fontname, float fontsize, float x, float y) {
 
 	glictFont* fnt;
