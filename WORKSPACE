@@ -5,7 +5,7 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 git_repository(
     name = "rules_libsdl12",
-    commit = "1b8dd528983ecead5bdad7502a9278de4d632187",
+    commit = "fa13706c994d6eab6287827d965dd3df45ae5e2b",
     remote = "https://github.com/ivucica/rules_libsdl12",
 )
 
